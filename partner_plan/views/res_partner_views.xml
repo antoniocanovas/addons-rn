@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="partner_plan_form_inh_view" model="ir.ui.view">
+        <field name="name">Partner Plan</field>
+        <field name="model">res.partner</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page[@name='internal_notes']" position="after">
+                <page attrs='{"invisible": [("company_type", "=", "person")]}' name="partner_plan" string="Plan">
+                    <group>
+                        <field name="pc_delegacion_id"/>
+                        <field name="pc_competencia_ids" widget="many2many_tags"/>
+                        <field name="pc_potencialanual_id"/>
+                        <field name="pc_actividad_id"/>
+                        <field name="pc_negociacion_id"/>
+                        <field name="pc_catalogo_ids" widget="many2many_tags"/>
+                        <field name="pc_nlocal_id"/>
+                        <field name="pc_zonainfluencia_id"/>
+                        <field name="pc_situacionfinanciera_id"/>
+                        <field name="pc_valorado_id"/>
+                        <field name="pc_externaliza_ids" widget="many2many_tags"/>
+                        <field name="pc_negocio_ids"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
