@@ -3,7 +3,7 @@
     'version': '14.0.1.0.0',
     'category': 'CRM',
     'description': u"""
-Objetivos y seguimiento mensual
+Objetivos y seguimiento mensual Roldán Netya
 """,
     'author': 'Serincloud',
     'depends': [
@@ -11,9 +11,9 @@ Objetivos y seguimiento mensual
     ],
     'data': [
         'security/ir.model.access.csv',
-        'views/res_partner_views.xml',
-        'views/partner_plan_views.xml',
-        'views/menu_views.xml',
+#        'views/res_partner_views.xml',
+#        'views/partner_plan_views.xml',
+#        'views/menu_views.xml',
     ],
     'installable': True,
 }
