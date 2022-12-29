@@ -1,3 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-partner_plan_user, Partner Plan User,model_partner_plan,base.group_user,1,0,0,0
-partner_plan_admin,Partner Plan Admin,model_partner_plan,sales_team.group_sale_manager,1,1,1,1
+objetivo_anual_user, Objetivo Anual User,model_objetivo_anual,sales_team.group_salesman,1,1,1,1
+objetivo_anual_lineas_user, Objetivo Anual Líneas User,model_objetivo_anual_linea,sales_team.group_salesman,1,1,1,1

@@ -5,20 +5,19 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-class ObjetivoAnual(models.Model):
-    _name = 'objetivo.anual'
-    _description = 'Objetivo anual'
+class ObjetivoEquipo(models.Model):
+    _name = 'objetivo.equipo'
+    _description = 'Objetivo Equipo Anual'
 
     # Estos campos van en el módulo de facturación desde ERP:
     #    x_facturado  Incremento facturado
     #    x_facturado_op_ganada   Fact.Op.Ganadas
 
     name = fields.Char('Name')
-    # El siguiente campo se llamaba x_activo y dependía de otro llamado x_estado (cambiar a estándar):
     active = fields.Boolean('Activo', default=True)
     currency_id = fields.Many2one('res.currency', default=1)
     estado = fields.Selection(string='Estado', store=True, readonly=True,
-        [('borrador','Borrador'),('activo','Activo'),('archivado','Archivado')])
+        [('activo','Activo'),('archivado','Archivado')])
 
     act_finalizada_count = fields.Integer('Activ.finalizadas', readonly=True, store=True,
                                           help='Nº de actividades marcadas como hechas')
@@ -28,7 +27,7 @@ class ObjetivoAnual(models.Model):
                                        help='Nº de oportunidades con actividad planificada sin actualizar (sin realizar).')
     act_vencida_percent = fields.Float('Activ.vencidas( %)', readonly=True, store=True,
                                        help='Porcentaje entre actividades planificadas sin actualizar y número de oportunidades actuales.')
-    anho = fields.Integer('Año', readonly=False, store=True, required=True)
+    anho = fields.Integer('Año', readonly=True, store=True, required=True)
 
     def get_anho_percent(self):
         hoy = datetime.datetime.today()
@@ -41,86 +40,30 @@ class ObjetivoAnual(models.Model):
         self.anho_percent = total
     anho_percent = fields.Float('Días transcurridos', readonly=True, store=False, compute='get_anho_percent')
 
-    cambio_etapa_count = fields.Integer('Cambios de etapa', readonly=1, store=True)
-    comercial_id = fields.Many2one('res.users', string="Comercial", store=True, required=True)
-    cumplido_ca_anterior = fields.Float('Cumplido CA A-1(€)', readonly=False, store=True,
-                                       help='Parte del objetivo de ventas año pasado que había que hacer en cliente actual y cliente Vip.')
+    anual_ids = fields.One2many('objetivo.anual', 'objetivo_equipo_id', string="Comerciales", store=True, readonly=True)
+    anual_linea_ids = fields.One2many('objetivo.anual.linea', 'objetivo_equipo_id', string="Reg. Oportunidades", store=True, readonly=True)
+    conseguido_ca_count_percent = fields.Float('Nº Op. ganadas CA (% sobre objetivo)', store=True, readonly=True)
+    conseguido_cn_count_percent = fields.Float('Nº Op. ganadas CN (% sobre objetivo)', store=True, readonly=True)
+    cumplido_ca_anterior = fields.Monetary('Cumplido CA A-1 (€)', store=True, readonly=True)
+    cumplido_total = fields.Monetary('Total Año -1', store=True, readonly=True)
+    equipo_id = fields.Many2one('crm.team', string="Equipo de ventas", store=True, readonly=True)
+    ganada_ca_count = fields.Integer('Nº Op. Ganadas CA', store=True, readonly=True)
+    ganada_cn_count = fields.Integer('Nº Op. Ganadas CN', store=True, readonly=True)
 
-    cumplido_cn_anterior = fields.Float('Cumplido CN A-1(€)', readonly=False, store=True,
-                                       help='Parte del objetivo de ventas año pasado que había que hacer en Prospección buena, muy interesante, excelnte y Cliente recuperar.')
+    def get_grupo_ca_hoy_percent(self): # VOY POR AQUÍ !!!
+        for record in self:
+            resultado, objetivo, objetivo_equipo = 0, 0, 0
+            equipos = self.env['objetivo.equipo'].sudo().search([('sanho', '=', record.x_anho)])
+            for eq in equipos:
+                objetivo_equipo = self.env['x_objetivo_equipos'].sudo().search([('id', '=', eq.id)]).x_objetivo_ca
+                objetivo += objetivo_equipo
 
-    @api.depends('cumplido_ca_anterior', 'cumplido_cn_anterior')
-    def get_cumplido_total(self):
-        self.cumplido_total = (self.cumplido_ca_anterior + self.cumplido_cn_anterior)
-    cumplido_total  = fields.Float('Total Año-1', readonly=True, store=True, compute='get_cumplido_total',
-                                       help='Objetivo de ventas año pasado, cifra de crecimiento.')
+            if objetivo > 0:
+                resultado = record.x_venta_ca / objetivo * 100
+            record['x_grupo_ca_hoy_percent'] = resultado
+    grupo_ca_hoy_percent = fields.Float('grupo_ca_hoy_percent', store=False, reaonly=True, compute='get_grupo_ca_hoy_percent')
 
-    def get_equipo_ca_hoy_percent(self):
-        resultado = 0
-        equipo = self.env['objetivo_equipo'].sudo().search([('id', '=', self.objetivo_equipo_id.id)]).objetivo_ca
-        if equipo > 0:
-            resultado = self.venta_ca / equipo * 100
-        self.equipo_ca_hoy_percent = resultado
-    equipo_ca_hoy_percent = fields.Float('equipo_ca_hoy_percent', readonly=True, store=False, compute='get_equipo_ca_hoy_percent')
 
-    def get_equipo_ca_objetivo_percent(self):
-        resultado = 0
-        equipo = self.env['objetivo_equipo'].sudo().search([('id', '=', self.objetivo_equipo_id.id)]).objetivo_ca
-        if equipo > 0:
-            resultado = self.objetivo_ca / equipo * 100
-        self.equipo_ca_objetivo_percent = resultado
-    equipo_ca_objetivo_percent = fields.Float('equipo_ca_objetivo_percent', readonly=True, store=False, compute='get_equipo_ca_objetivo_percent')
-
-    def get_equipo_ca_op_hoy_percent(self):
-        resultado = 0
-        equipo = self.env['objetivo_equipo'].sudo().search([('id', '=', self.objetivo_equipo_id.id)]).objetivo_ca_count
-        if equipo > 0:
-            resultado = self.op_hoy_ca_count / equipo * 100
-        self.equipo_ca_op_hoy_percent = resultado
-    equipo_ca_op_hoy_percent = fields.Float('equipo_ca_op_hoy_percent', readonly=True, store=False, compute='get_equipo_ca_op_hoy_percent')
-
-    def get_equipo_ca_op_objetivo_percent(self):
-        resultado = 0
-        equipo = self.env['objetivo_equipo'].sudo().search([('id', '=', self.objetivo_equipo_id.id)]).objetivo_ca_count
-        if equipo > 0:
-            resultado = self.objetivo_ca_count / equipo * 100
-        self.equipo_ca_op_objetivo_percent = resultado
-    equipo_ca_op_objetivo_percent = fields.Float('equipo_ca_op_objetivo_percent', readonly=True, store=False, compute='get_equipo_ca_op_objetivo_percent')
-
-    # Lo mismo para CN:
-    def get_equipo_cn_hoy_percent(self):
-        resultado = 0
-        equipo = self.env['objetivo_equipo'].sudo().search([('id', '=', self.objetivo_equipo_id.id)]).objetivo_cn
-        if equipo > 0:
-            resultado = self.venta_cn / equipo * 100
-        self.equipo_cn_hoy_percent = resultado
-    equipo_cn_hoy_percent = fields.Float('equipo_cn_hoy_percent', readonly=True, store=False, compute='get_equipo_cn_hoy_percent')
-
-    def get_equipo_cn_objetivo_percent(self):
-        resultado = 0
-        equipo = self.env['objetivo_equipo'].sudo().search([('id', '=', self.objetivo_equipo_id.id)]).objetivo_cn
-        if equipo > 0:
-            resultado = self.objetivo_cn / equipo * 100
-        self.equipo_cn_objetivo_percent = resultado
-    equipo_cn_objetivo_percent = fields.Float('equipo_cn_objetivo_percent', readonly=True, store=False, compute='get_equipo_cn_objetivo_percent')
-
-    def get_equipo_cn_op_hoy_percent(self):
-        resultado = 0
-        equipo = self.env['objetivo_equipo'].sudo().search([('id', '=', self.objetivo_equipo_id.id)]).objetivo_cn_count
-        if equipo > 0:
-            resultado = self.op_hoy_cn_count / equipo * 100
-        self.equipo_cn_op_hoy_percent = resultado
-    equipo_cn_op_hoy_percent = fields.Float('equipo_ca_op_hoy_percent', readonly=True, store=False, compute='get_equipo_cn_op_hoy_percent')
-
-    def get_equipo_cn_op_objetivo_percent(self):
-        resultado = 0
-        equipo = self.env['objetivo_equipo'].sudo().search([('id', '=', self.objetivo_equipo_id.id)]).objetivo_cn_count
-        if equipo > 0:
-            resultado = self.objetivo_cn_count / equipo * 100
-        self.equipo_cn_op_objetivo_percent = resultado
-    equipo_cn_op_objetivo_percent = fields.Float('equipo_cn_op_objetivo_percent', readonly=True, store=False, compute='get_equipo_cn_op_objetivo_percent')
-
-    equipo_id = fields.Many2one('crm.team', string="Equipo de ventas", related='comercial_id.sale_team_id', store=True, readonly=True)
 
     @api.depends('objetivo_total','cumplido_total')
     def get_incremento_objetivo_anual_percent(self):
