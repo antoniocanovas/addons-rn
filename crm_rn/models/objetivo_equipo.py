@@ -269,8 +269,8 @@ class ObjetivoEquipo(models.Model):
     op_perdida_count = fields.Integer('Nº Op. perdidas', store=True, readonly=True,
                                       help='Total oportunidades en fase Perdido año actual.')
 
-    x_op_perdida_count_percent = fields.Float('Op. Perdidas (%)', store=True, readonly=True,
-                                              help='Porcentaje entre oportunidades Perdidas y Actuales.')
+    op_perdida_count_percent = fields.Float('Op. Perdidas (%)', store=True, readonly=True,
+                                            help='Porcentaje entre oportunidades Perdidas y Actuales.')
 
     op_prospeccion_count = fields.Integer('Posterior a objetivo', store=True, readonly=True,
                                           help='Total oportunidades creadas después del cierre del objetivo anual, es un buen medidor del esfuerzo y la motivación.')

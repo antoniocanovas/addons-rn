@@ -10,7 +10,7 @@ class ObjetivoGrupo(models.Model):
     _description = 'Objetivo Grupo Anual'
 
 
-    name = fields.Char('Name', store=True, readonly=True)
+    name = fields.Char('Name', store=True, readonly=False)
     active = fields.Boolean('Activo', default=True)
     currency_id = fields.Many2one('res.currency', default=1)
     estado = fields.Selection(string='Estado', store=True, readonly=True,
@@ -89,308 +89,449 @@ class ObjetivoGrupo(models.Model):
         self.x_cumplido_total = total
     cumplido_total = fields.Monetary('Año anterior', store=False, readonly=True, compute='get_grupo_cumplido_total')
 
-
-    x_facturado =
-
-
-    #### VOY POR AQUÍ:
-
-
-
-
-
-
-    anual_ids = fields.One2many('objetivo.anual', 'objetivo_equipo_id', string="Comerciales", store=True, readonly=True)
-    anual_linea_ids = fields.One2many('objetivo.anual.linea', 'objetivo_equipo_id', string="Reg. Oportunidades", store=True, readonly=True)
-    conseguido_ca_count_percent = fields.Float('Nº Op. ganadas CA (% sobre objetivo)', store=True, readonly=True)
-    conseguido_cn_count_percent = fields.Float('Nº Op. ganadas CN (% sobre objetivo)', store=True, readonly=True)
-    equipo_id = fields.Many2one('crm.team', string="Equipo de ventas", store=True, readonly=True)
-    ganada_ca_count = fields.Integer('Nº Op. Ganadas CA', store=True, readonly=True)
-    ganada_cn_count = fields.Integer('Nº Op. Ganadas CN', store=True, readonly=True)
-
-    def get_grupo_ca_hoy_percent(self):
-        resultado, objetivo, objetivo_equipo = 0, 0, 0
-        equipos = self.env['objetivo.equipo'].sudo().search([('anho', '=', self.anho)])
+    def get_grupo_facturado(self):
+        total = 0
+        equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
         for eq in equipos:
-            objetivo_equipo = self.env['objetivo.equipo'].sudo().search([('id', '=', eq.id)]).objetivo_ca
-            objetivo += objetivo_equipo
-        if objetivo > 0:
-            resultado = self.venta_ca / objetivo * 100
-        self.grupo_ca_hoy_percent = resultado
-    grupo_ca_hoy_percent = fields.Float('grupo_ca_hoy_percent', store=False, reaonly=True, compute='get_grupo_ca_hoy_percent')
+            total += eq.facturado
+        self.facturado = total
+    facturado = fields.Monetary('Facturado', store=False, readonly=False, compute='get_grupo_facturado')
 
-    def get_grupo_ca_objetivo_percent(self):
-        resultado, objetivo, objetivo_equipo = 0, 0, 0
-        equipos = self.env['objetivo.equipo'].sudo().search([('anho', '=', self.anho)])
+    def get_grupo_facturado_op_ganada(self):
+        total = 0
+        equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
         for eq in equipos:
-            objetivo_equipo = self.env['objetivo.equipo'].sudo().search([('id', '=', eq.id)]).objetivo_ca
-            objetivo += objetivo_equipo
-        if objetivo > 0:
-            resultado = self.objetivo_ca / objetivo * 100
-        self.grupo_ca_objetivo_percent = resultado
-    grupo_ca_objetivo_percent = fields.Float('grupo_ca_objetivo_percent', store=False, reaonly=True, compute='get_grupo_ca_objetivo_percent')
+            total += eq.facturado_op_ganada
+        self.facturado_op_ganada = total
+    facturado_op_ganada = fields.Monetary('Facturado', store=False, readonly=False, compute='get_grupo_facturado_op_ganada')
 
-    def get_grupo_ca_op_hoy_percent(self):
-        resultado, objetivo, objetivo_equipo = 0, 0, 0
-        equipos = self.env['objetivo.equipo'].sudo().search([('anho', '=', self.anho)])
-        for eq in equipos:
-            objetivo_equipo = self.env['objetivo.equipo'].sudo().search([('id', '=', eq.id)]).objetivo_ca_count
-            objetivo += objetivo_equipo
-        if objetivo > 0:
-            resultado = self.op_hoy_ca_count / objetivo * 100
-        self.grupo_ca_op_hoy_percent = resultado
-    grupo_ca_op_hoy_percent = fields.Float('grupo_ca_op_hoy_percent', store=False, reaonly=True, compute='get_grupo_ca_op_hoy_percent')
-
-    def get_grupo_ca_op_objetivo_percent(self):
-        resultado, objetivo, objetivo_equipo = 0, 0, 0
-        equipos = self.env['objetivo.equipo'].sudo().search([('anho', '=', self.anho)])
-        for eq in equipos:
-            objetivo_equipo = self.env['objetivo.equipo'].sudo().search([('id', '=', eq.id)]).objetivo_ca_count
-            objetivo += objetivo_equipo
-        if objetivo > 0:
-            resultado = self.objetivo_ca_count / objetivo * 100
-        self.grupo_ca_op_objetivo_percent = resultado
-    grupo_ca_op_objetivo_percent = fields.Float('grupo_ca_op_objetivo_percent', store=False, reaonly=True, compute='get_grupo_ca_op_objetivo_percent')
-
-    # Ahora con CN:
-    def get_grupo_cn_hoy_percent(self):
-        resultado, objetivo, objetivo_equipo = 0, 0, 0
-        equipos = self.env['objetivo.equipo'].sudo().search([('anho', '=', self.anho)])
-        for eq in equipos:
-            objetivo_equipo = self.env['objetivo.equipo'].sudo().search([('id', '=', eq.id)]).objetivo_cn
-            objetivo += objetivo_equipo
-        if objetivo > 0:
-            resultado = self.venta_ca / objetivo * 100
-        self.grupo_cn_hoy_percent = resultado
-    grupo_cn_hoy_percent = fields.Float('grupo_ca_hoy_percent', store=False, reaonly=True, compute='get_grupo_cn_hoy_percent')
-
-    def get_grupo_cn_objetivo_percent(self):
-        resultado, objetivo, objetivo_equipo = 0, 0, 0
-        equipos = self.env['objetivo.equipo'].sudo().search([('anho', '=', self.anho)])
-        for eq in equipos:
-            objetivo_equipo = self.env['objetivo.equipo'].sudo().search([('id', '=', eq.id)]).objetivo_cn
-            objetivo += objetivo_equipo
-        if objetivo > 0:
-            resultado = self.objetivo_cn / objetivo * 100
-        self.grupo_cn_objetivo_percent = resultado
-    grupo_cn_objetivo_percent = fields.Float('grupo_cn_objetivo_percent', store=False, reaonly=True, compute='get_grupo_cn_objetivo_percent')
-
-    def get_grupo_cn_op_hoy_percent(self):
-        resultado, objetivo, objetivo_equipo = 0, 0, 0
-        equipos = self.env['objetivo.equipo'].sudo().search([('anho', '=', self.anho)])
-        for eq in equipos:
-            objetivo_equipo = self.env['objetivo.equipo'].sudo().search([('id', '=', eq.id)]).objetivo_cn_count
-            objetivo += objetivo_equipo
-        if objetivo > 0:
-            resultado = self.op_hoy_cn_count / objetivo * 100
-        self.grupo_ca_op_hoy_percent = resultado
-    grupo_cn_op_hoy_percent = fields.Float('grupo_cn_op_hoy_percent', store=False, reaonly=True, compute='get_grupo_cn_op_hoy_percent')
-
-    def get_grupo_cn_op_objetivo_percent(self):
-        resultado, objetivo, objetivo_equipo = 0, 0, 0
-        equipos = self.env['objetivo.equipo'].sudo().search([('anho', '=', self.anho)])
-        for eq in equipos:
-            objetivo_equipo = self.env['objetivo.equipo'].sudo().search([('id', '=', eq.id)]).objetivo_cn_count
-            objetivo += objetivo_equipo
-        if objetivo > 0:
-            resultado = self.objetivo_cn_count / objetivo * 100
-        self.grupo_cn_op_objetivo_percent = resultado
-    grupo_cn_op_objetivo_percent = fields.Float('grupo_cn_op_objetivo_percent', store=False, reaonly=True, compute='get_grupo_cn_op_objetivo_percent')
-
-
-    @api.depends('objetivo_total','cumplido_total')
-    def get_equipo_incremento_objetivo_anual_percent(self):
+    def get_grupo_incremento_objetivo_anual_percent(self):
         total = 0
         if self.cumplido_total > 0:
             total = 100 * (self.objetivo_total / self.x_cumplido_total) - 100
         self.incremento_objetivo_anual_percent = total
-    incremento_objetivo_anual_percent = fields.Float('Variación obj.anual', store=True, readonly=True,
-                                                     compute='get_equipo_incremento_objetivo_anual_percent',
+    incremento_objetivo_anual_percent = fields.Float('Variación obj.anual', store=False, readonly=True,
+                                                     compute='get_grupo_incremento_objetivo_anual_percent',
                                                      help='Porcentaje de diferencia entre objetivo total de este año y el del año pasado.')
 
-    iniciativa_count = fields.Integer('Iniciativas', store=True, readonly=True)
+    def get_grupo_iniciativa_count(self):
+        total = 0
+        equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
+        for eq in equipos:
+            total += eq.iniciativa_count
+        self.iniciativa_count = total
+    iniciativa_count = fields.Integer('Iniciativas', store=False, readonly=True, compute='get_grupo_iniciativa_count')
 
-
-    kpi_captacion = fields.Float('KPI Captación', store=True, readonly=1,
+    def get_grupo_kpi_captacion(self):
+        total = 0
+        if (self.op_perdida_cn_count + self.op_ganada_cn_count > 0):
+            total = self.op_ganada_cn_count / (self.op_perdida_cn_count + self.op_ganada_cn_count) * 100
+        self.kpi_captacion = total
+    kpi_captacion = fields.Float('KPI Captación', store=False, readonly=1, compute='get_grupo_kpi_captacion',
                                  help='Relación entre las oportunidades GANADAS, y la suma de GANADAS+PERDIDAS.'
                                       'Refleja qué tanto por ciento de oportunidades ganamos del total. '
                                       'Por ejemplo un 33% indica que ganamos una de cada 3.'
                                       'Para CUENTA NUEVA.')
 
-    kpi_fidelizacion = fields.Float('KPI Fidelización', store=True, readonly=1,
+
+    def get_grupo_kpi_fidelizacion(self):
+        total = 0
+        if (self.op_perdida_ca_count + self.op_ganada_ca_count > 0):
+            total = self.op_ganada_ca_count / (self.op_perdida_ca_count + self.op_ganada_ca_count) * 100
+        self.kpi_fidelizacion = total
+    kpi_fidelizacion = fields.Float('KPI Fidelización', store=False, readonly=1, compute='get_grupo_kpi_fidelizacion',
                                     help='Relación entre las oportunidades GANADAS, y la suma de GANADAS+PERDIDAS.'
                                          'Refleja qué tanto por ciento de oportunidades ganamos del total.'
                                          'Por ejemplo un 33% indica que ganamos una de cada 3.'
                                          'Para CUENTA ACTUAL (base instalada).')
 
-    mes_ids = fields.One2many('objetivo.mensual', 'objetivo_equipo_id', string='Meses')
     nota = fields.Text('Notas')
 
-    objetivo_ca = fields.Monetary('Objetivo CA', store=True, readonly=True,
+
+    def get_grupo_objetivo_ca(self):
+        total = 0
+        equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
+        for eq in equipos:
+            total += eq.objetivo_ca
+        self.objetivo_ca = total
+    objetivo_ca = fields.Monetary('Objetivo CA', store=False, readonly=True, compute='get_grupo_objetivo_ca',
                                   help='Parte del objetivo de venta año actual que hay que hacer en cliente actual o cliente Vip.')
-    objetivo_ca_count = fields.Integer('Objetivo Ud.CA', store=True, readonly=True,
+
+    def get_grupo_objetivo_ca_count(self):
+        total = 0
+        equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
+        for eq in equipos:
+            total += eq.objetivo_ca_count
+        self.objetivo_ca_count = total
+    objetivo_ca_count = fields.Integer('Objetivo Ud.CA', store=False, readonly=True, compute='get_grupo_objetivo_ca_count',
                                        help='Número de oportunidades año actual que hay que hacer en Cliente Actual o Cliente VIP.')
-    objetivo_cn = fields.Monetary('Objetivo CN', store=True, readonly=True,
+
+
+    def get_grupo_objetivo_cn(self):
+        total = 0
+        equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
+        for eq in equipos:
+            total += eq.objetivo_cn
+        self.objetivo_cn = total
+    objetivo_cn = fields.Monetary('Objetivo CN', store=False, readonly=True, compute='get_grupo_objetivo_cn',
                                   help='Parte del objetivo de ventas año actual que hay que hacer en Prospección buena, muy interesante, excelente y Cliente recuperar.')
-    objetivo_cn_count = fields.Integer('Objetivo Ud.CN', store=True, readonly=True,
+
+    def get_grupo_objetivo_cn_count(self):
+        total = 0
+        equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
+        for eq in equipos:
+            total += eq.objetivo_cn_count
+        self.objetivo_cn_count = total
+    objetivo_cn_count = fields.Integer('Objetivo Ud.CN', store=False, readonly=True, compute='get_grupo_objetivo_cn_count',
                                        help='Nº de oportunidades año actual que hay que hacer en Prospección buena, muy interesante, excelente y Cliente recuperar.')
-    objetivo_count  = fields.Float('Objetivo Nº oportunidades', readonly=True, store=True,
+
+    def get_grupo_objetivo_count(self):
+        total = 0
+        equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
+        for eq in equipos:
+            total += eq.objetivo_count
+        self.objetivo_count = total
+    objetivo_count  = fields.Float('Objetivo Nº oportunidades', readonly=True, store=False, compute='get_grupo_objetivo_count',
                                        help='Objetivo en número de oportunidades total año actual (nº oport en Venta cruzada más nº oport en Nuevo negocio).')
-    objetivo_pendiente = fields.Monetary('Objetivo pendiente', store=True, readonly=True)
 
-    objetivo_total = fields.Monetary('Objetivo total', store=True, readonly=True)
 
-    op_activa = fields.Monetary('Op. activas', store=True, readonly=True,
+    @api.dependes('objetivo_total','venta_total')
+    def get_grupo_objetivo_pendiente(self):
+        self.objetivo_pendiente = self.objetivo_total - self.venta_total
+    objetivo_pendiente = fields.Monetary('Objetivo pendiente', store=True, readonly=True, compute='get_grupo_objetivo_pendiente')
+
+    def get_grupo_objetivo_total(self):
+        total = 0
+        equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
+        for eq in equipos:
+            total += eq.objetivo_total
+        self.objetivo_total = total
+    objetivo_total = fields.Monetary('Objetivo total', store=False, readonly=True, compute='get_grupo_objetivo_total')
+
+
+    def get_grupo_op_activa(self):
+        total = 0
+        equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
+        for eq in equipos:
+            total += eq.op_activa
+        self.op_activa = total
+    op_activa = fields.Monetary('Op. activas', store=False, readonly=True, compute='get_grupo_op_activa',
                                 help='Importe total de ventas en Oportunidades que estamos trabajando (no incluye las oportunidades que hay en las fases: Nuevo, Ganado y Perdido).'
                                      'Es posible que no coincida con la suma de cuenta nueva + base instalada si algún cliente no tiene esta clasificación asignada.')
 
-    op_activa_ca  = fields.Monetary('Para negociar CA', store=True, readonly=True,
+
+    def get_grupo_op_activa_ca(self):
+        total = 0
+        equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
+        for eq in equipos:
+            total += eq.op_activa_ca
+        self.op_activa_ca = total
+    op_activa_ca  = fields.Monetary('Para negociar CA', store=False, readonly=True, compute='get_grupo_op_activa_ca',
                                 help='Importe total de venta en oportunidades de Venta Cruzada que estamos trabajando '
                                      '(no incluye las oportunidades que hay en las fases: Nuevo, Ganado y Perdido), en Cliente Actual y VIP.')
 
-    op_activa_cn = fields.Monetary('Para negociar CN', store=True, readonly=True,
+    def get_grupo_op_activa_cn(self):
+        total = 0
+        equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
+        for eq in equipos:
+            total += eq.op_activa_cn
+        self.op_activa_cn = total
+    op_activa_cn = fields.Monetary('Para negociar CN', store=False, readonly=True, compute='get_grupo_op_activa_cn',
                                 help='Importe total de ventas en Oportunidades en Nuevo negocio que estamos trabajando '
                                      '(no incluye las oportundades en las fases: Nuevo, Ganado y Perdido) en Prospección buena, muy interesante, excelente y Cliente recuperar.')
 
-    op_activa_count = fields.Integer('Nº Op. activas', store=True, readonly=True,
-                                     'help':'Total oportunidades que estamos trabajando (no incluye las que están en las fases: Nuevo, Ganado y Perdido, tampoco las iniciativas).' \
+    def get_grupo_op_activa_count(self):
+        total = 0
+        equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
+        for eq in equipos:
+            total += eq.op_activa_count
+        self.op_activa_count = total
+    op_activa_count = fields.Integer('Nº Op. activas', store=False, readonly=True, compute='get_grupo_op_activa_count',
+                                     help = 'Total oportunidades que estamos trabajando (no incluye las que están en las fases: Nuevo, Ganado y Perdido, tampoco las iniciativas).' \
                                             'Es posible que no coincida con el total de oportunidades activas del CRM, porque calcula la suma de cuenta nueva + base instalada.' \
                                             'Si algún cliente no tiene esta clasificación no contará como ACTIVA.')
 
-    op_activa_vs_hoy_percent = fields.Float('Op. activas (%)', store=True, readonly=True,
+    def get_grupo_op_activa_vs_hoy_percent(self):
+        total = 0
+        if self.op_hoy_count > 0:
+            total = self.op_activa_count / self.op_hoy_count * 100
+        self.op_activa_vs_hoy_percent = total
+    op_activa_vs_hoy_percent = fields.Float('Op. activas (%)', store=False, readonly=True, compute='get_grupo_op_activa_vs_hoy_percent',
                                             help='Porcentaje entre oportunidades Activas y Actuales.')
 
-    op_activa_vs_media_global_percent = fields.Float('Potencial vs Global', store=True, readonly=True)
-
-    op_activas_vs_global = fields.Integer('Activas VS Global', store=True, readonly=True,
-                                          help='Comparación entre la cantidad de oportunidades ACTIVAS de este comercial, con la media de todos los comerciales.')
-
-
-    def get_op_ca_count_percent(self):
+    def get_grupo_op_ca_count_percent(self):
         total = 0
         if (self.objetivo_ca_count > 0):
             total = self.op_hoy_ca_count / self.objetivo_ca_count * 100
         self.op_ca_count_percent = total
-    op_ca_count_percent = fields.Float('Progreso Op. CA (%)', store=False, readonly=True, compute='get_op_ca_count_percent')
+    op_ca_count_percent = fields.Float('Progreso Op. CA (%)', store=False, readonly=True, compute='get_grupo_op_ca_count_percent')
 
-    def get_op_cn_count_percent(self):
+    def get_grupo_op_cn_count_percent(self):
         total = 0
         if (self.objetivo_cn_count > 0):
             total = self.op_hoy_cn_count / self.objetivo_cn_count * 100
         self.op_cn_count_percent = total
-    op_cn_count_percent = fields.Float('Progreso Op. CN (%)', store=False, readonly=True, compute='get_op_cn_count_percent')
+    op_cn_count_percent = fields.Float('Progreso Op. CN (%)', store=False, readonly=True, compute='get_grupo_op_cn_count_percent')
 
-    op_ganada_ca_count = fields.Integer('Nº Op.Ganadas CA', store=True, readonly=True,
+
+    def get_grupo_op_ganada_ca_count(self):
+        total = 0
+        equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
+        for eq in equipos:
+            total += eq.op_ganada_ca_count
+        self.op_ganada_ca_count = total
+    op_ganada_ca_count = fields.Integer('Nº Op.Ganadas CA', store=False, readonly=True, compute='get_grupo_op_ganada_ca_count',
                                         help='Número de oportunidades en fase Ganado de Cliente Actual y VIP.')
 
-    op_ganada_ca_count_percent = fields.Float('Op. ganadas CA (% sobre objetivo)', store=True, readonly=True,
+
+    def get_grupo_op_ganada_ca_count_percent(self):
+        total = 0
+        if (self.op_hoy_ca_count > 0):
+            total = self.op_ganada_ca_count / self.op_hoy_ca_count * 100
+        self.op_ganada_ca_count_percent = total
+    op_ganada_ca_count_percent = fields.Float('Op. ganadas CA (% sobre objetivo)', store=False, readonly=True,
+                                              compute = 'get_grupo_op_ganada_ca_count_percent',
                                               help='Porcentaje entre oportunidades Ganadas en Cliente Actual/VIP y nº total de oportunidades en Cliente Actual y VIP.')
 
-    op_ganada_cn_count = fields.Integer('Nº Op.Ganadas CN', store=True, readonly=True,
+    def get_grupo_op_ganada_cn_count(self):
+        total = 0
+        equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
+        for eq in equipos:
+            total += eq.op_ganada_cn_count
+        self.op_ganada_cn_count = total
+    op_ganada_cn_count = fields.Integer('Nº Op.Ganadas CN', store=False, readonly=True,
+                                        compute='get_grupo_op_ganada_cn_count',
                                         help='Nº de oportunidades en fase Ganado de Prospección buena, excelente, muy interesante y Cliente recuperar.')
 
-    op_ganada_cn_count_percent = fields.Float('Op. ganadas CN (% sobre objetivo)', store=True, readonly=True,
+
+    def get_grupo_op_ganada_cn_count_percent(self):
+        total = 0
+        if (self.op_hoy_ca_count > 0):
+            total = self.op_ganada_cn_count / self.op_hoy_cn_count * 100
+        self.op_ganada_cn_count_percent = total
+    op_ganada_cn_count_percent = fields.Float('Op. ganadas CN (% sobre objetivo)', store=False, readonly=True,
+                                              compute='get_grupo_op_ganada_cn_count_percent',
                                               help='Porcentaje entre oportunidades Ganadas en en prospección buena, muy interesante, excelente y cliente recuperar '
                                                    'y nº total de oportunidades en Prospección buena, muy interesante, excelente y Cliente recuperar.')
 
-    op_ganada_count = fields.Integer('Total Op. Ganadas', store=True, readonly=True,
+    def get_grupo_op_ganada_count(self):
+        total = 0
+        equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
+        for eq in equipos:
+            total += eq.op_ganada_count
+        self.op_ganada_count = total
+    op_ganada_count = fields.Integer('Total Op. Ganadas', store=False, readonly=True, compute='get_grupo_op_ganada_count',
                                      help='Total oportunidades en fase Ganado año actual.')
 
-    op_ganada_count_percent = fields.Float('Progreso Op. ganadas (% sobre objetivo', store=True, readonly=True,
+    def get_grupo_op_ganada_count_percent(self):
+        total = 0
+        if (self.op_hoy_ca_count > 0):
+            total = self.op_ganada_count / self.op_hoy_count * 100
+        self.op_ganada_count_percent = total
+    op_ganada_count_percent = fields.Float('Progreso Op. ganadas (% sobre objetivo', store=False, readonly=True,
+                                           compute='get_grupo_op_ganada_count_percent',
                                            help='Porcentaje entre oportunidades Ganadas y Actuales.')
 
-    op_hoy_ca_count = fields.Integer('Nº Op. Actuales CA', store=True, readonly=True,
+    def get_grupo_op_hoy_ca_count(self):
+        total = 0
+        equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
+        for eq in equipos:
+            total += eq.op_hoy_ca_count
+        self.op_hoy_ca_count = total
+    op_hoy_ca_count = fields.Integer('Nº Op. Actuales CA', store=False, readonly=True, compute='get_grupo_op_hoy_ca_count',
                                      help='Número total de oportunidades en Cliente actual y Cliente VIP incluído Nuevo, Ganado y Perdido.')
 
-    op_hoy_cn_count = fields.Integer('Nº Op. Actuales CN', store=True, readonly=True,
+    def get_grupo_op_hoy_cn_count(self):
+        total = 0
+        equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
+        for eq in equipos:
+            total += eq.op_hoy_cn_count
+        self.op_hoy_cn_count = total
+    op_hoy_cn_count = fields.Integer('Nº Op. Actuales CN', store=False, readonly=True, compute='get_grupo_op_hoy_cn_count',
                                      help='Nº total de oportunidades en Prospección buena, muy interesante, excelente y Cliente recuperar.')
 
-    op_hoy_count = fields.Integer('Nº Op. actuales', store=True, readonly=True,
+
+    def get_grupo_op_hoy_count(self):
+        total = 0
+        equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
+        for eq in equipos:
+            total += eq.op_hoy_count
+        self.op_hoy_count = total
+    op_hoy_count = fields.Integer('Nº Op. actuales', store=False, readonly=True, compute='get_grupo_op_hoy_count',
                                      help='Oportunidades a fecha de la última actualización, incluyendo las nuevas, ganadas, perdidas y activas.')
 
-    op_hoy_vs_global = fields.Integer('VS Central', store=True, readonly=True,
-                                      help='Comparación entre la media de oportunidades por cada comercial en esta delegación, con la media total de  los comerciales.')
 
-    op_perdida_ca_count = fields.Integer('Nº Op. Perdidas CA', store=True, readonly=True,
+    def get_grupo_op_perdida_ca_count(self):
+        total = 0
+        equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
+        for eq in equipos:
+            total += eq.op_perdida_ca_count
+        self.op_perdida_ca_count = total
+    op_perdida_ca_count = fields.Integer('Nº Op. Perdidas CA', store=False, readonly=True, compute='get_grupo_op_perdida_ca_count',
                                          help='Nº oportunidades en fase Perdido de clientes Actuales y VIP.')
 
-    op_perdida_ca_count_percent = fields.Float('Op. Perdidas CA (%)', store=True, readonly=True,
+    def get_grupo_op_perdida_ca_count_percent(self):
+        total = 0
+        if (self.op_hoy_ca_count > 0):
+            total = self.op_perdida_ca_count / self.op_hoy_ca_count * 100
+        self.op_perdida_ca_count_percent = total
+    op_perdida_ca_count_percent = fields.Float('Tasa de Perdidas CA (%)', store=False, readonly=True, compute='get_grupo_op_perdida_ca_count_percent',
                                                help='Porcentaje entre oportunidades Perdidas en Cliente Actual/VIP y nº total de oportunidades en Cliente Actual y VIP.')
 
-    op_perdida_cn_count = fields.Integer('Nº Op. Perdidas CN', store=True, readonly=True,
+    def get_grupo_op_perdida_cn_count(self):
+        total = 0
+        equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
+        for eq in equipos:
+            total += eq.op_perdida_cn_count
+        self.op_perdida_cn_count = total
+    op_perdida_cn_count = fields.Integer('Nº Op. Perdidas CN', store=False, readonly=True, compute='get_grupo_op_perdida_cn_count',
                                          help='Nº oportunidades en fase Perdido de oportunidades en Prospección buena, muy interesante, excelente y Cliente recuperar.')
 
-    op_perdida_cn_count_percent = fields.Float('Op. Perdidas CN (%)', store=True, readonly=True,
+
+    def get_grupo_op_perdida_cn_count_percent(self):
+        total = 0
+        if (self.op_hoy_cn_count > 0):
+            total = self.op_perdida_cn_count / self.op_hoy_cn_count * 100
+        self.op_perdida_cn_count_percent = total
+    op_perdida_cn_count_percent = fields.Float('Op. Perdidas CN (%)', store=False, readonly=True, compute='get_grupo_op_perdida_cn_count_percent',
                                                help='Porcentaje entre oportunidades Perdidas en prospección buena, muy interesante, excelente y cliente recuperar '
                                                     'y nº total de oportunidades en Prospección buena, muy interesante, excelente y Cliente recuperar.')
 
-    op_perdida_count = fields.Integer('Nº Op. perdidas', store=True, readonly=True,
+    def get_grupo_op_perdida_count(self):
+        total = 0
+        equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
+        for eq in equipos:
+            total += eq.op_perdida_count
+        self.op_perdida_count = total
+    op_perdida_count = fields.Integer('Nº Op. perdidas', store=False, readonly=True, compute='get_grupo_op_perdida_count',
                                       help='Total oportunidades en fase Perdido año actual.')
 
-    x_op_perdida_count_percent = fields.Float('Op. Perdidas (%)', store=True, readonly=True,
-                                              help='Porcentaje entre oportunidades Perdidas y Actuales.')
+    def get_grupo_op_perdida_count_percent(self):
+        total = 0
+        if (self.op_hoy_cn_count > 0):
+            total = self.op_perdida_count / self.op_hoy_count * 100
+        self.op_perdida_count_percent = total
+    op_perdida_count_percent = fields.Float('Op. Perdidas (%)', store=False, readonly=True,
+                                            compute='get_grupo_op_perdida_count_percent',
+                                            help='Porcentaje entre oportunidades Perdidas y Actuales.')
 
-    op_prospeccion_count = fields.Integer('Posterior a objetivo', store=True, readonly=True,
+    def get_grupo_op_prospeccion_count(self):
+        total = 0
+        equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
+        for eq in equipos:
+            total += eq.op_prospeccion_count
+        self.op_prospeccion_count = total
+    op_prospeccion_count = fields.Integer('Posterior a objetivo', store=False, readonly=True, compute='get_grupo_op_prospeccion_count',
                                           help='Total oportunidades creadas después del cierre del objetivo anual, es un buen medidor del esfuerzo y la motivación.')
 
-    op_prospeccion_count_percent = fields.Float('Op. posteriores vs objetivo (%)', store=True, readonly=True,
+
+    def get_grupo_op_prospeccion_count_percent(self):
+        total = 0
+        cantidad_inicial = self.x_op_hoy_count - self.x_op_prospeccion_count
+        if (cantidad_inicial > 0):
+            total = (self.x_op_hoy_count - cantidad_inicial) / cantidad_inicial * 100
+        self.op_prospeccion_count_percent = total
+    op_prospeccion_count_percent = fields.Float('Op. posteriores vs objetivo (%)', store=False, readonly=True,
+                                                compute='get_grupo_op_prospeccion_count_percent',
                                                 help='% de prospecciones creadas tras el cierre del objetivo, sobre el nº inicial de cierre.'
                                                      'Por ejemplo, si el objetivo son 80 y hay 40 nuevas, este valor será un 50%.')
 
-    op_sin_actividad_count = fields.Integer('Nº Op. sin actividad', store=True, readonly=True,
+
+    def get_grupo_op_sin_actividad_count(self):
+        total = 0
+        equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
+        for eq in equipos:
+            total += eq.op_sin_actividad_count
+        self.op_sin_actividad_count = total
+    op_sin_actividad_count = fields.Integer('Nº Op. sin actividad', store=False, readonly=True,
+                                            compute='get_grupo_op_sin_actividad_count',
                                             help='Nº total de actividades sin actividad planificada. '
                                                  'Incluye ACTIVAS + NUEVAS.')
 
-    op_sin_actividad_percent = fields.Float('Nº Op. no planificadas', store=True, readonly=True,
+    def get_grupo_op_sin_actividad_percent(self):
+        total = 0
+        if (self.op_hoy_count - self.op_perdida_count - self.op_ganada_count > 0):
+            total = self.op_sin_actividad_count / (self.op_hoy_count - self.op_perdida_count - self.op_ganada_count) * 100
+        self.op_sin_actividad_percent = total
+    op_sin_actividad_percent = fields.Float('Nº Op. no planificadas', store=False, readonly=True,
+                                            compute='get_grupo_op_sin_actividad_percent',
                                             help='Porcentaje entre actividades no planificadas y nº de oportunidades actuales.')
 
-    op_vencida_count = fields.Integer('Nº Op. vencidas', store=True, readonly=True,
+    def get_grupo_op_vencida_count(self):
+        total = 0
+        equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
+        for eq in equipos:
+            total += eq.op_vencida_count
+        self.op_vencida_count = total
+    op_vencida_count = fields.Integer('Nº Op. vencidas', store=False, readonly=True, compute='get_grupo_op_vencida_count',
                                       help='Total Oportunidades con fecha de cierre vencida.')
 
-    # En objetivo anual esta se llama op_vencida_count_percent:
-    op_vencida_percent = fields.Float('Op. Vencidas (%)', store=True, readonly=True,
+
+    def get_grupo_op_vencida_percent(self):
+        total = 0
+        if (self.op_hoy_count > 0):
+            total = self.op_vencida_count / self.op_hoy_count * 100
+        self.op_vencida_percent = total
+    op_vencida_percent = fields.Float('Op. Vencidas (%)', store=False, readonly=True, compute='get_grupo_op_vencida_percent',
                                             help='Porcentaje entre oportunidades Vencidas y Actuales.')
 
-    oportunidad_vs_objetivo_percent = fields.Float('Cobertura', store=True, readonly=True, compute='get_oportunidad_vs_objetivo_percent',
+    def get_grupo_oportunidad_vs_objetivo_percent(self):
+        total = 100
+        if (self.objetivo_pendiente > 0):
+            total = self.op_activa / self.objetivo_pendiente * 100
+        self.oportunidad_vs_objetivo_percent = total
+    oportunidad_vs_objetivo_percent = fields.Float('Cobertura', store=False, readonly=True, compute='get_grupo_oportunidad_vs_objetivo_percent',
                                                    help='Porcentaje de diferencia entre objetivo venta año y el importe en oportunidades activas.')
 
-    responsable_id = fields.Many2one('res.users', string='Responsable', store=True, readonly=True)
-
-    venta_ca = fields.Monetary('Venta CA', store=True, readonly=True,
+    def get_grupo_venta_ca(self):
+        total = 0
+        equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
+        for eq in equipos:
+            total += eq.venta_ca
+        self.venta_ca = total
+    venta_ca = fields.Monetary('Venta CA', store=False, readonly=True, compute='get_grupo_venta_ca',
                                help='Ventas en oportunidades ganadas en cliente actual y Vip.')
-    venta_ca_percent = fields.Float('Venta CA (% sobre objetivo)', store=True, readonly=True,
+
+    def get_grupo_venta_ca_percent(self):
+        total = 0
+        if (self.objetivo_ca > 0):
+            total = self.op_vencida_ca / self.objetivo_ca * 100
+        self.venta_ca_percent = total
+    venta_ca_percent = fields.Float('Venta CA (% sobre objetivo)', store=False, readonly=True,
+                                    compute='get_grupo_venta_ca_percent',
                                     help='Porcentaje de consecución de objetivo en venta cruzada, cliente actual y Vip.')
 
-    venta_cn = fields.Monetary('Venta CN', store=True, readonly=True,
+    def get_grupo_venta_cn(self):
+        total = 0
+        equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
+        for eq in equipos:
+            total += eq.venta_cn
+        self.venta_cn = total
+    venta_cn = fields.Monetary('Venta CN', store=False, readonly=True, compute='get_grupo_venta_cn',
                                help='Ventas en oportunidades ganadas en Prospección buena, muy interesante, excelente y Cliente recuperar.')
-    venta_cn_percent = fields.Float('Venta CN (% sobre objetivo)', store=True, readonly=True,
+
+
+    def get_grupo_venta_cn_percent(self):
+        total = 0
+        if (self.objetivo_cn > 0):
+            total = self.venta_cn / self.objetivo_cn * 100
+        self.venta_cn_percent = total
+    venta_cn_percent = fields.Float('Venta CN (% sobre objetivo)', store=False, readonly=True, compute='get_grupo_venta_cn_percent',
                                     help='Porcentaje de consecución de Objetivo en Nuevo negocio año actual en Prospección buena, muy interesante, excelente y Cliente recuperar.')
 
-    venta_percent = fields.Float('Vendido (% sobre objetivo)', store=True, readonly=True,
+    def get_grupo_venta_percent(self):
+        total = 0
+        if (self.objetivo_total > 0):
+            total = self.venta_total / self.objetivo_total * 100
+        self.venta_ca_percent = total
+    venta_percent = fields.Float('Vendido (% sobre objetivo)', store=False, readonly=True, compute='get_grupo_venta_percent',
                                  help='Porcentaje de consecución de objetivo total, año actual.')
 
-    venta_total = fields.Monetary('Venta total', store=True, readonly=True,
+    def get_grupo_venta_total(self):
+        total = 0
+        equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
+        for eq in equipos:
+            total += eq.venta_total
+        self.venta_total = total
+    venta_total = fields.Monetary('Venta total', store=False, readonly=True, compute='get_grupo_venta_total',
                                   help='Ventas en oportunidades ganadas')
-
-    venta_vs_global = fields.Monetary('Venta vs Global', store=True, readonly=True,
-                                      help='Diferencia media de importe por usuario de la delegación, con respecto a la media global de todos los comerciales.')
-
-
-    #### REVISAR ::: !!!
-    def get_objetivo_equipo_id_objetivo_anual_lineas_count(self):
-        for record in self:
-            lineas = self.env['objetivo.anual.linea'].search([('objetivo_equipo_id', '=', record.id)])
-            record['objetivo_equipo_id_objetivo_anual_lineas_count'] = len(lineas.ids)
-    objetivo_equipo_id_objetivo_anual_lineas_count = fields.Integer('Obj. Equipo venta count', store=False, readonly=True,
-                                                                compute='get_objetivo_equipo_id_objetivo_anual_lineas_count')
-    def get_objetivo_equipo_id_objetivo_anuales_count(self):
-        lineas = self.env['objetivo.anual'].search([('objetivo_equipo_id', '=', self.id)])
-        self.objetivo_id_objetivo_anual_lineas_count = len(lineas.ids)
-    objetivo_equipo_id_objetivo_anuales_count = fields.Integer('Objetivo equipo count', store=False, readonly=True,
-                                                                compute='get_objetivo_equipo_id_objetivo_anuales_count')
-
-    def objetivo_equipo_id_objetivo_mensuales_count(self):
-        lineas = self.env['objetivo.mensual'].search([('objetivo_equipo_id', '=', self.id)])
-        record['objetivo_equipo_id_objetivo_mensuales_count'] = len(lineas.ids)
-    objetivo_equipo_id_objetivo_mensuales_count = fields.Integer('Obj. Equipo Ventas count', store=False, readonly=True,
-                                                                 compute='get_objetivo_equipo_id_objetivo_mensuales_count')
