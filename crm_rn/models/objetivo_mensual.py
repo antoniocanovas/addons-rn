@@ -144,7 +144,7 @@ class ObjetivoMensual(models.Model):
                                                     'y nº total de oportunidades en Prospección buena, muy interesante, excelente y Cliente recuperar.')
     op_perdida_count = fields.Integer('Nº Op. perdidas', store=True, readonly=True,
                                       help='Total oportunidades en fase Perdido año actual.')
-    x_op_perdida_count_percent = fields.Float('Op. Perdidas (% obj)', store=True, readonly=True,
+    op_perdida_count_percent = fields.Float('Op. Perdidas (% obj)', store=True, readonly=True,
                                               help='Porcentaje entre oportunidades Perdidas y Actuales.')
     op_perdida_mes_ca_count = fields.Integer('Nº Op. Perdidas CA este mes', store=True, readonly=True,
                                          help='Nº oportunidades en fase Perdido de clientes Actuales y VIP este mes.')
@@ -167,7 +167,7 @@ class ObjetivoMensual(models.Model):
     op_prospeccion_mes_count = fields.Integer('Nº Op. nuevas este mes', store=True, readonly=True,
                                               help = 'Total oportunidades creadas después del cierre del objetivo anual, '
                                                      'es un buen medidor del esfuerzo y la motivación, este mes.')
-    x_op_prospeccion_mes_count_percent = fields.Float('Nº Op. nuevas este mes (% obj)', store=True, readonly=True,
+    op_prospeccion_mes_count_percent = fields.Float('Nº Op. nuevas este mes (% obj)', store=True, readonly=True,
                                                       help='% de prospecciones creadas tras el cierre del objetivo, sobre el nº inicial de cierre.'
                                                      'Por ejemplo, si el objetivo son 80 y hay 40 nuevas, este valor será un 50%; este mes.')
     op_sin_actividad_count = fields.Integer('Nº Op. sin actividad', store=True, readonly=True,

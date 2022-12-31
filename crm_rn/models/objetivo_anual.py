@@ -126,7 +126,7 @@ class ObjetivoAnual(models.Model):
     def get_incremento_objetivo_anual_percent(self):
         total = 0
         if self.cumplido_total > 0:
-            total = 100 * (self.objetivo_total / self.x_cumplido_total) - 100
+            total = 100 * (self.objetivo_total / self.cumplido_total) - 100
         self.incremento_objetivo_anual_percent = total
     incremento_objetivo_anual_percent = fields.Float('Variación obj.anual', store=True, readonly=True,
                                                      compute='get_incremento_objetivo_anual_percent',
@@ -280,7 +280,7 @@ class ObjetivoAnual(models.Model):
     op_perdida_count = fields.Integer('Nº Op. perdidas', store=True, readonly=True,
                                       help='Total oportunidades en fase Perdido año actual.')
 
-    x_op_perdida_count_percent = fields.Float('Op. Perdidas (%)', store=True, readonly=True,
+    op_perdida_count_percent = fields.Float('Op. Perdidas (%)', store=True, readonly=True,
                                               help='Porcentaje entre oportunidades Perdidas y Actuales.')
 
     op_prospeccion_count = fields.Integer('Nº Op. posteriores a objetivo', store=True, readonly=True,
@@ -345,7 +345,7 @@ class ObjetivoAnual(models.Model):
             record['objetivo_anual_id_objetivo_mensuales_count'] = len(meses.ids)
     objetivo_anual_id_objetivo_mensuales_count = fields.Integer('Objetivo anual count', store=False, readonly=True,
                                                                 compute='get_objetivo_anual_id_objetivo_mensuales_count')
-    def get_objetivo_id__x_objetivo_anual_lineas_count(self):
+    def get_objetivo_id__objetivo_anual_lineas_count(self):
         self.objetivo_id_objetivo_anual_lineas_count = len(self.linea_ids.ids)
     objetivo_id_objetivo_anual_lineas_count = fields.Integer('Objetivo count', store=False, readonly=True,
-                                                                compute='get_objetivo_id__x_objetivo_anual_lineas_count')
+                                                                compute='get_objetivo_id__objetivo_anual_lineas_count')
