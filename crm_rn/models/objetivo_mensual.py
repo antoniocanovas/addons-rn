@@ -164,71 +164,42 @@ class ObjetivoMensual(models.Model):
                                                 help='% de prospecciones creadas tras el cierre del objetivo, sobre el nº inicial de cierre.'
                                                      'Por ejemplo, si el objetivo son 80 y hay 40 nuevas, este valor será un 50%.')
 
-
-
-    ## VOY POR AQUÍ:
-
-
-
-
-
-
+    op_prospeccion_mes_count = fields.Integer('Nº Op. nuevas este mes', store=True, readonly=True,
+                                              help = 'Total oportunidades creadas después del cierre del objetivo anual, '
+                                                     'es un buen medidor del esfuerzo y la motivación, este mes.')
+    x_op_prospeccion_mes_count_percent = fields.Float('Nº Op. nuevas este mes (% obj)', store=True, readonly=True,
+                                                      help='% de prospecciones creadas tras el cierre del objetivo, sobre el nº inicial de cierre.'
+                                                     'Por ejemplo, si el objetivo son 80 y hay 40 nuevas, este valor será un 50%; este mes.')
     op_sin_actividad_count = fields.Integer('Nº Op. sin actividad', store=True, readonly=True,
                                             help='Nº total de actividades sin actividad planificada. '
                                                  'Incluye ACTIVAS + NUEVAS.')
-
     op_sin_actividad_percent = fields.Float('Nº Op. no planificadas', store=True, readonly=True,
                                             help='Porcentaje entre actividades no planificadas y nº de oportunidades actuales.')
-
     op_vencida_count = fields.Integer('Nº Op. vencidas', store=True, readonly=True,
                                       help='Total Oportunidades con fecha de cierre vencida.')
-
     op_vencida_count_percent = fields.Float('Nº Op. Vencidas vs actuales (%)', store=True, readonly=True,
                                             help='Porcentaje entre oportunidades Vencidas y Actuales.')
-
-    @api.depends('op_activa','objetivo_pendiente')
-    def get_oportunidad_vs_objetivo_percent(self):
-        if self.objetivo_pendiente > 0:
-            self.oportunidad_vs_objetivo_percent = self.op_activa / self.objetivo_pendiente * 100
-        else:
-            self.oportunidad_vs_objetivo_percent = 100
-    oportunidad_vs_objetivo_percent = fields.Float('Cobertura', store=True, readonly=True, compute='get_oportunidad_vs_objetivo_percent',
+    oportunidad_vs_objetivo_percent = fields.Float('Cobertura', store=True, readonly=True,
                                                    help='Porcentaje de diferencia entre objetivo venta año y el importe en oportunidades activas.')
-
-    responsable_id = fields.Many2one('res.users', string='Responsable', store=True, required=True)
-
     venta_ca = fields.Monetary('Venta CA', store=True, readonly=True,
                                help='Ventas en oportunidades ganadas en cliente actual y Vip.')
-    venta_ca_percent = fields.Float('Venta CA (%)', store=True, readonly=True,
-                                    help='Porcentaje de consecución de objetivo en venta cruzada, cliente actual y Vip.')
-
     venta_cn = fields.Monetary('Venta CN', store=True, readonly=True,
                                help='Ventas en oportunidades ganadas en Prospección buena, muy interesante, excelente y Cliente recuperar.')
-    venta_cn_percent = fields.Float('Venta CN (%)', store=True, readonly=True,
-                                    help='Porcentaje de consecución de Objetivo en Nuevo negocio año actual en Prospección buena, muy interesante, excelente y Cliente recuperar.')
+    venta_mes = fields.Monetary('Vendido este mes', store=True, readonly=True)
+    venta_mes_ca = fields.Monetary('Vendido este mes CA (€)', store=True, readonly=True)
+    venta_mes_ca_percent = fields.Float('Vendido este mes CA (% obj)', store=True, readonly=True)
+    venta_mes_cn = fields.Monetary('Vendido este mes CN (€)', store=True, readonly=True)
+    venta_mes_cn_percent = fields.Monetary('Vendido este mes CN (% obj)', store=True, readonly=True)
 
     venta_percent = fields.Float('Objetivo de venta (%)', store=True, readonly=True,
                                  help='Porcentaje de consecución de objetivo total, año actual.')
-
     venta_total = fields.Monetary('Venta total', store=True, readonly=True,
                                   help='Ventas en oportunidades ganadas')
+    venta_total_percent = fields.Float('Vendido (% obj)', store=True, readonly=True,
+                                 help='Porcentaje de consecución de objetivo total, año actual.')
 
-    venta_vs_delegacion = fields.Monetary('Venta vs equipo', store=True, readonly=True,
-                                          help='En importe, comparación con la venta media de todos los comerciales de su equipo.')
+    def get_mes_objetivo_mensual_id_objetivo_mensual_lineas_count(self):
+        self.objetivo_mensual_id_objetivo_mensual_lineas_count = len(self.linea_ids.ids)
+    objetivo_mensual_id_objetivo_mensual_lineas_count = fields.Integer('Obj mensual count', store=True, readonly=True,
+                                                                       compute='get_mes_objetivo_mensual_id_objetivo_mensual_lineas_count')
 
-    venta_vs_global = fields.Monetary('Venta vs Global', store=True, readonly=True,
-                                      help='En importe, comparación con la venta media de todos los comerciales.')
-
-
-
-    #### REVISAR ::: !!!
-    def get_objetivo_anual_id_objetivo_mensuales_count(self):
-        for record in self:
-            meses = self.env['objetivo_mensual'].search([('objetivo_anual_id', '=', record.id)])
-            record['objetivo_anual_id_objetivo_mensuales_count'] = len(meses.ids)
-    objetivo_anual_id_objetivo_mensuales_count = fields.Integer('Objetivo anual count', store=False, readonly=True,
-                                                                compute='get_objetivo_anual_id_objetivo_mensuales_count')
-    def get_objetivo_id__x_objetivo_anual_lineas_count(self):
-        self.objetivo_id_objetivo_anual_lineas_count = len(self.linea_ids.ids)
-    objetivo_id_objetivo_anual_lineas_count = fields.Integer('Objetivo count', store=False, readonly=True,
-                                                                compute='get_objetivo_id__x_objetivo_anual_lineas_count')
