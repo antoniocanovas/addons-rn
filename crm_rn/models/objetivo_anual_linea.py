@@ -6,7 +6,7 @@ _logger = logging.getLogger(__name__)
 
 
 class ObjetivoAnualLinea(models.Model):
-    _name = 'objetivo.anual'
+    _name = 'objetivo.anual.linea'
     _description = 'Objetivo anual Líneas'
 
     # Estos campos van en el módulo de facturación desde ERP:
