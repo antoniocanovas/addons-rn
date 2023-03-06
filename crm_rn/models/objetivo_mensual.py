@@ -74,7 +74,7 @@ class ObjetivoMensual(models.Model):
                                      'Es posible que no coincida con la suma de cuenta nueva + base instalada si algún cliente no tiene esta clasificación asignada.')
 
     op_activa_count = fields.Integer('Nº Op. activas', store=True, readonly=True,
-                                     'help':'Total oportunidades que estamos trabajando (no incluye las que están en las fases: Nuevo, Ganado y Perdido, tampoco las iniciativas).' \
+                                     help='Total oportunidades que estamos trabajando (no incluye las que están en las fases: Nuevo, Ganado y Perdido, tampoco las iniciativas).' \
                                             'Es posible que no coincida con el total de oportunidades activas del CRM, porque calcula la suma de cuenta nueva + base instalada.' \
                                             'Si algún cliente no tiene esta clasificación no contará como ACTIVA.')
 
