@@ -195,7 +195,7 @@ class ObjetivoGrupo(models.Model):
                                        help='Objetivo en número de oportunidades total año actual (nº oport en Venta cruzada más nº oport en Nuevo negocio).')
 
 
-    @api.dependes('objetivo_total','venta_total')
+    @api.depends('objetivo_total','venta_total')
     def get_grupo_objetivo_pendiente(self):
         self.objetivo_pendiente = self.objetivo_total - self.venta_total
     objetivo_pendiente = fields.Monetary('Objetivo pendiente', store=True, readonly=True, compute='get_grupo_objetivo_pendiente')
