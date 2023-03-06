@@ -21,8 +21,7 @@ class ResPartner(models.Model):
     @api.depends('active')
     def _get_lead_es_perdida(self):
         for record in self:
-            if record.active == False:
-                record['x_es_perdida'] = True
-            else:
-                record['x_es_perdida'] = False
+            lost = False
+            if record.active == False: lost = True
+            record['es_perdida'] = lost
     es_perdida = fields.Boolean('Es perdida', store=True, compute=_get_lead_es_perdida)
