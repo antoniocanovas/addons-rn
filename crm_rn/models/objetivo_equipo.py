@@ -16,8 +16,8 @@ class ObjetivoEquipo(models.Model):
     name = fields.Char('Name', store=True, readonly=True)
     active = fields.Boolean('Activo', default=True)
     currency_id = fields.Many2one('res.currency', default=1)
-    estado = fields.Selection(string='Estado', store=True, readonly=True,
-        [('activo','Activo'),('archivado','Archivado')])
+    estado = fields.Selection([('activo','Activo'),('archivado','Archivado')],
+                              string='Estado', store=True, readonly=True)
 
     act_finalizada_count = fields.Integer('Activ.finalizadas', readonly=True, store=True,
                                           help='Nº de actividades marcadas como hechas')
