@@ -13,8 +13,8 @@ class ObjetivoGrupo(models.Model):
     name = fields.Char('Name', store=True, readonly=False)
     active = fields.Boolean('Activo', default=True)
     currency_id = fields.Many2one('res.currency', default=1)
-    estado = fields.Selection(string='Estado', store=True, readonly=True,
-        [('activo','Activo'),('archivado','Archivado')])
+    estado = fields.Selection([('activo','Activo'),('archivado','Archivado')],
+                              string='Estado', store=True, readonly=True)
 
     def get_grupo_act_finalizada_count(self):
         total = 0
