@@ -15,6 +15,8 @@ class ResPartner(models.Model):
     _inherit = 'crm.lead'
 
     vat   = fields.Char('NIF', related='partner_id.vat', readonly=False)
+    estado = fields.Selection([('borrador','Borrador'),('activo','Activo'),('archivado','Archivado')],
+                              string='Estado', store=True, readonly=True)
 
     @api.depends('active')
     def _get_lead_es_perdida(self):
