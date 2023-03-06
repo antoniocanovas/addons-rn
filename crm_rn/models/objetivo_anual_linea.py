@@ -17,6 +17,7 @@ class ObjetivoAnualLinea(models.Model):
     active = fields.Boolean('Activo', store=True, related='oportunidad_id.active')
     currency_id = fields.Many2one('res.currency', default=1)
     anho = fields.Integer('Año', store=True, related='objetivo_id.anho')
+    objetivo_id = fields.Many2one('objetivo.anual', string='Objetivo anual', store=True, readonly=True)
     cliente_id = fields.Many2one('res.partner', string="Cliente")
     comercial_id = fields.Many2one('res.users', string="Comercial", store=True, readonly=True)
     equipo_id = fields.Many2one('crm.team', string="Equipo de ventas", related='comercial_id.sale_team_id', store=True, readonly=True)
@@ -35,4 +36,3 @@ class ObjetivoAnualLinea(models.Model):
     importe_inicial = fields.Monetary('Importe inicial', store=True, readonly=True)
     objetivo_equipo_id = fields.Many2one('objetivo.equipo', string='Obj. Equipo venta', store=True, readonly=True,
                                          related='objetivo_id.objetivo_equipo_id')
-    objetivo_id = fields.Many2one('objetivo.anual', string='Objetivo anual', store=True, readonly=True)
