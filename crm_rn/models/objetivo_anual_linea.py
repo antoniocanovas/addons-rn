@@ -32,7 +32,7 @@ class ObjetivoAnualLinea(models.Model):
     estado = fields.Selection('Estado Op.', store=True, readonly=True, related='oportunidad_id.estado')
     estado_actual_id = fields.Many2one('crm.stage', string="Última etapa", store=False, readonly=True, related='oportunidad_id.stage_id')
     estado_inicial_id = fields.Many2one('crm.stage', string="Estado inicial", store=True, readonly=True)
-    importe_actual = fields.Monetary('Importe actual', store=True, readonly=True, related='oportunidad_id.planned_revenue')
+    importe_actual = fields.Monetary('Importe actual', store=True, readonly=True, related='oportunidad_id.expected_revenue')
     importe_inicial = fields.Monetary('Importe inicial', store=True, readonly=True)
     objetivo_equipo_id = fields.Many2one('objetivo.equipo', string='Obj. Equipo venta', store=True, readonly=True,
                                          related='objetivo_id.objetivo_equipo_id')
