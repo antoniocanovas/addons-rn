@@ -16,3 +16,11 @@ class ResPartner(models.Model):
 
     vat   = fields.Char('NIF', related='partner_id.vat', readonly=False)
 
+    @api.depends('active')
+    def _get_lead_es_perdida(self):
+        for record in self:
+            if record.active == False:
+                record['x_es_perdida'] = True
+            else:
+                record['x_es_perdida'] = False
+    es_perdida = fields.Boolean('Es perdida', store=True, compute=_get_lead_es_perdida)
