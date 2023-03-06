@@ -69,7 +69,7 @@ class ObjetivoMensual(models.Model):
     objetivo_total = fields.Monetary('Objetivo total', store=True, readonly=True)
     objetivo_venta_id = fields.Monetary('Objetivo anual', store=True, readonly=True, related='objetivo_anual_id.objetivo_total',
                                         help='Objetivo de ventas año actual, cifra de crecimiento')
-    op_activa = fields.Monetary('Op. activas', store=True, readonly=True, readonly=True,
+    op_activa = fields.Monetary('Op. activas', store=True, readonly=True,
                                 help='Importe total de ventas en Oportunidades que estamos trabajando (no incluye las oportunidades que hay en las fases: Nuevo, Ganado y Perdido).'
                                      'Es posible que no coincida con la suma de cuenta nueva + base instalada si algún cliente no tiene esta clasificación asignada.')
 
