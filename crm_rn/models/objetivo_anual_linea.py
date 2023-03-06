@@ -26,8 +26,9 @@ class ObjetivoAnualLinea(models.Model):
                                           'pero el sistema guarda la información histórica que es la interesante.')
     es_nueva = fields.Boolean('Es nueva', store=True, readonly=True)
     es_objetivo = fields.Boolean('Es objetivo', store=True, readonly=True)
-#    es_perdida = fields.Boolean('Es perdida', store=True, readonly=True, related='oportunidad_id.es_perdida',
-#                                help='Campo de control para mostrar en las líneas de análisis anual.')
+    oportunidad_id = fields.Many2one('crm.lead', string='Oportunidad', store=True, readonly=True)
+    es_perdida = fields.Boolean('Es perdida', store=True, readonly=True, related='oportunidad_id.es_perdida',
+                                help='Campo de control para mostrar en las líneas de análisis anual.')
     estado = fields.Selection('Estado Op.', store=True, readonly=True, related='oportunidad_id.estado')
     estado_actual_id = fields.Many2one('crm.stage', string="Última etapa", store=False, readonly=True, related='oportunidad_id.stage_id')
     estado_inicial_id = fields.Many2one('crm.stage', string="Estado inicial", store=True, readonly=True)
@@ -36,4 +37,3 @@ class ObjetivoAnualLinea(models.Model):
     objetivo_equipo_id = fields.Many2one('objetivo.equipo', string='Obj. Equipo venta', store=True, readonly=True,
                                          related='objetivo_id.objetivo_equipo_id')
     objetivo_id = fields.Many2one('objetivo.anual', string='Objetivo anual', store=True, readonly=True)
-    oportunidad_id = fields.Many2one('crm.lead', string='Oportunidad', store=True, readonly=True)
