@@ -5,4 +5,3 @@ from . import objetivo_equipo
 from . import objetivo_grupo
 from . import objetivo_mensual
 from . import objetivo_mensual_linea
-from . import res_partner
