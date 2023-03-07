@@ -8,10 +8,10 @@
                 <header>
                     <field name="estado" options="{'clickable': '1','default_value':'borrador'}" widget="statusbar"/>
                     <!--
-                    <button name="229" string="Actualizar" type="action" class="oe_highlight oe_read_only" attrs="{'invisible':[('x_estado','=','archivado')]}"/>
-                    <button name="230" string="Pasar a borrador" type="action" class="oe_highlight oe_read_only" attrs="{'invisible':[('x_estado','!=','activo')]}" groups="sales_team.group_sale_manager"/>
-                    <button name="232" string="Activar" type="action" class="oe_highlight oe_read_only" attrs="{'invisible':[('x_estado','=','activo')]}" groups="sales_team.group_sale_manager"/>
-                    <button name="234" string="Archivar" type="action" class="oe_highlight oe_read_only" attrs="{'invisible':[('x_estado','!=','activo')]}" groups="sales_team.group_sale_manager"/>
+                    <button name="229" string="Actualizar" type="action" class="oe_highlight oe_read_only" attrs="{'invisible':[('estado','=','archivado')]}"/>
+                    <button name="230" string="Pasar a borrador" type="action" class="oe_highlight oe_read_only" attrs="{'invisible':[('estado','!=','activo')]}" groups="sales_team.group_sale_manager"/>
+                    <button name="232" string="Activar" type="action" class="oe_highlight oe_read_only" attrs="{'invisible':[('estado','=','activo')]}" groups="sales_team.group_sale_manager"/>
+                    <button name="234" string="Archivar" type="action" class="oe_highlight oe_read_only" attrs="{'invisible':[('estado','!=','activo')]}" groups="sales_team.group_sale_manager"/>
                     -->
                 </header>
                 <sheet string="Objetivos anuales">
@@ -36,9 +36,9 @@
                     </h2>
                     <group col="4">
                         <newline/>
-                        <field name="comercial_id"  string="Comercial" attrs="{'readonly':[('x_estado','!=','borrador')]}"/>
-                        <field name="responsable_id"  string="Responsable" attrs="{'readonly':[('x_estado','!=','borrador')]}"/>
-                        <field name="anho"  string="Año" attrs="{'readonly':[('x_estado','!=','borrador')]}"/>
+                        <field name="comercial_id"  string="Comercial" attrs="{'readonly':[('estado','!=','borrador')]}"/>
+                        <field name="responsable_id"  string="Responsable" attrs="{'readonly':[('estado','!=','borrador')]}"/>
+                        <field name="anho"  string="Año" attrs="{'readonly':[('estado','!=','borrador')]}"/>
                         <field name="anho_percent" widget="progressbar" string="Días transcurridos"/>
                         <!--  ¿LLEVAR A OTRO MÓDULO????
                         <field name="facturado" string="Facturado" widget="monetary" options="{'currency_field': 'currency_id'}"/>
