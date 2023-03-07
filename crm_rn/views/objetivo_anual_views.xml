@@ -24,7 +24,8 @@
                             <field name="x_x_objetivo_anual_id__x_objetivo_mensuales_count" string="Meses" widget="statinfo"/>
                         </button>
                         <button class="oe_stat_button" icon="fa-tasks" type="action" name="507" string="Facturado">
-                            <!--
+                       -->
+                        <!--
                                       <field name="x_x_objetivo_anual_id__x_objetivo_mensuales_count" string="Meses" widget="statinfo"/>
 
                         </button>
