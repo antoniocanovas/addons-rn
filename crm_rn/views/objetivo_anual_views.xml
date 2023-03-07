@@ -106,7 +106,7 @@
                             <group name="comparativas_vs_equipo_y_central" string="Capacidad de generar nuevas oportunidades (+/-)">
                                 <group>
                                     <field name="op_hoy_vs_delegacion" string="Actual vs Equipo"/>
-                                    <field name="xop_hoy_vs_global" string="Actual vs Global"/>
+                                    <field name="op_hoy_vs_global" string="Actual vs Global"/>
                                 </group>
                                 <group>
                                     <field name="op_activas_vs_delegacion" string="Activas vs Equipo"/>
