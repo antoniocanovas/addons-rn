@@ -40,8 +40,10 @@
                         <field name="responsable_id"  string="Responsable" attrs="{'readonly':[('x_estado','!=','borrador')]}"/>
                         <field name="anho"  string="Año" attrs="{'readonly':[('x_estado','!=','borrador')]}"/>
                         <field name="anho_percent" widget="progressbar" string="Días transcurridos"/>
+                        <!--  ¿LLEVAR A OTRO MÓDULO????
                         <field name="facturado" string="Facturado" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                         <field name="facturado_op_ganada" string="Fact. Op. Ganadas" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                         -->
                     </group>
                     <notebook>
                         <page name="venta_objetivos_anuales" string="Ventas">
