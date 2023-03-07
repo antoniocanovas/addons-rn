@@ -207,15 +207,15 @@
         <field name="active" eval="True"/>
         <field name="arch" type="xml">
             <tree string="Annual target">
-                <field name="x_name" modifiers="{&quot;required&quot;: true}"/>
-                <field name="x_objetivo_total" widget="monetary" options="{'currency_field': 'currency_id'}" sum="Objetivo global"/>
-                <field name="x_venta_total" widget="monetary" options="{'currency_field': 'currency_id'}" sum="Vendido"/>
-                <field name="x_op_activa_count" sum="Op. activas"/>
-                <field name="x_op_activa" widget="monetary" options="{'currency_field': 'currency_id'}" sum="En cartera"/>
-                <field name="x_op_vencida_count" sum="Op. vencidas"/>
-                <field name="x_act_planificada_count" sum="Act. planificadas"/>
-                <field name="x_act_vencida_count" sum="Act. vencidas"/>
-                <field name="x_equipo_id"/>
+                <field name="name" modifiers="{&quot;required&quot;: true}"/>
+                <field name="objetivo_total" widget="monetary" options="{'currency_field': 'currency_id'}" sum="Objetivo global"/>
+                <field name="venta_total" widget="monetary" options="{'currency_field': 'currency_id'}" sum="Vendido"/>
+                <field name="op_activa_count" sum="Op. activas"/>
+                <field name="op_activa" widget="monetary" options="{'currency_field': 'currency_id'}" sum="En cartera"/>
+                <field name="op_vencida_count" sum="Op. vencidas"/>
+                <field name="act_planificada_count" sum="Act. planificadas"/>
+                <field name="act_vencida_count" sum="Act. vencidas"/>
+                <field name="equipo_id"/>
                 <field name="currency_id" invisible="1"/>
             </tree>
         </field>
