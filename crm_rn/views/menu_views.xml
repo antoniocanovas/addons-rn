@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <odoo>
-
+<!--
     <record id="action_partner_plan" model="ir.actions.act_window">
         <field name="binding_model_id" eval="False"/>
         <field name="binding_type">action</field>
@@ -22,5 +22,5 @@
         <field name="parent_id" ref="crm.crm_menu_config"/>
         <field name="sequence">60</field>
     </record>
-
+-->
 </odoo>
