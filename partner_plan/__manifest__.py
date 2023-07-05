@@ -3,7 +3,7 @@
     'version': '14.0.1.0.0',
     'category': 'CRM',
     'description': u"""
-Partner Plan in contacts
+Partner Plan in contacts and CRM Configuration
 """,
     'author': 'Serincloud',
     'depends': [

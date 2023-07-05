@@ -1,6 +1,22 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <odoo>
-<!--
+
+    <record id="action_objetivo_anual" model="ir.actions.act_window">
+        <field name="binding_model_id" eval="False"/>
+        <field name="binding_type">action</field>
+        <field name="filter" eval="False"/>
+        <field name="groups_id" eval="[(6, 0, [])]"/>
+        <field name="limit">80</field>
+        <field name="name">Objetivos comerciales</field>
+        <field name="res_model">objetivo.anual</field>
+        <field name="search_view_id" eval="False"/>
+        <field name="target">current</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <!--
     <record id="action_partner_plan" model="ir.actions.act_window">
         <field name="binding_model_id" eval="False"/>
         <field name="binding_type">action</field>
@@ -22,5 +38,28 @@
         <field name="parent_id" ref="crm.crm_menu_config"/>
         <field name="sequence">60</field>
     </record>
+
+
+
+
+
 -->
+
+    <menuitem
+            action="action_objetivo_anual"
+            id="objetivo_comercial_main_menu"
+            name="Objetivos"
+            sequence="5"
+            web_icon="crm_rn,static/description/objetivos.png"
+    />
+
+    <record id="objetivo_comercial_menu" model="ir.ui.menu">
+        <field name="action" ref="action_objetivo_anual"/>
+        <field name="active" eval="True"/>
+        <field name="name">Comerciales</field>
+        <field name="parent_id" ref="objetivo_comercial_main_menu"/>
+        <field name="sequence">10</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+
 </odoo>
