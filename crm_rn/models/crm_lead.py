@@ -15,7 +15,7 @@ class CrmLead(models.Model):
     _inherit = 'crm.lead'
 
     vat   = fields.Char('NIF', related='partner_id.vat', readonly=False)
-    estado = fields.Selection([('borrador','Borrador'),('activo','Activo'),('archivado','Archivado')],
+    estado = fields.Selection([('pending','En curso'),('won','Ganado'),('lost','Perdido')],
                               string='Estado', store=True, readonly=True)
 
     @api.depends('active')
