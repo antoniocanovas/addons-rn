@@ -6,7 +6,7 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <field name="estado" options="{'clickable': '1','default_value':'borrador'}" widget="statusbar"/>
+                    <field name="estado" options="{'clickable': '1'}" widget="statusbar"/>
                     <!--
                     <button name="229" string="Actualizar" type="action" class="oe_highlight oe_read_only" attrs="{'invisible':[('estado','=','archivado')]}"/>
                     <button name="230" string="Pasar a borrador" type="action" class="oe_highlight oe_read_only" attrs="{'invisible':[('estado','!=','activo')]}" groups="sales_team.group_sale_manager"/>
@@ -199,7 +199,7 @@
         <field name="model">objetivo.anual</field>
         <field name="name">Default form view for annual target</field>
         <field name="priority">16</field>
-        <field name="type">tree</field>
+        <field name="type">form</field>
     </record>
 
 
