@@ -25,4 +25,26 @@
         <field name="type">tree</field>
     </record>
 
+    <record id="partner_plan_default_form_view" model="ir.ui.view">
+        <field name="active" eval="True"/>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name" modifiers="{}" placeholder="Negocio ..."/>
+                    <field name="active" invisible="1"/>
+                    <field name="type" invisible="1"/>
+                </group>
+            </form>
+        </field>
+        <field name="field_parent" eval="False"/>
+        <field name="groups_id" eval="[(6, 0, [])]"/>
+        <field name="inherit_id" eval="False"/>
+        <field name="key" eval="False"/>
+        <field name="mode">primary</field>
+        <field name="model">partner.plan</field>
+        <field name="name">Default form view for partner plan</field>
+        <field name="priority">16</field>
+        <field name="type">form</field>
+    </record>
+
 </odoo>
