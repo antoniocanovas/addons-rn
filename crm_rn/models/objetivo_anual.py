@@ -58,7 +58,7 @@ class ObjetivoAnual(models.Model):
 
     def get_equipo_ca_hoy_percent(self):
         resultado = 0
-        equipo = self.env['objetivo_equipo'].sudo().search([('id', '=', self.objetivo_equipo_id.id)]).objetivo_ca
+        equipo = self.env['objetivo.equipo'].sudo().search([('id', '=', self.objetivo_equipo_id.id)]).objetivo_ca
         if equipo > 0:
             resultado = self.venta_ca / equipo * 100
         self.equipo_ca_hoy_percent = resultado
@@ -66,7 +66,7 @@ class ObjetivoAnual(models.Model):
 
     def get_equipo_ca_objetivo_percent(self):
         resultado = 0
-        equipo = self.env['objetivo_equipo'].sudo().search([('id', '=', self.objetivo_equipo_id.id)]).objetivo_ca
+        equipo = self.env['objetivo.equipo'].sudo().search([('id', '=', self.objetivo_equipo_id.id)]).objetivo_ca
         if equipo > 0:
             resultado = self.objetivo_ca / equipo * 100
         self.equipo_ca_objetivo_percent = resultado
@@ -74,7 +74,7 @@ class ObjetivoAnual(models.Model):
 
     def get_equipo_ca_op_hoy_percent(self):
         resultado = 0
-        equipo = self.env['objetivo_equipo'].sudo().search([('id', '=', self.objetivo_equipo_id.id)]).objetivo_ca_count
+        equipo = self.env['objetivo.equipo'].sudo().search([('id', '=', self.objetivo_equipo_id.id)]).objetivo_ca_count
         if equipo > 0:
             resultado = self.op_hoy_ca_count / equipo * 100
         self.equipo_ca_op_hoy_percent = resultado
@@ -82,7 +82,7 @@ class ObjetivoAnual(models.Model):
 
     def get_equipo_ca_op_objetivo_percent(self):
         resultado = 0
-        equipo = self.env['objetivo_equipo'].sudo().search([('id', '=', self.objetivo_equipo_id.id)]).objetivo_ca_count
+        equipo = self.env['objetivo.equipo'].sudo().search([('id', '=', self.objetivo_equipo_id.id)]).objetivo_ca_count
         if equipo > 0:
             resultado = self.objetivo_ca_count / equipo * 100
         self.equipo_ca_op_objetivo_percent = resultado
@@ -91,7 +91,7 @@ class ObjetivoAnual(models.Model):
     # Lo mismo para CN:
     def get_equipo_cn_hoy_percent(self):
         resultado = 0
-        equipo = self.env['objetivo_equipo'].sudo().search([('id', '=', self.objetivo_equipo_id.id)]).objetivo_cn
+        equipo = self.env['objetivo.equipo'].sudo().search([('id', '=', self.objetivo_equipo_id.id)]).objetivo_cn
         if equipo > 0:
             resultado = self.venta_cn / equipo * 100
         self.equipo_cn_hoy_percent = resultado
@@ -99,7 +99,7 @@ class ObjetivoAnual(models.Model):
 
     def get_equipo_cn_objetivo_percent(self):
         resultado = 0
-        equipo = self.env['objetivo_equipo'].sudo().search([('id', '=', self.objetivo_equipo_id.id)]).objetivo_cn
+        equipo = self.env['objetivo.equipo'].sudo().search([('id', '=', self.objetivo_equipo_id.id)]).objetivo_cn
         if equipo > 0:
             resultado = self.objetivo_cn / equipo * 100
         self.equipo_cn_objetivo_percent = resultado
@@ -107,7 +107,7 @@ class ObjetivoAnual(models.Model):
 
     def get_equipo_cn_op_hoy_percent(self):
         resultado = 0
-        equipo = self.env['objetivo_equipo'].sudo().search([('id', '=', self.objetivo_equipo_id.id)]).objetivo_cn_count
+        equipo = self.env['objetivo.equipo'].sudo().search([('id', '=', self.objetivo_equipo_id.id)]).objetivo_cn_count
         if equipo > 0:
             resultado = self.op_hoy_cn_count / equipo * 100
         self.equipo_cn_op_hoy_percent = resultado
@@ -115,7 +115,7 @@ class ObjetivoAnual(models.Model):
 
     def get_equipo_cn_op_objetivo_percent(self):
         resultado = 0
-        equipo = self.env['objetivo_equipo'].sudo().search([('id', '=', self.objetivo_equipo_id.id)]).objetivo_cn_count
+        equipo = self.env['objetivo.equipo'].sudo().search([('id', '=', self.objetivo_equipo_id.id)]).objetivo_cn_count
         if equipo > 0:
             resultado = self.objetivo_cn_count / equipo * 100
         self.equipo_cn_op_objetivo_percent = resultado
