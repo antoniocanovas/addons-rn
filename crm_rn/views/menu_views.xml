@@ -1,6 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <odoo>
 
+    <!-- ACCIONES DE VENTANA: -->
+
     <record id="action_objetivo_anual" model="ir.actions.act_window">
         <field name="binding_model_id" eval="False"/>
         <field name="binding_type">action</field>
