@@ -167,7 +167,7 @@ class ObjetivoAnual(models.Model):
 
     @api.depends('objetivo_ca_count', 'objetivo_cn_count')
     def get_objetivo_count(self):
-        self.cumplido_total = (self.cumplido_ca_anterior + self.cumplido_cn_anterior)
+        self.objetivo_count = (self.cumplido_ca_anterior + self.cumplido_cn_anterior)
     objetivo_count  = fields.Float('Objetivo Nº oportunidades', readonly=True, store=False, compute='get_objetivo_count',
                                        help='Objetivo en número de oportunidades total año actual (nº oport en Venta cruzada más nº oport en Nuevo negocio).')
 
