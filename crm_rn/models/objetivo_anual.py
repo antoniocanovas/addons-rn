@@ -350,3 +350,7 @@ class ObjetivoAnual(models.Model):
         self.objetivo_id_objetivo_anual_lineas_count = len(self.linea_ids.ids)
     objetivo_id_objetivo_anual_lineas_count = fields.Integer('Objetivo count', store=False, readonly=True,
                                                                 compute='get_objetivo_id__objetivo_anual_lineas_count')
+
+    ### MÉTODOS DE BOTONES:
+    def update_objetivo_anual(self):
+        return True
