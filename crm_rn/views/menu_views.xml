@@ -85,4 +85,6 @@
         <field name="web_icon" eval="False"/>
     </record>
 
+    <!-- FALTAN LOS MENÚS DE INFORMES: -->
+
 </odoo>
