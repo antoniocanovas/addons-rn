@@ -7,10 +7,10 @@
             <form>
                 <header>
                     <field name="estado" options="{'clickable': '1'}" widget="statusbar"/>
-                    <button name="actualizar_objetivo_anual" string="Actualizar" type="method" class="oe_highlight oe_read_only" attrs="{'invisible':[('estado','=','archivado')]}"/>
-                    <button name="objetivo_anual_a_borrador" string="Pasar a borrador" type="method" class="oe_highlight oe_read_only" attrs="{'invisible':[('estado','!=','activo')]}" groups="sales_team.group_sale_manager"/>
-                    <button name="objetivo_anual_activar" string="Activar" type="method" class="oe_highlight oe_read_only" attrs="{'invisible':[('estado','=','activo')]}" groups="sales_team.group_sale_manager"/>
-                    <button name="objetivo_anual_archivar" string="Archivar" type="method" class="oe_highlight oe_read_only" attrs="{'invisible':[('estado','!=','activo')]}" groups="sales_team.group_sale_manager"/>
+                    <button name="actualizar_objetivo_anual" string="Actualizar" type="object" class="oe_highlight oe_read_only" attrs="{'invisible':[('estado','=','archivado')]}"/>
+                    <button name="objetivo_anual_a_borrador" string="Pasar a borrador" type="object" class="oe_highlight oe_read_only" attrs="{'invisible':[('estado','!=','activo')]}" groups="sales_team.group_sale_manager"/>
+                    <button name="objetivo_anual_activar" string="Activar" type="object" class="oe_highlight oe_read_only" attrs="{'invisible':[('estado','=','activo')]}" groups="sales_team.group_sale_manager"/>
+                    <button name="objetivo_anual_archivar" string="Archivar" type="object" class="oe_highlight oe_read_only" attrs="{'invisible':[('estado','!=','activo')]}" groups="sales_team.group_sale_manager"/>
                 </header>
                 <sheet string="Objetivos anuales">
                     <!--
