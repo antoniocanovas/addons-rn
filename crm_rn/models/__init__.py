@@ -1,3 +1,4 @@
+from . import crm_stage
 from . import crm_lead
 from . import objetivo_anual
 from . import objetivo_anual_linea

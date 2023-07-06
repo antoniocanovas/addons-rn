@@ -12,6 +12,7 @@ Objetivos y seguimiento mensual Roldán Netya
     'data': [
         'security/ir.model.access.csv',
         'views/objetivo_anual_views.xml',
+        'views/crm_stage_views.xml',
 #        'views/objetivo_mensual_views.xml',
 #        'views/objetivo_equipo_views.xml',
 #        'views/objetivo_grupo_views.xml',

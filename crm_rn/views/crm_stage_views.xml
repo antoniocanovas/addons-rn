@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="crm_stage_inh_form_view" model="ir.ui.view">
+        <field name="active" eval="True"/>
+        <field name="arch" type="xml">
+            <field name="is_won" position="after">
+                <field name="en_curso"/>
+            </field>
+        </field>
+        <field name="field_parent" eval="False"/>
+        <field name="groups_id" eval="[(6, 0, [])]"/>
+        <field name="inherit_id" ref="crm.crm_stage_form"/>
+        <field name="mode">extension</field>
+        <field name="model">crm.stage</field>
+        <field name="name">CRM Stage inh form view RN</field>
+        <field name="priority">16</field>
+        <field name="type">form</field>
+    </record>
+
+</odoo>
