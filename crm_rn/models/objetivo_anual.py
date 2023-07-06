@@ -353,14 +353,15 @@ class ObjetivoAnual(models.Model):
                                                                 compute='get_objetivo_id__objetivo_anual_lineas_count')
 
     ### MÉTODOS DE BOTONES:
+    def objetivo_anual_activar(self):
+        self.estado = 'activo'
+
+    def objetivo_anual_a_borrador(self):
+        self.estado = 'borrador'
+
+    def objetivo_anual_archivar(self):
+        self.estado = 'archivado'
+
     def actualizar_objetivo_anual(self):
         return True
 
-    def objetivo_anual_a_borrador(self):
-        return True
-
-    def objetivo_anual_activar(self):
-        return True
-
-    def objetivo_anual_archivar(self):
-        return True
