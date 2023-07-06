@@ -16,8 +16,8 @@ class ObjetivoMensual(models.Model):
     name = fields.Char('Name', store=True, readonly=True)
     # El siguiente campo se llamaba x_activo y dependía de otro llamado x_estado (cambiar a estándar):
     active = fields.Boolean('Activo', default=True)
-#    estado = fields.Selection([('borrador','Borrador'),('activo','Activo'),('archivado','Archivado')],
-#                              string='Estado', store=True, readonly=True)
+    estado = fields.Selection([('borrador','Borrador'),('activo','Activo'),('archivado','Archivado')],
+                              string='Estado', store=True, readonly=True)
 
     act_finalizada_count = fields.Integer('Activ.finalizadas', readonly=True, store=True,
                                           help='Nº de actividades marcadas como hechas')
