@@ -28,7 +28,7 @@ class ObjetivoMensual(models.Model):
     act_vencida_percent = fields.Float('Activ.vencidas( %)', readonly=True, store=True,
                                        help='Porcentaje entre actividades planificadas sin actualizar y número de oportunidades actuales.')
 
-    comercial_id = fields.Many2one('res.users', string="Comercial", store=True, required=True, related='objetivo_anual_id.comercial_id')
+    comercial_id = fields.Many2one('res.users', string="Comercial", store=True, related='objetivo_anual_id.comercial_id')
     conseguido_mes_ca_count = fields.Integer('Op. ganadas en mes CA', readonly=True, store=True)
     conseguido_mes_cn_count = fields.Integer('Op. ganadas en mes CN', readonly=True, store=True)
     currency_id = fields.Many2one('res.currency', default=1)
