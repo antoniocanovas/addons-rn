@@ -19,8 +19,8 @@ class ObjetivoAnual(models.Model):
     active = fields.Boolean('Activo', default=True)
     currency_id = fields.Many2one('res.currency', default=1)
 
-#    estado = fields.Selection([('borrador','Borrador'),('activo','Activo'),('archivado','Archivado')],
-#                              string='Estado', store=True, readonly=True, default='borrador')
+    estado = fields.Selection([('borrador','Borrador'),('activo','Activo'),('archivado','Archivado')],
+                              string='Estado', store=True, readonly=True, default='borrador')
 
     act_finalizada_count = fields.Integer('Activ.finalizadas', readonly=True, store=True,
                                           help='Nº de actividades marcadas como hechas')
