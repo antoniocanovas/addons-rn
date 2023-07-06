@@ -16,9 +16,8 @@ class ObjetivoMensual(models.Model):
     name = fields.Char('Name', store=True, readonly=True)
     # El siguiente campo se llamaba x_activo y dependía de otro llamado x_estado (cambiar a estándar):
     active = fields.Boolean('Activo', default=True)
-    currency_id = fields.Many2one('res.currency', default=1)
-    estado = fields.Selection([('borrador','Borrador'),('activo','Activo'),('archivado','Archivado')],
-                              string='Estado', store=True, readonly=True)
+#    estado = fields.Selection([('borrador','Borrador'),('activo','Activo'),('archivado','Archivado')],
+#                              string='Estado', store=True, readonly=True)
 
     act_finalizada_count = fields.Integer('Activ.finalizadas', readonly=True, store=True,
                                           help='Nº de actividades marcadas como hechas')
@@ -29,10 +28,12 @@ class ObjetivoMensual(models.Model):
     act_vencida_percent = fields.Float('Activ.vencidas( %)', readonly=True, store=True,
                                        help='Porcentaje entre actividades planificadas sin actualizar y número de oportunidades actuales.')
 
-    comercial_id = fields.Many2one('res.users', string="Comercial", store=True, required=True)
+    comercial_id = fields.Many2one('res.users', string="Comercial", store=True, required=True, related='objetivo_anual_id.comercial_id')
     conseguido_mes_ca_count = fields.Integer('Op. ganadas en mes CA', readonly=True, store=True)
     conseguido_mes_cn_count = fields.Integer('Op. ganadas en mes CN', readonly=True, store=True)
-    equipo_id = fields.Many2one('objetivo.mensual', string='Equipo de ventas', store=True, readonly=True)
+    currency_id = fields.Many2one('res.currency', default=1)
+
+    equipo_id = fields.Many2one('objetivo.mensual', string='Equipo de ventas', store=True, readonly=True, related='comercial_id.sale_team_id')
     facturado = fields.Monetary('Facturado', store=True, readonly=True)
     facturado_op_ganada = fields.Monetary('Fact. Ops. Ganadas', store=True, readonly=True)
     iniciativa_count = fields.Integer('Iniciativas', store=True, readonly=True)
