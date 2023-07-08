@@ -195,7 +195,7 @@ class ObjetivoAnual(models.Model):
                                 help='Importe total de venta en oportunidades de Venta Cruzada que estamos trabajando '
                                      '(no incluye las oportunidades que hay en las fases: Nuevo, Ganado y Perdido), en Cliente Actual y VIP.')
 
-    op_activa_cn = fields.Monetary('Para negociar CN', store=True, readonly=True,)
+    op_activa_cn = fields.Monetary('Para negociar CN', store=True, readonly=True,
                                 help='Importe total de ventas en Oportunidades en Nuevo negocio que estamos trabajando '
                                      '(no incluye las oportundades en las fases: Nuevo, Ganado y Perdido) en Prospección buena, muy interesante, excelente y Cliente recuperar.')
 
