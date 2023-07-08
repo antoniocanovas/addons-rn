@@ -192,11 +192,11 @@ class ObjetivoAnual(models.Model):
                                      'Es posible que no coincida con la suma de cuenta nueva + base instalada si algún cliente no tiene esta clasificación asignada.')
 
     op_activa_ca  = fields.Monetary('Para negociar CA', store=True, readonly=True,
-                                help='Importe total de venta en oportunidades de Venta Cruzada que estamos trabajando '
+                                help='Importe total de venta en oportunidades de Venta Cruzada que estamos trabajando ' \
                                      '(no incluye las oportunidades que hay en las fases: Nuevo, Ganado y Perdido), en Cliente Actual y VIP.')
 
     op_activa_cn = fields.Monetary('Para negociar CN', store=True, readonly=True,
-                                help='Importe total de ventas en Oportunidades en Nuevo negocio que estamos trabajando '
+                                help='Importe total de ventas en Oportunidades en Nuevo negocio que estamos trabajando ' \
                                      '(no incluye las oportundades en las fases: Nuevo, Ganado y Perdido) en Prospección buena, muy interesante, excelente y Cliente recuperar.')
 
     op_activa_count = fields.Integer('Nº Op. activas', store=True, readonly=True,
