@@ -33,7 +33,7 @@ class ObjetivoMensual(models.Model):
     conseguido_mes_cn_count = fields.Integer('Op. ganadas en mes CN', readonly=True, store=True)
     currency_id = fields.Many2one('res.currency', default=1)
 
-    equipo_id = fields.Many2one('objetivo.mensual', string='Equipo de ventas', store=True, readonly=True, related='comercial_id.sale_team_id')
+    equipo_id = fields.Many2one('crm.team', string='Equipo de ventas', store=True, readonly=True, related='comercial_id.sale_team_id')
     facturado = fields.Monetary('Facturado', store=True, readonly=True)
     facturado_op_ganada = fields.Monetary('Fact. Ops. Ganadas', store=True, readonly=True)
     iniciativa_count = fields.Integer('Iniciativas', store=True, readonly=True)
