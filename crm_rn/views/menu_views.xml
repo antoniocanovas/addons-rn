@@ -17,6 +17,20 @@
         <field name="view_mode">tree,form</field>
     </record>
 
+    <record id="action_objetivo_anual_linea" model="ir.actions.act_window">
+        <field name="binding_model_id" eval="False"/>
+        <field name="binding_type">action</field>
+        <field name="filter" eval="False"/>
+        <field name="groups_id" eval="[(6, 0, [])]"/>
+        <field name="limit">80</field>
+        <field name="name">Foto oportunidades anuales</field>
+        <field name="res_model">objetivo.anual.linea</field>
+        <field name="search_view_id" eval="False"/>
+        <field name="target">current</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
     <record id="action_objetivo_equipo" model="ir.actions.act_window">
         <field name="binding_model_id" eval="False"/>
         <field name="binding_type">action</field>
@@ -45,7 +59,33 @@
         <field name="view_mode">tree,form</field>
     </record>
 
+    <record id="action_objetivo_mensual" model="ir.actions.act_window">
+        <field name="binding_model_id" eval="False"/>
+        <field name="binding_type">action</field>
+        <field name="filter" eval="False"/>
+        <field name="groups_id" eval="[(6, 0, [])]"/>
+        <field name="limit">80</field>
+        <field name="name">Foto mensual</field>
+        <field name="res_model">objetivo.mensual</field>
+        <field name="search_view_id" eval="False"/>
+        <field name="target">current</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree,form</field>
+    </record>
 
+    <record id="action_objetivo_mensual_linea" model="ir.actions.act_window">
+        <field name="binding_model_id" eval="False"/>
+        <field name="binding_type">action</field>
+        <field name="filter" eval="False"/>
+        <field name="groups_id" eval="[(6, 0, [])]"/>
+        <field name="limit">80</field>
+        <field name="name">Foto oportunidades mensual</field>
+        <field name="res_model">objetivo.mensual.linea</field>
+        <field name="search_view_id" eval="False"/>
+        <field name="target">current</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree,form</field>
+    </record>
 
 
     <!-- MENUS: -->
@@ -85,6 +125,43 @@
         <field name="web_icon" eval="False"/>
     </record>
 
-    <!-- FALTAN LOS MENÚS DE INFORMES: -->
+
+    <!-- MENÚS DE INFORMES: -->
+
+    <record id="informes_objetivos_menu" model="ir.ui.menu">
+<!--        <field name="action" ref="action_objetivo_mensual"/> -->
+        <field name="active" eval="True"/>
+        <field name="name">Informes</field>
+        <field name="parent_id" ref="objetivo_comercial_main_menu"/>
+        <field name="sequence">40</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+
+    <record id="objetivo_anual_lineas_menu" model="ir.ui.menu">
+        <field name="action" ref="action_objetivo_anual_linea"/>
+        <field name="active" eval="True"/>
+        <field name="name">Reg. oportunidades anuales</field>
+        <field name="parent_id" ref="informes_objetivos_menu"/>
+        <field name="sequence">10</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+
+    <record id="objetivo_mensual_lineas_menu" model="ir.ui.menu">
+        <field name="action" ref="action_objetivo_mensual_linea"/>
+        <field name="active" eval="True"/>
+        <field name="name">Reg. oportunidades mensuales</field>
+        <field name="parent_id" ref="informes_objetivos_menu"/>
+        <field name="sequence">20</field>
+        <field name="web_icon" eval="False"/>
+    </record>
+
+    <record id="objetivo_mensual_menu" model="ir.ui.menu">
+        <field name="action" ref="action_objetivo_mensual"/>
+        <field name="active" eval="True"/>
+        <field name="name">Fotos mensuales</field>
+        <field name="parent_id" ref="informes_objetivos_menu"/>
+        <field name="sequence">30</field>
+        <field name="web_icon" eval="False"/>
+    </record>
 
 </odoo>
