@@ -8,7 +8,7 @@
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
             <field name="vat" position="after">
-                <field name="status"/>
+                <field name="status_id"/>
                 <field name="sale_contact"/>
                 <field name="sale_contact_qty"/>
             </field>

@@ -9,7 +9,7 @@
         <field name="priority">99</field>
         <field name="arch" type="xml">
             <field name="company_id" position="after">
-                <field name="partner_status"/>
+                <field name="partner_status_id"/>
             </field>
         </field>
     </record>

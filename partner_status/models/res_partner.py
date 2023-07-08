@@ -14,7 +14,7 @@ _logger = logging.getLogger(__name__)
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-    status = fields.Many2one('partner.status', string='Partner type')
+    status_id = fields.Many2one('partner.status', string='Partner type')
     sale_contact = fields.Boolean('Commercial contact')
 
     @api.depends('child_ids.sale_contact','sale_contact')

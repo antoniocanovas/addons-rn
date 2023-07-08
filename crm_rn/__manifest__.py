@@ -8,6 +8,7 @@ Objetivos y seguimiento mensual Roldán Netya
     'author': 'Serincloud',
     'depends': [
         'crm',
+        'partner_status',
     ],
     'data': [
         'security/ir.model.access.csv',
