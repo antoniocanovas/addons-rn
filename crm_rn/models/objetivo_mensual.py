@@ -50,7 +50,7 @@ class ObjetivoMensual(models.Model):
     linea_ids = fields.One2many('objetivo.mensual.linea', 'objetivo_mensual_id', string='Líneas')
     mes = fields.Char('Mes', store=True, readonly=True)
     nota = fields.Text('Notas')
-    objetivo_anual_id = fields.Many2one('objetivo.anual', string="Objetivo anual")
+    objetivo_anual_id = fields.Many2one('objetivo.anual', string="Objetivo anual", store=True, readonly=True)
     objetivo_ca = fields.Monetary('Objetivo CA', store=True, readonly=True,
                                   help='Parte del objetivo de venta año actual que hay que hacer en cliente actual o cliente Vip.')
     objetivo_ca_count = fields.Integer('Objetivo Ud.CA', store=True, readonly=True,
