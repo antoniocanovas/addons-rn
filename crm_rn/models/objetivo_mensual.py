@@ -7,6 +7,7 @@ _logger = logging.getLogger(__name__)
 
 class ObjetivoMensual(models.Model):
     _name = 'objetivo.mensual'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = 'Objetivo mensual'
 
     # Estos campos van en el módulo de facturación desde ERP:
