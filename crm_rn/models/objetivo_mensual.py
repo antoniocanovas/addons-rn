@@ -205,3 +205,5 @@ class ObjetivoMensual(models.Model):
     objetivo_mensual_id_objetivo_mensual_lineas_count = fields.Integer('Obj mensual count', store=True, readonly=True,
                                                                        compute='get_mes_objetivo_mensual_id_objetivo_mensual_lineas_count')
 
+    def actualizar_objetivo_mensual(self):
+        return True

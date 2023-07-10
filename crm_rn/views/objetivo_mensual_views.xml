@@ -5,24 +5,27 @@
         <field name="active" eval="True"/>
         <field name="arch" type="xml">
             <form>
-            <!--
                 <header>
-                    <button name="238" string="Actualizar" type="action" class="oe_highlight oe_read_only"/>
+                    <button name="actualizar_objetivo_mensual" string="Actualizar" type="object" class="oe_highlight oe_read_only" attrs="{'invisible':[('estado','=','archivado')]}"/>
                 </header>
                 <sheet string="Objetivos mensuales">
+            <!--
                     <div class="oe_button_box" name="button_box">
                         <button class="oe_stat_button" icon="fa-recycle" type="action" name="240">
                             <field name="x_x_objetivo_mensual_id__x_objetivo_mensual_lineas_count" string="Reg. Oportunidades" widget="statinfo"/>
                         </button>
                     </div>
+            -->
                     <h2>
                         <field name="name"/>
                     </h2>
                     <group col="4">
                         <field name="comercial_id" string="Comercial"/>
                         <field name="equipo_id" string="Equipo de ventas"/>
+                        <!--
                         <field name="facturado" string="Facturado" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                         <field name="facturado_op_ganada" string="Fact. Ops. Ganadas" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        -->
                         <field name="mes" invisible="1"/>
                     </group>
                     <notebook>
@@ -36,7 +39,7 @@
                                 <group string="... y sus KPIs">
                                     <field name="objetivo_pendiente" string="Objetivo pendiente" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                                     <field name="venta_total_percent" string="Progreso acumulado" widget="progressbar"/>
-                                    <field name="venta_mes_percent" string="Progreso este mes" widget="progressbar"/>
+                                    <field name="venta_percent" string="Progreso este mes" widget="progressbar"/>
                                 </group>
                             </group>
                             <group>
@@ -169,7 +172,6 @@
                     <field name="message_follower_ids" widget="mail_followers"/>
                     <field name="message_ids" widget="mail_thread"/>
                 </div>
--->
             </form>
         </field>
         <field name="field_parent" eval="False"/>
