@@ -30,6 +30,7 @@
                         -->
                         <field name="mes" invisible="1"/>
                     </group>
+                    <!--
                     <notebook>
                         <page name="seguimiento_mensual_ventas" string="Ventas">
                             <group>
@@ -169,6 +170,7 @@
                             </group>
                         </page>
                     </notebook>
+                    -->
                 </sheet>
                 <div class="oe_chatter">
                     <field name="message_follower_ids" widget="mail_followers"/>
@@ -194,6 +196,7 @@
         <field name="arch" type="xml">
             <tree string="Objetivos mensuales">
                 <field name="name" modifiers="{&quot;readonly&quot;: true}" invisible="1"/>
+                <!--
                 <field name="mes"/>
                 <field name="op_nueva" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                 <field name="op_iniciada" widget="monetary" options="{'currency_field': 'currency_id'}"/>
@@ -212,6 +215,7 @@
                 <field name="act_vencida_count"/>
                 <field name="comercial_id"/>
                 <field name="currency_id" invisible="1"/>
+                -->
             </tree>
         </field>
         <field name="field_parent" eval="False"/>
