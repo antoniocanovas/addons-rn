@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+
     <record id="objetivo_mensual_default_form_view" model="ir.ui.view">
         <field name="active" eval="True"/>
         <field name="arch" type="xml">
-            <!--
             <form>
+            <!--
                 <header>
                     <button name="238" string="Actualizar" type="action" class="oe_highlight oe_read_only"/>
                 </header>
@@ -168,8 +169,8 @@
                     <field name="message_follower_ids" widget="mail_followers"/>
                     <field name="message_ids" widget="mail_thread"/>
                 </div>
-            </form>
 -->
+            </form>
         </field>
         <field name="field_parent" eval="False"/>
         <field name="groups_id" eval="[(6, 0, [])]"/>
