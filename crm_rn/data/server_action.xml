@@ -70,14 +70,14 @@ for li in record.linea_ids:
 
 if record.estado != 'archivado':
   for opo in oportus:
-    if opo.create_date > esnuevo:
+    if opo.create_date &gt; esnuevo:
       esnueva = True
     else:
       esnueva = False
 # 8/7/2021 Modificación para el control del search 'date_closed' del año anterior si existen no archivadas (ver comentario anterior de esta fecha):
 # 8/7/2021 (original)   if (opo.id not in yaestan):
-# 8/7/2021 (test para borrar de la misma fecha)    if (opo.id not in yaestan) and (opo.date_closed) and (opo.date_closed > esnuevo):
-    if (opo.id not in yaestan) and not (opo.date_closed) or (opo.id not in yaestan) and (opo.date_closed > esnuevo):
+# 8/7/2021 (test para borrar de la misma fecha)    if (opo.id not in yaestan) and (opo.date_closed) and (opo.date_closed &gt; esnuevo):
+    if (opo.id not in yaestan) and not (opo.date_closed) or (opo.id not in yaestan) and (opo.date_closed &gt; esnuevo):
       nombre = opo.name + ' - ' + opo.stage_id.name
       nuevalinea = env['objetivo.anual.linea'].create({'oportunidad_id':opo.id, 'objetivo_id':record.id, 'estado_inicial_id':opo.stage_id.id,
         'importe_inicial':opo.expected_revenue, 'name':nombre, 'es_objetivo':esobjetivo, 'cliente_id':opo.partner_id.id,
@@ -93,7 +93,7 @@ if record.estado != 'archivado':
   for op in oportunidades:
     if op.activity_type_id.id == False:
       op_sin_actividad += 1
-    if str(datetime.date.today()) > str(op.date_deadline):
+    if str(datetime.date.today()) &gt; str(op.date_deadline):
       opvencidas += 1
     if (op.stage_id.en_curso == True) and (op.es_cuenta_nueva == False) and (op.partner_status_id.id):   #2023 ¿hace falta si ya está estado arriba?
       opactivas_ca += 1
@@ -118,7 +118,7 @@ if record.estado != 'archivado':
   actividades = env['mail.activity'].search([('user_id','=',record.comercial_id.id)])
   num_actividades = len(actividades.ids)
   for ac in actividades:
-    if str(datetime.date.today()) > str(ac.date_deadline):
+    if str(datetime.date.today()) &gt; str(ac.date_deadline):
       actvencidas += 1
 
     # Actividades planificadas:
@@ -162,9 +162,9 @@ if record.estado == 'activo':
       perdidascn += 1
 
     # Porcentajes del total para ventas, unidades y totales cn+ca:
-  if record.objetivo_ca > 0:
+  if record.objetivo_ca &gt; 0:
     venta_ca_percent = ventaca / record.objetivo_ca * 100
-  if record.objetivo_cn > 0:
+  if record.objetivo_cn &gt; 0:
     venta_cn_percent = ventacn / record.objetivo_cn * 100
 
 
@@ -181,20 +181,20 @@ if record.estado == 'activo':
 
   ## Miguel cambia el cálculo 11/08, ya no tiene sentido el que se llame 'ganada', pendiente cambiar en todos los modelos:
 # 12/08/20: modifico tras error al dividir por cero (la acción nocturna no va):
-#  if record.objetivo_ca_count > 0:
-  if oportunidad_hoy_ca > 0:
+#  if record.objetivo_ca_count &gt; 0:
+  if oportunidad_hoy_ca &gt; 0:
     op_ganada_ca_count_percent = ganadasca / oportunidad_hoy_ca * 100
-#  if record.objetivo_cn_count > 0:
-  if oportunidad_hoy_cn > 0:
+#  if record.objetivo_cn_count &gt; 0:
+  if oportunidad_hoy_cn &gt; 0:
     op_ganada_cn_count_percent = ganadascn / oportunidad_hoy_cn * 100
 
   ventatotal = ventaca + ventacn
-  if record.objetivo_total > 0:
+  if record.objetivo_total &gt; 0:
     venta_percent = ventatotal / (record.objetivo_total) * 100
   else:
     venta_percent = 0
   cuentas_objetivo = record.objetivo_ca_count + record.objetivo_cn_count
-  if (cuentas_objetivo > 0):
+  if (cuentas_objetivo &gt; 0):
     # Actualizado a petición de Miguel 11/08 para que sea sobre las actuales en vez de sobre el objetivo:
     op_ganada_count_percent = (ganadasca + ganadascn) / cantidad_oportunidades * 100
 
@@ -217,29 +217,29 @@ if record.estado == 'activo':
   cantidad_perdidas = perdidasca + perdidascn
 
   # Otras estadísticas:
-  if  cantidad_oportunidades > 0:
+  if  cantidad_oportunidades &gt; 0:
     op_perdida_count_percent = cantidad_perdidas / cantidad_oportunidades * 100
     op_vencida_count_percent = opvencidas / cantidad_oportunidades * 100
   else:
     op_perdida_count_percent = 0
     op_vencida_count_percent = 0
 
-  if (cantidad_oportunidades - cantidad_perdidas) > 0:
+  if (cantidad_oportunidades - cantidad_perdidas) &gt; 0:
     op_activa_vs_hoy_percent = opactivas / cantidad_oportunidades * 100
   else:
     op_activa_vs_hoy_percent = 0
 
-  if (num_actividades > 0):
+  if (num_actividades &gt; 0):
     act_vencida_percent = actvencidas / num_actividades * 100
   else:
     act_vencida_percent = 0
 
-  if (cantidad_oportunidades - cantidad_perdidas - cantidad_ganadas > 0):
+  if (cantidad_oportunidades - cantidad_perdidas - cantidad_ganadas &gt; 0):
     op_sin_actividad_percent = op_sin_actividad / (cantidad_oportunidades - cantidad_perdidas - cantidad_ganadas) * 100
   else:
     op_sin_actividad_percent = 0
 
-  if cantidad_inicial > 0:
+  if cantidad_inicial &gt; 0:
     op_prospeccion_count_percent = (cantidad_oportunidades - cantidad_inicial) / cantidad_inicial * 100
   else:
     op_prospeccion_count_percent = 0
@@ -247,15 +247,15 @@ if record.estado == 'activo':
 # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 # KPIs FIDELIZACIÓN (cuenta actual) y CAPTACIÓN (cuenta nueva) en pestaña "Seguimiento":
 # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-  if (perdidasca + ganadasca > 0):
+  if (perdidasca + ganadasca &gt; 0):
     fidelizacion = ganadasca / (ganadasca + perdidasca) * 100
-  if (perdidascn + ganadascn > 0):
+  if (perdidascn + ganadascn &gt; 0):
     captacion = ganadascn / (ganadascn + perdidascn) * 100
 
   # Porcentaje de perdidas:
-  if (oportunidad_hoy_ca > 0):
+  if (oportunidad_hoy_ca &gt; 0):
     perdido_ca_percent = perdidasca / oportunidad_hoy_ca * 100
-  if (oportunidad_hoy_cn > 0):
+  if (oportunidad_hoy_cn &gt; 0):
     perdido_cn_percent = perdidascn / oportunidad_hoy_cn * 100
 
 # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -457,7 +457,7 @@ if str(hoy.month) == mes:
 
 # corregido 31/05, peta:    yaexiste = env['x_objetivo_mensual_lineas'].search([('id','in',record.x_linea_ids.ids),('x_oportunidad_id','=',op.id)])
     yaexiste = env['objetivo.mensual.linea'].search([('id','in',lineasahora),('oportunidad_id','=',op.id)])
-    if (yaexiste.id) and (op.active == True) and (op.probability > 0):
+    if (yaexiste.id) and (op.active == True) and (op.probability &gt; 0):
       yaexiste.write({'oportunidad_id':op.id, 'comercial_id':op.user_id.id, 'objetivo_mensual_id':record.id,
         'etapa_id':op.stage_id.id,'is_prospection':op.partner_id.partner_status_id.is_prospection, 'x_importe':op.planned_revenue,
         'es_nueva':esnueva, 'name':op.name, 'es_objetivo':esobjetivo, 'es_perdida':False})
@@ -468,7 +468,7 @@ if str(hoy.month) == mes:
         'etapa_id':op.stage_id.id,'is_prospection':op.partner_id.partner_status_id.is_prospection, 'importe':op.planned_revenue,
         'es_nueva':esnueva, 'name':op.name, 'es_objetivo':esobjetivo, 'es_perdida':True})
       lineasahora.remove(yaexiste.id)
-    elif (yaexiste.id == False) and (op.active == True) and (op.probability > 0):
+    elif (yaexiste.id == False) and (op.active == True) and (op.probability &gt; 0):
       nueva = env['objetivo.mensual.linea'].create({'oportunidad_id':op.id, 'comercial_id':op.user_id.id, 'objetivo_mensual_id':record.id,
         'etapa_id':op.stage_id.id,'is_prospection':op.partner_id.partner_status_id.is_prospection, 'importe':op.planned_revenue,
         'es_nueva':esnueva, 'name':op.name, 'es_objetivo':esobjetivo, 'es_perdida':False})
