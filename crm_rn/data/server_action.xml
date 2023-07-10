@@ -489,10 +489,10 @@ if str(hoy.month) == mes:
     if (op.estado == 'pending') and (op.stage_id.en_curso == False):
       nuevas += 1
       acum_nuevas += op.planned_revenue
-    elif (op.estado == 'pending') and (op.stage_id.en_curso == True) and (op.probability < 51):
+    elif (op.estado == 'pending') and (op.stage_id.en_curso == True) and (op.probability &lt; 51):
       iniciadas += 1
       acum_iniciadas += op.planned_revenue
-    elif (op.estado == 'pending') and (op.stage_id.en_curso == True) and (op.probability < 100):
+    elif (op.estado == 'pending') and (op.stage_id.en_curso == True) and (op.probability &lt; 100):
       maduras += 1
       acum_maduras += op.planned_revenue
     elif (op.estado == 'won'):
@@ -512,24 +512,24 @@ if str(hoy.month) == mes:
 
   venta_mes = acum_ganadas_ca + acum_ganadas_cn
 
-  if record.x_objetivo_anual_id.x_objetivo_total > 0:
+  if record.x_objetivo_anual_id.x_objetivo_total &gt; 0:
     venta_mes_percent = venta_mes / record.objetivo_anual_id.objetivo_total * 100
-  if record.objetivo_anual_id.objetivo_count > 0:
+  if record.objetivo_anual_id.objetivo_count &gt; 0:
     ganadas_percent = ganadas_este_mes / record.objetivo_anual_id.objetivo_count * 100
     op_prospeccion_mes_count_percent = nuevas_este_mes / record.objetivo_anual_id.objetivo_count * 100
-  if record.objetivo_anual_id.op_hoy_count > 0:
+  if record.objetivo_anual_id.op_hoy_count &gt; 0:
       op_perdida_mes_count_percent = perdidas_este_mes / record.objetivo_anual_id.op_hoy_count * 100
-  if record.objetivo_anual_id.objetivo_ca > 0:
+  if record.objetivo_anual_id.objetivo_ca &gt; 0:
     venta_mes_ca_percent = acum_ganadas_ca / record.objetivo_anual_id.objetivo_ca * 100
-  if record.objetivo_anual_id.objetivo_ca_count > 0:
+  if record.objetivo_anual_id.objetivo_ca_count &gt; 0:
     ganadas_ca_percent = ganadas_ca / record.objetivo_anual_id.objetivo_ca_count * 100
-  if (record.objetivo_anual_id.op_hoy_ca_count + perdidas_ca > 0):
+  if (record.objetivo_anual_id.op_hoy_ca_count + perdidas_ca &gt; 0):
     perdidas_ca_percent = perdidas_ca / (record.objetivo_anual_id.op_hoy_ca_count + perdidas_ca) * 100
-  if record.objetivo_anual_id.objetivo_cn > 0:
+  if record.objetivo_anual_id.objetivo_cn &gt; 0:
     venta_mes_cn_percent = acum_ganadas_cn / record.objetivo_anual_id.objetivo_cn * 100
-  if record.objetivo_anual_id.x_op_hoy_ca_count > 0:
+  if record.objetivo_anual_id.x_op_hoy_ca_count &gt; 0:
     ganadas_cn_percent = ganadas_cn / record.objetivo_anual_id.op_hoy_ca_count * 100
-  if (record.objetivo_anual_id.op_hoy_cn_count + perdidas_cn > 0):
+  if (record.objetivo_anual_id.op_hoy_cn_count + perdidas_cn &gt; 0):
     perdidas_cn_percent = perdidas_cn / (record.objetivo_anual_id.op_hoy_cn_count + perdidas_cn) * 100
 
 
