@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="objetivo_anual_linea_default_form_view" model="ir.ui.view">
+        <field name="active" eval="True"/>
+        <field name="arch" type="xml">
+            <form>
+                <sheet string="Objetivo anual lineas">
+                    <h2><field name="oportunidad_id"/></h2>
+                    <group col="2">
+                        <field name="cliente_id" can_create="true" can_write="true" modifiers="{&quot;readonly&quot;: true}"/>
+                        <field name="es_cuenta_nueva" modifiers="{&quot;readonly&quot;: true}"/>
+                        <field name="es_objetivo" modifiers="{}"/>
+                        <field name="es_nueva" modifiers="{&quot;readonly&quot;: true}"/>
+                        <field name="objetivo_id" can_create="true" can_write="true" modifiers="{&quot;readonly&quot;: true}"/>
+                        <field name="name" invisible="1"/>
+                    </group>
+                    <group col="2">
+                        <field name="importe_inicial" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        <field name="importe_actual" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    </group>
+                    <group col="2">
+                        <field name="estado_inicial_id" can_create="true" can_write="true" modifiers="{&quot;readonly&quot;: true}"/>
+                        <field name="estado_actual_id" can_create="true" can_write="true" modifiers="{&quot;readonly&quot;: true}"/>
+                        <field name="es_perdida"/>
+                        <field name="comercial_id"/>
+                        <field name="currency_id" invisible="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+        <field name="field_parent" eval="False"/>
+        <field name="groups_id" eval="[(6, 0, [])]"/>
+        <field name="inherit_id" eval="False"/>
+        <field name="key" eval="False"/>
+        <field name="mode">primary</field>
+        <field name="model">objetivo.anual.linea</field>
+        <field name="name">Default form view for objetivo anual líneas</field>
+        <field name="priority">16</field>
+        <field name="type">form</field>
+    </record>
+
+
+    <record id="objetivo_anual_linea_default_tree_view" model="ir.ui.view">
+        <field name="active" eval="True"/>
+        <field name="arch" type="xml">
+            <tree string="Objetivo anual Líneas" decoration-danger="x_es_objetivo == True">
+                <field name="es_objetivo" invisible="1"/>
+                <field name="es_nueva"/>
+                <field name="es_cuenta_nueva"/>
+                <field name="cliente_id"/>
+                <field name="oportunidad_id"/>
+                <field name="importe_inicial" widget="monetary" options="{'currency_field': 'x_moneda_id'}"/>
+                <field name="estado_inicial_id"/>
+                <field name="importe_actual" widget="monetary" options="{'currency_field': 'x_moneda_id'}"/>
+                <field name="estado_actual_id"/>
+                <field name="es_perdida"/>
+                <field name="comercial_id"/>
+                <field name="active"/>
+                <field name="currency_id" invisible="1"/>
+            </tree>
+        </field>
+        <field name="field_parent" eval="False"/>
+        <field name="groups_id" eval="[(6, 0, [])]"/>
+        <field name="inherit_id" eval="False"/>
+        <field name="key" eval="False"/>
+        <field name="mode">primary</field>
+        <field name="model">objetivo.anual.linea</field>
+        <field name="name">Default tree view for objetivo anual línea</field>
+        <field name="priority">16</field>
+        <field name="type">tree</field>
+    </record>
+
+
+</odoo>
