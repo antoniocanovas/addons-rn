@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <record id="annual_target_default_form_view" model="ir.ui.view">
+    <record id="objetivo_mensual_default_form_view" model="ir.ui.view">
         <field name="active" eval="True"/>
         <field name="arch" type="xml">
             <form>
