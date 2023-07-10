@@ -7,6 +7,7 @@ _logger = logging.getLogger(__name__)
 
 class ObjetivoGrupo(models.Model):
     _name = 'objetivo.grupo'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = 'Objetivo Grupo Anual'
 
 

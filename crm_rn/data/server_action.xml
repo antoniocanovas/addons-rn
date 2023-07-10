@@ -412,7 +412,7 @@ if str(hoy.month) == mes:
   acum_ganadas_ca = 0
   acum_perdidas = 0
   venta_mes = 0
-  venta_mes_percent = 0
+  venta_percent = 0
   venta_mes_ca_percent = 0
   venta_mes_cn_percent = 0
   nuevas_este_mes = 0
@@ -462,11 +462,11 @@ if str(hoy.month) == mes:
     else:
       esobjetivo = False
 
-# corregido 31/05, peta:    yaexiste = env['x_objetivo_mensual_lineas'].search([('id','in',record.x_linea_ids.ids),('x_oportunidad_id','=',op.id)])
+# corregido 31/05, peta:    yaexiste = env['objetivo_mensual_lineas'].search([('id','in',record.linea_ids.ids),('oportunidad_id','=',op.id)])
     yaexiste = env['objetivo.mensual.linea'].search([('id','in',lineasahora),('oportunidad_id','=',op.id)])
     if (yaexiste.id) and (op.active == True) and (op.probability &gt; 0):
       yaexiste.write({'oportunidad_id':op.id, 'comercial_id':op.user_id.id, 'objetivo_mensual_id':record.id,
-        'etapa_id':op.stage_id.id,'is_prospection':op.partner_id.partner_status_id.is_prospection, 'x_importe':op.planned_revenue,
+        'etapa_id':op.stage_id.id,'is_prospection':op.partner_id.partner_status_id.is_prospection, 'importe':op.planned_revenue,
         'es_nueva':esnueva, 'name':op.name, 'es_objetivo':esobjetivo, 'es_perdida':False})
       lineasahora.remove(yaexiste.id)
 
@@ -519,8 +519,8 @@ if str(hoy.month) == mes:
 
   venta_mes = acum_ganadas_ca + acum_ganadas_cn
 
-  if record.x_objetivo_anual_id.x_objetivo_total &gt; 0:
-    venta_mes_percent = venta_mes / record.objetivo_anual_id.objetivo_total * 100
+  if record.objetivo_anual_id.objetivo_total &gt; 0:
+    venta_percent = venta_mes / record.objetivo_anual_id.objetivo_total * 100
   if record.objetivo_anual_id.objetivo_count &gt; 0:
     ganadas_percent = ganadas_este_mes / record.objetivo_anual_id.objetivo_count * 100
     op_prospeccion_mes_count_percent = nuevas_este_mes / record.objetivo_anual_id.objetivo_count * 100
@@ -534,7 +534,7 @@ if str(hoy.month) == mes:
     perdidas_ca_percent = perdidas_ca / (record.objetivo_anual_id.op_hoy_ca_count + perdidas_ca) * 100
   if record.objetivo_anual_id.objetivo_cn &gt; 0:
     venta_mes_cn_percent = acum_ganadas_cn / record.objetivo_anual_id.objetivo_cn * 100
-  if record.objetivo_anual_id.x_op_hoy_ca_count &gt; 0:
+  if record.objetivo_anual_id.op_hoy_ca_count &gt; 0:
     ganadas_cn_percent = ganadas_cn / record.objetivo_anual_id.op_hoy_ca_count * 100
   if (record.objetivo_anual_id.op_hoy_cn_count + perdidas_cn &gt; 0):
     perdidas_cn_percent = perdidas_cn / (record.objetivo_anual_id.op_hoy_cn_count + perdidas_cn) * 100
@@ -548,9 +548,9 @@ if str(hoy.month) == mes:
 # Actualizo el registro de objetivo mensual con las variables anteriores, para hacer una única escritura:
 # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
   record.write({'objetivo_total':record.objetivo_anual_id.objetivo_total, 'venta_total':record.objetivo_anual_id.venta_total,
-    'facturado':record.objetivo_anual_id.facturado, 'facturado_op_ganada':record.objetivo_anual_id.facturado_op_ganada,
+#    'facturado':record.objetivo_anual_id.facturado, 'facturado_op_ganada':record.objetivo_anual_id.facturado_op_ganada,
     'venta_mes':venta_mes, 'objetivo_pendiente':record.objetivo_anual_id.objetivo_pendiente,
-    'venta_total_percent':record.objetivo_anual_id.venta_percent, 'venta_mes_percent': venta_mes_percent,
+    'venta_total_percent':record.objetivo_anual_id.venta_percent, 'venta_percent': venta_percent,
     'objetivo_ca':record.objetivo_anual_id.objetivo_ca, 'objetivo_cn':record.objetivo_anual_id.objetivo_cn,
     'venta_ca':record.objetivo_anual_id.venta_ca, 'venta_cn':record.objetivo_anual_id.venta_cn,
     'venta_mes_ca': acum_ganadas_ca, 'venta_mes_cn': acum_ganadas_cn,
