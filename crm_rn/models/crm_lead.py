@@ -58,4 +58,4 @@ class CrmLead(models.Model):
     def _get_cambios_de_etapa_date(self):
         for record in self:
             record['cambio_etapa_date'] = datetime.today().date()
-    cambio_etapa_date = fields.Integer('Último cambio de etapa', readonly=1, store=True, compute='_get_cambios_de_etapa_date')
+    cambio_etapa_date = fields.Date('Último cambio de etapa', readonly=1, store=True, compute='_get_cambios_de_etapa_date')
