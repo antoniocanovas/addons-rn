@@ -7,7 +7,7 @@
             <form create="false" edit="true" delete="false">
                 <header>
                     <field name="active" options="{'clickable': '1','default_value':'activo'}" widget="statusbar"/>
-                    <button name="actualizar_objetivo_equipo" string="Actualizar" type="object" class="oe_highlight oe_read_only" attrs="{'invisible':[('estado','=','archivado')]}"/>
+                    <button name="actualizar_objetivo_equipo" string="Actualizar" type="object" class="oe_highlight oe_read_only" attrs="{'invisible':[('active','=',False)]}"/>
                 </header>
                 <sheet string="Objetivos de equipos de venta">
                     <!--
