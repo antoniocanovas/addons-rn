@@ -70,7 +70,7 @@ class ObjetivoGrupo(models.Model):
         equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
         for eq in equipos:
             total += eq.cumplido_ca_anterior
-        self.x_cumplido_ca_anterior = total
+        self.cumplido_ca_anterior = total
     cumplido_ca_anterior = fields.Monetary('Año anterior', store=False, readonly=True, compute='get_grupo_cumplido_ca_anterior')
 
 
@@ -79,7 +79,7 @@ class ObjetivoGrupo(models.Model):
         equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
         for eq in equipos:
             total += eq.cumplido_cn_anterior
-        self.x_cumplido_cn_anterior = total
+        self.cumplido_cn_anterior = total
     cumplido_cn_anterior = fields.Monetary('Año anterior', store=False, readonly=True, compute='get_grupo_cumplido_cn_anterior')
 
     def get_grupo_cumplido_total(self):
@@ -87,7 +87,7 @@ class ObjetivoGrupo(models.Model):
         equipos = self.env['objetivo.equipo'].search([('anho', '=', self.anho)])
         for eq in equipos:
             total += eq.cumplido_total
-        self.x_cumplido_total = total
+        self.cumplido_total = total
     cumplido_total = fields.Monetary('Año anterior', store=False, readonly=True, compute='get_grupo_cumplido_total')
 
     def get_grupo_facturado(self):
@@ -109,7 +109,7 @@ class ObjetivoGrupo(models.Model):
     def get_grupo_incremento_objetivo_anual_percent(self):
         total = 0
         if self.cumplido_total > 0:
-            total = 100 * (self.objetivo_total / self.x_cumplido_total) - 100
+            total = 100 * (self.objetivo_total / self.cumplido_total) - 100
         self.incremento_objetivo_anual_percent = total
     incremento_objetivo_anual_percent = fields.Float('Variación obj.anual', store=False, readonly=True,
                                                      compute='get_grupo_incremento_objetivo_anual_percent',
@@ -428,9 +428,9 @@ class ObjetivoGrupo(models.Model):
 
     def get_grupo_op_prospeccion_count_percent(self):
         total = 0
-        cantidad_inicial = self.x_op_hoy_count - self.x_op_prospeccion_count
+        cantidad_inicial = self.op_hoy_count - self.op_prospeccion_count
         if (cantidad_inicial > 0):
-            total = (self.x_op_hoy_count - cantidad_inicial) / cantidad_inicial * 100
+            total = (self.op_hoy_count - cantidad_inicial) / cantidad_inicial * 100
         self.op_prospeccion_count_percent = total
     op_prospeccion_count_percent = fields.Float('Op. posteriores vs objetivo (%)', store=False, readonly=True,
                                                 compute='get_grupo_op_prospeccion_count_percent',
