@@ -6,7 +6,7 @@
         <field name="arch" type="xml">
             <form create="false" edit="true" delete="false">
                 <header>
-                    <field name="estado" options="{'clickable': '1','default_value':'activo'}" widget="statusbar"/>
+                    <field name="active" options="{'clickable': '1','default_value':'activo'}" widget="statusbar"/>
                     <!--
                     <button name="239" string="Actualizar" type="action" class="oe_highlight oe_read_only"/>
                     -->
