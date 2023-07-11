@@ -55,12 +55,12 @@ class ObjetivoGrupo(models.Model):
     anho = fields.Integer('Año', readonly=False, store=True, required=True)
 
     def get_anho_percent(self):
-        hoy = datetime.datetime.today()
+        hoy = datetime.today()
         total = 0
         if hoy.year > self.anho:
             total = 100
         else:
-            day_of_year = (hoy - datetime.datetime(hoy.year, 1, 1)).days * + 1
+            day_of_year = (hoy - datetime(hoy.year, 1, 1)).days * + 1
             total = day_of_year / 365 * 100
         self.anho_percent = total
     anho_percent = fields.Float('Días transcurridos', readonly=True, store=False, compute='get_anho_percent')
