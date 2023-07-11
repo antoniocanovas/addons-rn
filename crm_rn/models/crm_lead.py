@@ -60,3 +60,14 @@ class CrmLead(models.Model):
         for record in self:
             record['cambio_etapa_date'] = datetime.today().date()
     cambio_etapa_date = fields.Date('Último cambio de etapa', readonly=1, store=True, compute='_get_cambios_de_etapa_date')
+
+    @def _get_objetivo_anual(self):
+        for record in self:
+            objetivo = False
+            registros = self.env['objetivo_anual_lineas'].search([('oportunidad_id', '=', record.id),
+                                                                  ('objetivo_id.estado', '=', 'activo')])
+            if registros.ids:
+                primero = registros[0]
+                objetivo = primero.objetivo_id.id
+            record['objetivo_anual_id'] = objetivo
+    objetivo_anual_id = fields.Many2one('objetivo.anual', string='Obj. Anual', store=False, compute='_get_objetivo_anual')

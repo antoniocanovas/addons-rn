@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <odoo>
 
-    <record id="crm_lead_stage_change_inh" model="ir.ui.view">
+    <record id="crm_lead_stage_change_form_inh" model="ir.ui.view">
         <field name="name">CRM Stage changes Inherit Form View</field>
         <field name="model">crm.lead</field>
         <field name="type">form</field>
@@ -9,10 +9,30 @@
         <field name="priority">99</field>
         <field name="arch" type="xml">
             <field name="team_id" position="after">
+                <field name="vat"/>
                 <field name="estado"/>
+                <field name="empresa_id"/>
                 <field name="date_closed"/>
                 <field name="cambio_etapa_count"/>
                 <field name="cambio_etapa_date"/>
+            </field>
+        </field>
+    </record>
+
+
+    <record id="crm_lead_stage_change_tree_inh" model="ir.ui.view">
+        <field name="name">CRM Stage changes Inherit Tree View</field>
+        <field name="model">crm.lead</field>
+        <field name="type">tree</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <field name="phone" position="after">
+                <field name="partner_status"/>
+                <field name="vat"/>
+                <field name="empresa_id" optional="show"/>
+                <field name="objetivo_anual_id" optional="show"/>
+                <field name="partner_address_email"/>
             </field>
         </field>
     </record>
