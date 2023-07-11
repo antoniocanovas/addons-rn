@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="objetivo_mensual_linea_default_form_view" model="ir.ui.view">
+        <field name="active" eval="True"/>
+        <field name="arch" type="xml">
+<form>
+    <sheet string="Objetivo mensual Líneas">
+        <h2>
+            <field name="oportunidad_id"/>
+        </h2>
+        <group col="2">
+            <field name="cliente_id"/>
+            <field name="es_cuenta_nueva"/>
+            <field name="es_objetivo"/>
+            <field name="es_nueva"/>
+            <field name="name" invisible="1"/>
+        </group>
+        <group col="4">
+            <field name="importe" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+            <field name="etapa_id"/>
+            <field name="comercial_id"/>
+            <field name="equipo_id"/>
+            <field name="objetivo_mensual_id"/>
+            <field name="objetivo_equipo_id"/>
+            <field name="currency_id" invisible="1"/>
+            <separator/>
+        </group>
+    </sheet>
+            </form>
+        </field>
+        <field name="field_parent" eval="False"/>
+        <field name="groups_id" eval="[(6, 0, [])]"/>
+        <field name="inherit_id" eval="False"/>
+        <field name="key" eval="False"/>
+        <field name="mode">primary</field>
+        <field name="model">objetivo.mensual.linea</field>
+        <field name="name">Default form view for objetivo mensual líneas</field>
+        <field name="priority">16</field>
+        <field name="type">form</field>
+    </record>
+
+
+    <record id="objetivo_menual_linea_default_tree_view" model="ir.ui.view">
+        <field name="active" eval="True"/>
+        <field name="arch" type="xml">
+            <tree string="Objetivo mensual Líneas" decoration-danger="es_objetivo == True">
+                <field name="es_objetivo"/>
+                <field name="es_nueva"/>
+                <field name="es_cuenta_nueva"/>
+                <field name="cliente_id"/>
+                <field name="name"/>
+                <field name="etapa_id"/>
+                <field name="es_perdida"/>
+                <field name="importe" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="currency_id" invisible="1"/>
+            </tree>
+        </field>
+        <field name="field_parent" eval="False"/>
+        <field name="groups_id" eval="[(6, 0, [])]"/>
+        <field name="inherit_id" eval="False"/>
+        <field name="key" eval="False"/>
+        <field name="mode">primary</field>
+        <field name="model">objetivo.mensual.linea</field>
+        <field name="name">Default tree view for objetivo mensual línea</field>
+        <field name="priority">16</field>
+        <field name="type">tree</field>
+    </record>
+
+
+</odoo>

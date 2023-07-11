@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="objetivo_equipo_default_form_view" model="ir.ui.view">
+        <field name="active" eval="True"/>
+        <field name="arch" type="xml">
+            <form create="false" edit="true" delete="false">
+                <header>
+                    <field name="estado" options="{'clickable': '1','default_value':'activo'}" widget="statusbar"/>
+                    <!--
+                    <button name="239" string="Actualizar" type="action" class="oe_highlight oe_read_only"/>
+                    -->
+                </header>
+                <sheet string="Objetivos de equipos de venta">
+                    <!--
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" icon="fa-shield" type="action" name="241">
+                            <field name="objetivo_equipo_id__objetivo_anuales_count" string="Comerciales" widget="statinfo"/>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-calendar" type="action" name="242">
+                            <field name="objetivo_equipo_id__objetivo_mensuales_count" string="Reg. Mensuales" widget="statinfo"/>
+                        </button>
+                        <button class="oe_stat_button" icon="fa-diamond" type="action" name="243">
+                            <field name="objetivo_equipo_id__objetivo_anual_lineas_count" string="Reg. Oportunidad" widget="statinfo"/>
+                        </button>
+                    </div>
+                    -->
+                    <h2>
+                        <field name="name" modifiers="{}" placeholder="Año, comercial ..."/>
+                    </h2>
+                    <group col="4">
+                        <field name="equipo_id" string="Equipo de ventas"/>
+                        <field name="responsable_id" string="Responsable"/>
+                        <field name="anho" string="Año"/>
+                        <field name="anho_percent" string="Dias transcurridos" widget="progressbar"/>
+                        <!--
+                        <field name="facturado" string="Facturado"  widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        <field name="facturado_op_ganada" string="Fact. Op. Ganadas"  widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        -->
+                    </group>
+                    <!--
+                    <notebook>
+                        <page name="objetivos_equipos_ventas" string="Ventas">
+                            <group>
+                                <group name="objetivo_equipos_ventas_este_año" string="Visión Global">
+                                    <field name="objetivo_total" string="Objetivo" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="cumplido_total" string="Año anterior" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="venta_total" string="Vendido" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="op_activa" string="Mercado potencial" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="venta_vs_global" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                </group>
+                                <group name="objetivo_equipos_ventas_año_anterior" string="... y sus KPIs">
+                                    <field name="objetivo_pendiente" string="Objetivo pendiente" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="incremento_objetivo_anual_percent" string="Variación anual" widget="progressbar"/>
+                                    <field name="venta_percent" string="Progreso ventas" widget="progressbar"/>
+                                    <field name="oportunidad_vs_objetivo_percent" string="Objetivo potencial" widget="progressbar"/>
+                                    <field name="op_activa_vs_media_global_percent" string="MP. vs Global %"/>
+                                </group>
+                                <group name="objetivo_equipos_venta_cruzada" string="Venta cruzada">
+                                    <field name="objetivo_ca" string="Objetivo" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="cumplido_ca_anterior" string="Año anterior" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="venta_ca" string="Vendido" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="venta_ca_percent" string="Progreso" widget="progressbar"/>
+                                    <field name="op_activa_ca" string="Importe en Op. activas" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                </group>
+                                <group name="objetivo_equipos_nuevo_negocio" string="Nuevo negocio">
+                                    <field name="objetivo_cn" string="Objetivo" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="cumplido_cn_anterior" string="Año anterior" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="venta_cn" string="Vendido" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="venta_cn_percent" string="Progreso" widget="progressbar"/>
+                                    <field name="op_activa_cn" string="Importe en Op. activas" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page name="objetivos_equipos_actividad" string="Actividad">
+                            <group>
+                                <group name="objetivo_equipos_foto_oportunidades" string="Iniciativas y oportunidades">
+                                    <field name="op_hoy_count" string="Actuales"/>
+                                    <field name="op_ganada_count" string="Ganadas"/>
+                                    <field name="op_activa_count" string="Activas"/>
+                                    <field name="op_vencida_count" string="Vencidas"/>
+                                    <field name="op_perdida_count" string="Perdidas"/>
+                                    <field name="op_prospeccion_count" string="Posterior a objetivo"/>
+                                    <field name="iniciativa_count" string="Iniciativas"/>
+                                </group>
+                                <group name="objetivo_equipos_kpi_oportunidades" string="... y sus KPIs">
+                                    <field name="objetivo_count" string="Objetivo anual"/>
+                                    <field name="op_ganada_count_percent" string="Progreso ganadas" widget="progressbar"/>
+                                    <field name="op_activa_vs_hoy_percent" string="Progreso activas" widget="progressbar"/>
+                                    <field name="op_vencida_percent" string="Vencidas" widget="progressbar"/>
+                                    <field name="op_perdida_count_percent" string="Perdidas" widget="progressbar"/>
+                                    <field name="op_prospeccion_count_percent" string="Posterior a objetivo" widget="progressbar"/>
+                                </group>
+                            </group>
+                            <group name="comparativas_vs_central" string="Capacidad de generar nuevas oportunidades (+/-)">
+                                <group>
+                                    <field name="op_hoy_vs_global"/>
+                                </group>
+                                <group>
+                                    <field name="op_activas_vs_global"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group name="objetivo_equipos_foto_actividades" string="Foto de actividades">
+                                    <field name="act_planificada_count" string="Act. planificadas"/>
+                                    <field name="op_sin_actividad_count" string="Op. sin actividad"/>
+                                    <field name="act_vencida_count" string="Act. vencidas"/>
+                                </group>
+                                <group name="objetivo_equipos_kpi_actividades" string="... y sus KPIs">
+                                    <field name="act_finalizada_count" string="Act. finalizadas"/>
+                                    <field name="op_sin_actividad_percent" string="No planificadas" widget="progressbar"/>
+                                    <field name="act_vencida_percent" string="Act. vencidas" widget="progressbar"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page name="objetivos_equipos_origen" string="Origen">
+                            <group>
+                                <group name="objetivo_equipos_venta_cruzada" string="Oportunidades en Venta cruzada">
+                                    <field name="op_hoy_ca_count" string="Actuales"/>
+                                    <field name="objetivo_ca_count" string="Objetivo"/>
+                                    <field name="op_ca_count_percent" string="Progreso" widget="progressbar"/>
+                                    <field name="op_ganada_ca_count" string="Ganadas"/>
+                                    <field name="op_ganada_ca_count_percent" string="Tasa de éxito" widget="progressbar"/>
+                                    <field name="op_perdida_ca_count" string="Perdidas"/>
+                                    <field name="op_perdida_ca_count_percent" string="Tasa de pérdidas" widget="progressbar"/>
+                                    <field name="kpi_fidelizacion" string="KPI Fidelización" widget="progressbar"/>
+                                </group>
+                                <group name="objetivo_equipos_nuevo_negocio" string="Oportunidades en Nuevo negocio">
+                                    <field name="op_hoy_cn_count" string="Actuales"/>
+                                    <field name="objetivo_cn_count" string="Objetivo"/>
+                                    <field name="op_cn_count_percent" string="Progreso" widget="progressbar"/>
+                                    <field name="op_ganada_cn_count" string="Ganadas"/>
+                                    <field name="op_ganada_cn_count_percent" string="Tasa de éxito" widget="progressbar"/>
+                                    <field name="op_perdida_cn_count" string="Perdidas"/>
+                                    <field name="op_perdida_cn_count_percent" string="Tasa de pérdidas" widget="progressbar"/>
+                                    <field name="kpi_captacion" string="KPI Captación" widget="progressbar"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page name="objetivos_anuales_comparativa_grupo" string="Grupo" groups="sales_team.group_sale_manager">
+                            <group>
+                                <group name="seguimiento_cn_grupo" string="Cuenta nueva">
+                                    <field name="grupo_cn_objetivo_percent" string="Objetivo" widget="progressbar"/>
+                                    <field name="grupo_cn_hoy_percent" string="Ganado" widget="progressbar"/>
+                                </group>
+                                <group name="seguimiento_ca_grupo" string="Venta cruzada">
+                                    <field name="grupo_ca_objetivo_percent" string="Objetivo" widget="progressbar"/>
+                                    <field name="grupo_ca_hoy_percent" string="Ganado" widget="progressbar"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group name="oportunidades_cn_grupo" string="Oportunidades en nuevo negocio">
+                                    <field name="grupo_cn_op_objetivo_percent" string="Objetivo" widget="progressbar"/>
+                                    <field name="grupo_cn_op_hoy_percent" string="Hoy" widget="progressbar"/>
+                                </group>
+                                <group name="oportunidades_ca_grupo" string="Oportunidades en venta cruzada">
+                                    <field name="grupo_ca_op_objetivo_percent" string="Objetivo" widget="progressbar"/>
+                                    <field name="grupo_ca_op_hoy_percent" string="Hoy" widget="progressbar"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page name="objetivos_equipos_varios" string="Varios">
+                            <group name="notas">
+                                <field name="nota" placeholder="Anotaciones del comercial y responsable ..."/>
+                            </group>
+                            <group name="objetivo_equipos_venta_varios">
+                                <field name="write_date" string="Actualizado"/>
+                                <field name="currency_id" invisible="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                    -->
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+
+        </field>
+        <field name="field_parent" eval="False"/>
+        <field name="groups_id" eval="[(6, 0, [])]"/>
+        <field name="inherit_id" eval="False"/>
+        <field name="key" eval="False"/>
+        <field name="mode">primary</field>
+        <field name="model">objetivo.equipo</field>
+        <field name="name">Default form view for objetivo equipo</field>
+        <field name="priority">16</field>
+        <field name="type">form</field>
+    </record>
+
+
+
+    <record id="objetivo_equipo_default_tree_view" model="ir.ui.view">
+        <field name="active" eval="True"/>
+        <field name="arch" type="xml">
+            <tree string="Objetivos de equipos de venta" create="false" delete="true">
+                <field name="name"/>
+                <field name="objetivo_total" widget="monetary" options="{'currency_field': 'currency_id'}" sum="Objetivo"/>
+                <field name="venta_total" widget="monetary" options="{'currency_field': 'currency_id'}" sum="Vendido"/>
+                <field name="op_activa_count" sum="Op. activas"/>
+                <field name="op_activa" widget="monetary" options="{'currency_field': 'currency_id'}" sum="En cartera"/>
+                <field name="op_vencida_count" sum="Op. vencidas"/>
+                <field name="act_planificada_count" sum="Act. planificadas"/>
+                <field name="act_vencida_count" sum="Act. vencidas"/>
+                <field name="currency_id" invisible="1"/>
+            </tree>
+        </field>
+        <field name="field_parent" eval="False"/>
+        <field name="groups_id" eval="[(6, 0, [])]"/>
+        <field name="inherit_id" eval="False"/>
+        <field name="key" eval="False"/>
+        <field name="mode">primary</field>
+        <field name="model">objetivo.grupo</field>
+        <field name="name">Default tree view for objetivo grupo</field>
+        <field name="priority">16</field>
+        <field name="type">tree</field>
+    </record>
+
+
+</odoo>
