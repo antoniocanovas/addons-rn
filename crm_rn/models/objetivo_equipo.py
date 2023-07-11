@@ -338,3 +338,5 @@ class ObjetivoEquipo(models.Model):
         record['objetivo_equipo_id_objetivo_mensuales_count'] = len(lineas.ids)
     objetivo_equipo_id_objetivo_mensuales_count = fields.Integer('Obj. Equipo Ventas count', store=False, readonly=True,
                                                                  compute='get_objetivo_equipo_id_objetivo_mensuales_count')
+    def actualizar_objetivo_equipo(self):
+        return True
