@@ -28,11 +28,13 @@
         <field name="priority">99</field>
         <field name="arch" type="xml">
             <field name="phone" position="after">
+                <!--
                 <field name="partner_status"/>
                 <field name="vat"/>
                 <field name="empresa_id" optional="show"/>
                 <field name="objetivo_anual_id" optional="show"/>
                 <field name="partner_address_email"/>
+                -->
             </field>
         </field>
     </record>
