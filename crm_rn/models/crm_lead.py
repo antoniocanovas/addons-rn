@@ -15,6 +15,7 @@ class CrmLead(models.Model):
     _inherit = 'crm.lead'
 
     vat   = fields.Char('NIF', related='partner_id.vat', readonly=False)
+    empresa_id = fields.Many2one('res.company', store=True, related='user_id.empresa_id')
 
     @api.depends('stage_id')
     def _get_crm_estado(self):
