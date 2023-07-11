@@ -36,6 +36,7 @@
                         <field name="facturado_op_ganada" string="Fact. Op. Ganadas"  widget="monetary" options="{'currency_field': 'currency_id'}"/>
                         -->
                     </group>
+                    <!--
                     <notebook>
                         <page name="objetivos_equipos_ventas" string="Ventas">
                             <group>
@@ -166,6 +167,7 @@
                             </group>
                         </page>
                     </notebook>
+                    -->
                 </sheet>
                 <div class="oe_chatter">
                     <field name="message_follower_ids" widget="mail_followers"/>
