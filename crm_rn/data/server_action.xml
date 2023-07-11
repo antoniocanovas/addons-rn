@@ -213,7 +213,7 @@ if record.estado == 'activo':
   # ACTUALIZAR LOS CAMPOS DE LA LÍNEA DE ESTE MES Y COMERCIAL:
   acc_mes = env['ir.actions.server'].browse(485)
   ctx = dict(env.context or {})
-  ctx.update({'active_id': objetivomensual.id, 'active_model': 'objetivo_mensual'})
+  ctx.update({'active_id': objetivomensual.id, 'active_model': 'objetivo.mensual'})
   resp_mes = acc_mes.with_context(ctx).run()
 
   raise Warning('ok')
