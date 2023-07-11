@@ -8,11 +8,12 @@
         <field name="inherit_id" ref="crm.crm_lead_view_form"/>
         <field name="priority">99</field>
         <field name="arch" type="xml">
-        <field name="team_id" position="after">
-            <field name="estado"/>
-            <field name="date_closed"/>
-            <field name="cambio_etapa_count"/>
-            <field name="cambio_etapa_date"/>
+            <field name="team_id" position="after">
+                <field name="estado"/>
+                <field name="date_closed"/>
+                <field name="cambio_etapa_count"/>
+                <field name="cambio_etapa_date"/>
+            </field>
         </field>
     </record>
 
