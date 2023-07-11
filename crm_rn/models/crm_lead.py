@@ -61,7 +61,7 @@ class CrmLead(models.Model):
             record['cambio_etapa_date'] = datetime.today().date()
     cambio_etapa_date = fields.Date('Último cambio de etapa', readonly=1, store=True, compute='_get_cambios_de_etapa_date')
 
-    @def _get_objetivo_anual(self):
+    def _get_objetivo_anual(self):
         for record in self:
             objetivo = False
             registros = self.env['objetivo_anual_lineas'].search([('oportunidad_id', '=', record.id),
