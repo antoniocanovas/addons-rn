@@ -211,8 +211,8 @@
         <field name="inherit_id" eval="False"/>
         <field name="key" eval="False"/>
         <field name="mode">primary</field>
-        <field name="model">objetivo.grupo</field>
-        <field name="name">Default tree view for objetivo grupo</field>
+        <field name="model">objetivo.equipo</field>
+        <field name="name">Default tree view for objetivo equipo</field>
         <field name="priority">16</field>
         <field name="type">tree</field>
     </record>
