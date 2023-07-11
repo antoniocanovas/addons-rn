@@ -46,6 +46,7 @@ class ObjetivoEquipo(models.Model):
     conseguido_ca_count_percent = fields.Float('Nº Op. ganadas CA (% sobre objetivo)', store=True, readonly=True)
     conseguido_cn_count_percent = fields.Float('Nº Op. ganadas CN (% sobre objetivo)', store=True, readonly=True)
     cumplido_ca_anterior = fields.Monetary('Cumplido CA A-1 (€)', store=True, readonly=True)
+    cumplido_cn_anterior = fields.Monetary('Cumplido CN A-1 (€)', store=True, readonly=True)
     cumplido_total = fields.Monetary('Total Año -1', store=True, readonly=True)
     equipo_id = fields.Many2one('crm.team', string="Equipo de ventas", store=True, readonly=True)
     ganada_ca_count = fields.Integer('Nº Op. Ganadas CA', store=True, readonly=True)
