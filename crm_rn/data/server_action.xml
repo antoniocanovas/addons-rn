@@ -216,11 +216,6 @@ if record.estado == 'activo':
   cantidad_ganadas = ganadasca + ganadascn
   cantidad_perdidas = perdidasca + perdidascn
 
-
-
-
-# VOY POR AQUÍ !!!!
-
   # Otras estadísticas:
   if  cantidad_oportunidades &gt; 0:
     op_perdida_count_percent = cantidad_perdidas / cantidad_oportunidades * 100
@@ -281,12 +276,12 @@ if record.estado == 'activo':
 
   if (acum_opactivas &lt; media_delegacion):
     vs_delegacion = (1 - (acum_opactivas/media_delegacion)) * -100
-  else:
+  elif (media_delegacion != 0):
     vs_delegacion = ((acum_opactivas/media_delegacion) -1) * 100
 
   if (acum_opactivas &lt; media_global):
     vs_global = (1 - (acum_opactivas/media_global)) * -100
-  else:
+  elif (media_global != 0):
     vs_global = ((acum_opactivas/media_global) -1) * 100
 
 # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -316,8 +311,9 @@ if record.estado == 'activo':
       venta_delegacion += li.importe_actual
 
   # Cálculo de medias (aprovechamos datos generales del apartdo anterior (objetivos_delegacion_count y objetivos_central_count):
-  media_venta_delegacion = venta_delegacion / objetivos_delegacion_count
-  media_venta_global     = venta_global / objetivos_central_count
+
+  if objetivos_delegacion_count:  media_venta_delegacion = venta_delegacion / objetivos_delegacion_count
+  if objetivos_central_count:     media_venta_global = venta_global / objetivos_central_count
 
   venta_vs_delegacion =  ventatotal - media_venta_delegacion
   venta_vs_global     =  ventatotal - media_venta_global
