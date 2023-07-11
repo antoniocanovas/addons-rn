@@ -57,5 +57,5 @@ class CrmLead(models.Model):
     @api.depends('stage_id','user_id')
     def _get_cambios_de_etapa_date(self):
         for record in self:
-            record['cambio_etapa_date'] = datetime.datetime.today().date()
+            record['cambio_etapa_date'] = datetime.today().date()
     cambio_etapa_date = fields.Integer('Último cambio de etapa', readonly=1, store=True, compute='_get_cambios_de_etapa_date')
