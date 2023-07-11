@@ -64,7 +64,7 @@ class CrmLead(models.Model):
     def _get_objetivo_anual(self):
         for record in self:
             objetivo = False
-            registros = self.env['objetivo_anual_lineas'].search([('oportunidad_id', '=', record.id),
+            registros = self.env['objetivo.anual.linea'].search([('oportunidad_id', '=', record.id),
                                                                   ('objetivo_id.estado', '=', 'activo')])
             if registros.ids:
                 primero = registros[0]
