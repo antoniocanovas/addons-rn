@@ -205,23 +205,21 @@ if record.estado == 'activo':
     # Actualizado a petición de Miguel 11/08 para que sea sobre las actuales en vez de sobre el objetivo:
     op_ganada_count_percent = (ganadasca + ganadascn) / cantidad_oportunidades * 100
 
-
-
-# VOY POR AQUÍ !!!!
-
-
   # ACTUALIZAR LOS CAMPOS DE LA LÍNEA DE ESTE MES Y COMERCIAL:
   acc_mes = env['ir.actions.server'].browse(208)
   ctx = dict(env.context or {})
   ctx.update({'active_id': objetivomensual.id, 'active_model': 'objetivo.mensual'})
   resp_mes = acc_mes.with_context(ctx).run()
 
-  raise Warning('ok')
-
   # VAMOS CON KPI:
   # Eficiencia y Perdidas (ganadas o perdidas/ objetivo ud op anual)
   cantidad_ganadas = ganadasca + ganadascn
   cantidad_perdidas = perdidasca + perdidascn
+
+
+
+
+# VOY POR AQUÍ !!!!
 
   # Otras estadísticas:
   if  cantidad_oportunidades &gt; 0:
