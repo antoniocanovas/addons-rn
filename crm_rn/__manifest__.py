@@ -20,6 +20,7 @@ Objetivos y seguimiento mensual Roldán Netya
         'views/objetivo_mensual_linea_views.xml',
         'views/objetivo_equipo_views.xml',
         'views/crm_lead_views.xml',
+        'views/res_users_views.xml',
         'views/menu_views.xml',
         'data/server_action.xml',
     ],
