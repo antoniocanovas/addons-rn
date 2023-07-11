@@ -88,7 +88,7 @@ if record.estado != 'archivado':
       nombre = opo.name + ' - ' + opo.stage_id.name
       nuevalinea = env['objetivo.anual.linea'].create({'oportunidad_id':opo.id, 'objetivo_id':record.id, 'estado_inicial_id':opo.stage_id.id,
         'importe_inicial':opo.expected_revenue, 'name':nombre, 'es_objetivo':esobjetivo, 'cliente_id':opo.partner_id.id,
-        'es_cuenta_nueva':opo.partner_id.status_id.is_prospection, 'es_nueva':esnueva,
+        'es_cuenta_nueva':opo.is_prospection, 'es_nueva':esnueva,
         'comercial_id':opo.user_id.id})
 
 # restauración de copia
@@ -102,13 +102,13 @@ if record.estado != 'archivado':
       op_sin_actividad += 1
     if str(datetime.date.today()) &gt; str(op.date_deadline):
       opvencidas += 1
-    if (op.stage_id.en_curso == True) and (op.es_cuenta_nueva == False) and (op.partner_status_id.id):   #2023 ¿hace falta si ya está estado arriba?
+    if (op.stage_id.en_curso == True) and (op.is_prospection == False) and (op.partner_status_id.id):   #2023 ¿hace falta si ya está estado arriba?
       opactivas_ca += 1
       acum_opactivas_ca += op.expected_revenue
-    if (op.stage_id.en_curso == True) and (op.es_cuenta_nueva == True) and (op.partner_status_id.id):
+    if (op.stage_id.en_curso == True) and (op.is_prospection == True) and (op.partner_status_id.id):
       opactivas_cn += 1
       acum_opactivas_cn += op.expected_revenue
-    if (op.stage_id.en_curso == True) and not (op.tipo_cliente_id.id):
+    if (op.stage_id.en_curso == True) and not (op.partner_status_id.id):
       op_sintipocliente += 1
       acum_op_sintipocliente += op.expected_revenue
 
@@ -460,22 +460,22 @@ if str(hoy.month) == mes:
     yaexiste = env['objetivo.mensual.linea'].search([('id','in',lineasahora),('oportunidad_id','=',op.id)])
     if (yaexiste.id) and (op.active == True) and (op.probability &gt; 0):
       yaexiste.write({'oportunidad_id':op.id, 'comercial_id':op.user_id.id, 'objetivo_mensual_id':record.id,
-        'etapa_id':op.stage_id.id,'is_prospection':op.partner_id.partner_status_id.is_prospection, 'importe':op.planned_revenue,
+        'etapa_id':op.stage_id.id,'es_cuenta_nueva':op.is_prospection, 'importe':op.expected_revenue,
         'es_nueva':esnueva, 'name':op.name, 'es_objetivo':esobjetivo, 'es_perdida':False})
       lineasahora.remove(yaexiste.id)
 
     elif (yaexiste.id) and (op.active == False) and (op.probability == 0):
       yaexiste.write({'oportunidad_id':op.id, 'comercial_id':op.user_id.id, 'objetivo_mensual_id':record.id,
-        'etapa_id':op.stage_id.id,'is_prospection':op.partner_id.partner_status_id.is_prospection, 'importe':op.planned_revenue,
+        'etapa_id':op.stage_id.id,'es_cuenta_nueva':op.is_prospection, 'importe':op.expected_revenue,
         'es_nueva':esnueva, 'name':op.name, 'es_objetivo':esobjetivo, 'es_perdida':True})
       lineasahora.remove(yaexiste.id)
     elif (yaexiste.id == False) and (op.active == True) and (op.probability &gt; 0):
       nueva = env['objetivo.mensual.linea'].create({'oportunidad_id':op.id, 'comercial_id':op.user_id.id, 'objetivo_mensual_id':record.id,
-        'etapa_id':op.stage_id.id,'is_prospection':op.partner_id.partner_status_id.is_prospection, 'importe':op.planned_revenue,
+        'etapa_id':op.stage_id.id,'es_cuenta_nueva':op.is_prospection, 'importe':op.expected_revenue,
         'es_nueva':esnueva, 'name':op.name, 'es_objetivo':esobjetivo, 'es_perdida':False})
     elif (yaexiste.id == False) and (op.active == False) and (op.probability == 0):
       nueva = env['objetivo.mensual.linea'].create({'oportunidad_id':op.id, 'comercial_id':op.user_id.id, 'objetivo_mensual_id':record.id,
-        'etapa_id':op.stage_id.id,'is_prospection':op.partner_id.partner_status_id.is_prospection, 'importe':op.planned_revenue,
+        'etapa_id':op.stage_id.id,'es_cuenta_nueva':op.is_prospection, 'importe':op.expected_revenue,
         'es_nueva':esnueva, 'name':op.name, 'es_objetivo':esobjetivo, 'es_perdida':True})
 
     # Borrar las líneas que ya no son de este mes y este comercial (corregido el 13/07/20, estaba un tabulador más adelante):
@@ -489,24 +489,24 @@ if str(hoy.month) == mes:
     op = env['crm.lead'].browse(opo)
     if (op.estado == 'pending') and (op.stage_id.en_curso == False):
       nuevas += 1
-      acum_nuevas += op.planned_revenue
+      acum_nuevas += op.expected_revenue
     elif (op.estado == 'pending') and (op.stage_id.en_curso == True) and (op.probability &lt; 51):
       iniciadas += 1
-      acum_iniciadas += op.planned_revenue
+      acum_iniciadas += op.expected_revenue
     elif (op.estado == 'pending') and (op.stage_id.en_curso == True) and (op.probability &lt; 100):
       maduras += 1
-      acum_maduras += op.planned_revenue
+      acum_maduras += op.expected_revenue
     elif (op.estado == 'won'):
-      if (op.partner_id.partner_status_id.is_prospection == True):
+      if (op.is_prospection == True):
         acum_ganadas_cn += op.is_prospection
         ganadas_cn += 1
       else:
-        acum_ganadas_ca += op.planned_revenue
+        acum_ganadas_ca += op.expected_revenue
         ganadas_ca += 1
     elif (op.active == False) and (op.probability == 0):
       perdidas += 1
-      acum_perdidas += op.planned_revenue
-      if (op.partner_id.partner_status_id.is_prospection == True):
+      acum_perdidas += op.expected_revenue
+      if (op.is_prospection == True):
         perdidas_cn += 1
       else:
         perdidas_ca += 1

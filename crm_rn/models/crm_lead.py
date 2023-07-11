@@ -19,16 +19,13 @@ class CrmLead(models.Model):
     @api.depends('stage_id')
     def _get_crm_estado(self):
         for record in self:
-            # Actualizar campo 'x_estado' que en enterprise es 'won_status'. Corrección 21/09/20:
-            # if (record.active == False) and (record.probability == 0) and (record.x_estado != 'lost'):
             if (record.probability == 0) and (record.estado != 'lost') and (record.type == 'opportunity'):
-                record['estado'] = 'lost'
-            # elif (record.active == True) and (record.probability == 100) and (record.x_estado != 'won'):
+                estado = 'lost'
             elif (record.probability == 100) and (record.estado != 'won') and (record.type == 'opportunity'):
-                record['estado'] = 'won'
-            elif (record.probability > 0) and (record.probability < 100) and (record.estado != 'pending') and (
-                    record.type == 'opportunity'):
-                record['estado'] = 'pending'
+                estado = 'won'
+            elif (record.probability > 0) and (record.probability < 100) and (record.type == 'opportunity'):
+                estado = 'pending'
+            self.estado = estado
     estado = fields.Selection([('pending','En curso'),('won','Ganado'),('lost','Perdido')],
                               string='Estado', store=True, readonly=True, compute='_get_crm_estado')
 
