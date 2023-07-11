@@ -524,7 +524,7 @@ class ObjetivoGrupo(models.Model):
         total = 0
         if (self.objetivo_total > 0):
             total = self.venta_total / self.objetivo_total * 100
-        self.venta_ca_percent = total
+        self.venta_percent = total
     venta_percent = fields.Float('Vendido (% sobre objetivo)', store=False, readonly=True, compute='get_grupo_venta_percent',
                                  help='Porcentaje de consecución de objetivo total, año actual.')
 
