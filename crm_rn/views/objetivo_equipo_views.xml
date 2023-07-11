@@ -7,9 +7,7 @@
             <form create="false" edit="true" delete="false">
                 <header>
                     <field name="active" options="{'clickable': '1','default_value':'activo'}" widget="statusbar"/>
-                    <!--
-                    <button name="239" string="Actualizar" type="action" class="oe_highlight oe_read_only"/>
-                    -->
+                    <button name="actualizar_objetivo_equipo" string="Actualizar" type="object" class="oe_highlight oe_read_only" attrs="{'invisible':[('estado','=','archivado')]}"/>
                 </header>
                 <sheet string="Objetivos de equipos de venta">
                     <!--
@@ -38,7 +36,6 @@
                         <field name="facturado_op_ganada" string="Fact. Op. Ganadas"  widget="monetary" options="{'currency_field': 'currency_id'}"/>
                         -->
                     </group>
-                    <!--
                     <notebook>
                         <page name="objetivos_equipos_ventas" string="Ventas">
                             <group>
@@ -169,7 +166,6 @@
                             </group>
                         </page>
                     </notebook>
-                    -->
                 </sheet>
                 <div class="oe_chatter">
                     <field name="message_follower_ids" widget="mail_followers"/>

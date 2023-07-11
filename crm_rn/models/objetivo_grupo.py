@@ -536,3 +536,6 @@ class ObjetivoGrupo(models.Model):
         self.venta_total = total
     venta_total = fields.Monetary('Venta total', store=False, readonly=True, compute='get_grupo_venta_total',
                                   help='Ventas en oportunidades ganadas')
+
+    def actualizar_objetivo_equipo(self):
+        return True
