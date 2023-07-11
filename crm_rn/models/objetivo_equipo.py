@@ -127,7 +127,7 @@ class ObjetivoEquipo(models.Model):
             objetivo += objetivo_equipo
         if objetivo > 0:
             resultado = self.op_hoy_cn_count / objetivo * 100
-        self.grupo_ca_op_hoy_percent = resultado
+        self.grupo_cn_op_hoy_percent = resultado
     grupo_cn_op_hoy_percent = fields.Float('grupo_cn_op_hoy_percent', store=False, reaonly=True, compute='get_grupo_cn_op_hoy_percent')
 
     def get_grupo_cn_op_objetivo_percent(self):
