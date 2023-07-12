@@ -343,7 +343,7 @@ class ObjetivoAnual(models.Model):
     #### REVISAR ::: !!!
     def get_objetivo_anual_id_objetivo_mensuales_count(self):
         for record in self:
-            meses = self.env['objetivo_mensual'].search([('objetivo_anual_id', '=', record.id)])
+            meses = self.env['objetivo.mensual'].search([('objetivo_anual_id', '=', record.id)])
             record['objetivo_anual_id_objetivo_mensuales_count'] = len(meses.ids)
     objetivo_anual_id_objetivo_mensuales_count = fields.Integer('Objetivo anual count', store=False, readonly=True,
                                                                 compute='get_objetivo_anual_id_objetivo_mensuales_count')
