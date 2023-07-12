@@ -48,10 +48,10 @@
                 <sheet string="Objetivos anuales">
                     <div class="oe_button_box" name="button_box">
                         <button class="oe_stat_button" icon="fa-recycle" type="action" name="%(crm_rn.action_o2m_to_anual_linea)d">
-                            <field name="objetivo_id_objetivo_anual_lineas_count" string="Reg. oportunidades" widget="statinfo"/>
+                            <field name="linea_count" string="Reg. oportunidades" widget="statinfo"/>
                         </button>
                         <button class="oe_stat_button" icon="fa-calendar" type="action" name="%(crm_rn.action_o2m_to_objetivo_mensual)d">
-                            <field name="objetivo_anual_id_objetivo_mensuales_count" string="Meses" widget="statinfo"/>
+                            <field name="objetivo_mensual_count" string="Meses" widget="statinfo"/>
                         </button>
                         <!--
                         <button class="oe_stat_button" icon="fa-tasks" type="action" name="507" string="Facturado">

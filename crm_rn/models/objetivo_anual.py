@@ -338,19 +338,16 @@ class ObjetivoAnual(models.Model):
     venta_vs_global = fields.Monetary('Venta vs Global', store=True, readonly=True,
                                       help='En importe, comparación con la venta media de todos los comerciales.')
 
-
-
-    #### REVISAR ::: !!!
-    def get_objetivo_anual_id_objetivo_mensuales_count(self):
+    # BOTONES O2M:
+    def get_objetivo_mensual_count(self):
         for record in self:
             meses = self.env['objetivo.mensual'].search([('objetivo_anual_id', '=', record.id)])
-            record['objetivo_anual_id_objetivo_mensuales_count'] = len(meses.ids)
-    objetivo_anual_id_objetivo_mensuales_count = fields.Integer('Objetivo anual count', store=False, readonly=True,
-                                                                compute='get_objetivo_anual_id_objetivo_mensuales_count')
-    def get_objetivo_id__objetivo_anual_lineas_count(self):
-        self.objetivo_id_objetivo_anual_lineas_count = len(self.linea_ids.ids)
-    objetivo_id_objetivo_anual_lineas_count = fields.Integer('Objetivo count', store=False, readonly=True,
-                                                                compute='get_objetivo_id__objetivo_anual_lineas_count')
+            record['objetivo_mensual_count'] = len(meses.ids)
+    objetivo_mensual_count = fields.Integer('Objetivo anual count', store=False, readonly=True,
+                                                                compute='get_objetivo_mensual_count')
+    def get_linea_ids_count(self):
+        self.linea_count = len(self.linea_ids.ids)
+    linea_count = fields.Integer('Objetivo count', store=False, readonly=True, compute='get_linea_ids_count')
 
     ### MÉTODOS DE BOTONES:
     def objetivo_anual_activar(self):
