@@ -11,8 +11,6 @@
 # Hay otro que es op_perdida_ca_count_percent que tampoco tiene sentido, debería ser (tasa de éxito) op_ganada_ca_count_percent (que precisamente es el anterior), revisar.
 # Subir progreso tras objetivo en origen, dejar tasa de éxito donde está.
 
-
-
 # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 # Inicio de variables, creación/eliminación de líneas de objetivo en base a oportunidades, si estado borrador
 # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -39,7 +37,6 @@ cantidad_perdidas = 0
 cantidad_inicial = 0
 cambio_etapa_count = 0
 
-# Estas están también por abajo (revisar), si no se ponen aquí error si estado es borrador:
 op_activa_delegacion, op_activa_global, vs_delegacion, vs_global, objetivos_delegacion_count, objetivos_central_count, media_global, media_delegacion = 0, 0, 0, 0, 0, 0, 0, 0
 cantidad_oportunidades_delegacion, cantidad_oportunidades_global, media_hoy_delegacion, media_hoy_global = 0, 0, 0, 0
 op_hoy_vs_delegacion, op_hoy_vs_global = 0, 0
@@ -260,7 +257,6 @@ if record.estado == 'activo':
 # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 # 07/2021 KPIs de mercado potencial por comparativas con la delegación y la central (sumo todo lo de la delegación y posteriormente hago el porcentaje):
 # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-  op_activa_delegacion, op_activa_global, vs_delegacion, vs_global, objetivos_delegacion_count, objetivos_central_count, media_global, media_delegacion = 0, 0, 0, 0, 0, 0, 0, 0
   oportunidades = env['crm.lead'].search([('estado','=','pending'),('type','=','opportunity')])
   objetivos_delegacion_count = len(env['objetivo.anual'].search([('anho','=',record.anho),('equipo_id','=',record.equipo_id.id)]))
   objetivos_central_count = len(env['objetivo.anual'].search([('anho','=',record.anho)]))
@@ -289,7 +285,6 @@ if record.estado == 'activo':
 # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 # 1. Capacidad de generar nuevas oportunidades por comparativas con global (en unidades):
   # Para número de oportunidades de hoy del comercial utilizamos la variable 'cantidad_oportunidades'
-  cantidad_oportunidades_delegacion, cantidad_oportunidades_global, media_hoy_delegacion, media_hoy_global = 0, 0, 0, 0
   cantidad_oportunidades_delegacion = len(env['objetivo.anual.linea'].search([('equipo_id','=',record.equipo_id.id),('anho','=',record.anho),('oportunidad_id.type','=','opportunity')]).ids)
   cantidad_oportunidades_global = len(env['objetivo.anual.linea'].search([('anho','=',record.anho),('oportunidad_id.type','=','opportunity')]).ids)
   # Cálculo de medias por equipo y central (aprovechamos datos generales del apartdo anterior (objetivos_delegacion_count y objetivos_central_count):
@@ -302,7 +297,6 @@ if record.estado == 'activo':
 
 # 2. GAP de ventas con el global (en €)
   # Utilizamos 'ventatotal' para el valor del comercial
-  venta_delegacion, venta_global, venta_media_delegacion, venta_media_global, venta_vs_delegacion, venta_vs_global = 0, 0, 0, 0, 0, 0
   lineas = env['objetivo.anual.linea'].search([('anho','=',record.anho),('estado','=','won')])
   for li in lineas:
     venta_global += li.importe_actual
@@ -320,8 +314,6 @@ if record.estado == 'activo':
 
 # 3. Esfuerzo requerido, lo mismo del punto 1, pero sólo con las oportunidades 'activas':
   # Para número de oportunidades de hoy del comercial utilizamos la variable 'opactivas'
-  cantidad_oportunidades_activas_delegacion, cantidad_oportunidades_activas_global, media_activas_delegacion, media_activas_global, op_activas_vs_delegacion, op_activas_vs_global = 0, 0, 0, 0, 0, 0
-
   cantidad_oportunidades_activas_delegacion = len(env['objetivo.anual.linea'].search([('equipo_id','=',record.equipo_id.id),('anho','=',record.anho),('oportunidad_id.type','=','opportunity'),('oportunidad_id.stage_id.en_curso','=',True)]).ids)
   cantidad_oportunidades_activas_global = len(env['objetivo.anual.linea'].search([('anho','=',record.anho),('oportunidad_id.type','=','opportunity'),('oportunidad_id.stage_id.en_curso','=',True)]).ids)
   # Cálculo de medias por equipo y central (aprovechamos datos generales del apartdo anterior (objetivos_delegacion_count y objetivos_central_count):
@@ -595,7 +587,7 @@ if str(hoy.month) == mes:
 
 
 
-
+    # ACTUALIZAR OBJETIVOS DEL EQUIPO DE VENTA:
     <record id="actualizar_equipo_test" model="ir.actions.server">
             <field name="name">=> Actualizar equipo tests</field>
             <field name="model_id" ref="model_objetivo_equipo"/>
