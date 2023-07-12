@@ -46,8 +46,8 @@
                                       <field name="x_x_objetivo_anual_id__x_objetivo_mensuales_count" string="Meses" widget="statinfo"/>
 
                         </button>
+                      -->
                     </div>
-                            -->
                     <h2>
                         <field name="name" modifiers="{}" placeholder="Año, comercial ..."/>
                     </h2>
