@@ -1,4 +1,233 @@
 <odoo>
+
+
+
+    <record id="actualizar_equipo_test" model="ir.actions.server">
+            <field name="name">=> Actualizar equipo tests</field>
+            <field name="model_id" ref="model_objetivo_equipo"/>
+            <field name="binding_model_id" ref="model_objetivo_equipo"/>
+            <field name="state">code</field>
+            <field name="code">
+# ACTUALIZACIÓN DE TODO LO QUE DEPENDE, PREVIO AL CÁLCULO.
+# La actualización de objetivos anuales de comercial ya es suficiente para realizar el resto automáticamente:
+#for objetivoanual in record.anual_ids:
+#  a = env['ir.actions.server'].browse(180)
+#  ctx = dict(env.context or {})
+#  ctx.update({'active_id': objetivoanual.id, 'active_model': 'objetivo_anuales'})
+#  resp = a.with_context(ctx).run()
+
+# Inicialización variables:
+objetivo_total = 0
+venta_total = 0
+objetivo_pendiente = 0
+cumplidocnanterior = 0
+cumplidocaanterior = 0
+objetivoca = 0
+objetivocn = 0
+objetivocount = 0
+ventaca = 0
+ventacn = 0
+ventacapercent = 0
+ventacnpercent = 0
+ventapercent = 0
+op_hoy_count = 0
+ganadacacount = 0
+ganadacncount = 0
+ganadacacountpercent = 0
+ganadacncountpercent = 0
+opganadacount = 0
+opganadacountpercent = 0
+opperdidas = 0
+opposterior = 0
+opvencidas = 0
+opvencidaspercent = 0
+opperdidaspercent = 0
+opposteriorpercent = 0
+opactivascount = 0
+opactivas = 0
+opactivasca = 0
+opactivascn = 0
+cobertura = 0
+actvencidas = 0
+actplanificadas = 0
+actfinalizadas = 0
+opsinactividad = 0
+opactivavshoypercent = 0
+opsinactividadpercent = 0
+actvencidaspercent = 0
+op_hoy_ca_count = 0
+op_hoy_cn_count = 0
+objetivocacount = 0
+objetivocncount = 0
+opperdidasca = 0
+opperdidascn = 0
+opperdidascapercent = 0
+opperdidascnpercent = 0
+fidelizacion = 0
+captacion = 0
+iniciativa_count = 0
+
+# Una vez actualizados todos los registros anuales (de comerciales) e inicializadas variables, calculamos y consolidamos datos:
+
+for objetivoanual in record.anual_ids:
+  cumplidocnanterior += objetivoanual.cumplido_cn_anterior
+  cumplidocaanterior += objetivoanual.cumplido_ca_anterior
+  objetivoca += objetivoanual.objetivo_ca
+  objetivocn += objetivoanual.objetivo_cn
+  ventaca += objetivoanual.venta_ca
+  ventacn += objetivoanual.venta_cn
+  op_hoy_ca_count += objetivoanual.op_hoy_ca_count
+  op_hoy_cn_count += objetivoanual.op_hoy_cn_count
+  opactivascount += objetivoanual.op_activa_count
+  opvencidas += objetivoanual.op_vencida_count
+  opposterior += objetivoanual.op_prospeccion_count
+  opactivasca += objetivoanual.op_activa_ca
+  opactivascn += objetivoanual.op_activa_cn
+  actplanificadas += objetivoanual.act_planificada_count
+  actvencidas += objetivoanual.act_vencida_count
+  actfinalizadas += objetivoanual.act_finalizada_count
+  opsinactividad += objetivoanual.op_sin_actividad_count
+  objetivocacount += objetivoanual.objetivo_ca_count
+  objetivocncount += objetivoanual.objetivo_cn_count
+  ganadacacount += objetivoanual.op_ganada_ca_count
+  ganadacncount += objetivoanual.op_ganada_cn_count
+  opperdidasca += objetivoanual.op_perdida_ca_count
+  opperdidascn += objetivoanual.op_perdida_cn_count
+  iniciativa_count += objetivoanual.iniciativa_count
+
+objetivo_total = objetivoca + objetivocn
+op_hoy_count = op_hoy_ca_count + op_hoy_cn_count
+venta_total = ventaca + ventacn
+opactivas = opactivasca + opactivascn
+if (objetivo_total > 0):
+  ventapercent = venta_total / objetivo_total * 100
+objetivo_pendiente = objetivo_total - venta_total
+if objetivoca > 0:
+  ventacapercent = ventaca / objetivoca * 100
+if objetivocn > 0:
+  ventacnpercent = ventacn / objetivocn * 100
+opganadacount = ganadacacount + ganadacncount
+objetivocount = objetivocacount + objetivocncount
+opperdidas = opperdidasca + opperdidascn
+if op_hoy_count > 0:
+  opactivavshoypercent = opactivascount / op_hoy_count * 100
+  opvencidaspercent = opvencidas / op_hoy_count * 100
+  opposteriorpercent = opposterior / op_hoy_count * 100
+  opsinactividadpercent = opsinactividad / op_hoy_count * 100
+  actvencidaspercent = actvencidas / op_hoy_count * 100
+if objetivo_pendiente > 0:
+  cobertura = opactivas / objetivo_pendiente * 100
+else:
+  cobertura = 100
+
+if objetivocacount > 0:
+  ganadacacountpercent = ganadacacount / objetivocacount * 100
+if objetivocncount > 0:
+  ganadacncountpercent = ganadacncount / objetivocncount * 100
+if (objetivocacount + objetivocncount > 0):
+  opganadacountpercent = (ganadacacount + ganadacncount) / (objetivocacount + objetivocncount) * 100
+
+# Oportunidades perdidas en "ORIGEN" para GENERAL, CA y CN:
+if (op_hoy_count > 0):
+  opperdidaspercent = opperdidas / op_hoy_count * 100
+if (op_hoy_ca_count > 0):
+  opperdidascapercent = opperdidasca / op_hoy_ca_count * 100
+if (op_hoy_cn_count > 0):
+  opperdidascnpercent = opperdidascn / op_hoy_cn_count * 100
+
+#####################################
+# KPIs de Fidelización y captación:
+#####################################
+if (ganadacacount + opperdidasca > 0):
+  fidelizacion = ganadacacount / (opperdidasca + ganadacacount) * 100
+if (ganadacncount + opperdidascn > 0):
+  captacion = ganadacncount / (opperdidascn + ganadacncount) * 100
+
+# = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+# 07/2021 KPIs de mercado potencial por comparativas con la central (sumo todo lo de la delegación y posteriormente hago el porcentaje):
+# = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+  op_activa_global, vs_global, objetivos_equipos_count, media_global = 0, 0, 0, 0
+  oportunidades = env['crm.lead'].search([('estado','=','pending'),('type','=','opportunity')])
+  objetivos_delegacion_count = len(env['objetivo_anuales'].search([('anho','=',record.anho),('equipo_id','=',record.equipo_id.id)]))
+  objetivos_central_count = len(env['objetivo_anuales'].search([('anho','=',record.anho)]))
+
+  for op in oportunidades:
+    op_activa_global += op.planned_revenue
+  media_global = op_activa_global / objetivos_central_count
+  media_delegacion = opactivas / objetivos_delegacion_count
+
+  if (media_delegacion &lt; media_global):
+    vs_global = (1 - (media_delegacion/media_global)) * -100
+  else:
+    vs_global = ((media_delegacion/media_global) -1) * 100
+
+
+# = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+# 08/2021 KPIs de:
+# 1. Capacidad de generar nuevas oportunidades (actuales) por comparativas con global (en unidades):
+# 2. GAP de ventas con el global (en €)
+# 3. Esfuerzo.- Comparativa de oportunidades activas con el global (en unidades)
+# = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+  oportunidad_hoy_global, media_hoy_delegacion, media_hoy_global, op_hoy_vs_global = 0, 0, 0, 0
+  media_venta_delegacion, venta_global, media_venta_global, venta_vs_global = 0, 0, 0, 0
+  oportunidad_activas_global, media_activas_delegacion, media_activas_global, op_activas_vs_global = 0, 0, 0, 0
+  # Para número de oportunidades de delegación utilizamos la variable 'op_hoy_count'
+  # Para venta_total de delegación utilizamos la variable 'venta_total'
+  # Para número de oportunidades 'activas' de delegación utilizamos la variable 'opactivascount'
+  media_hoy_delegacion   = op_hoy_count / objetivos_delegacion_count
+  media_venta_delegacion = venta_total / objetivos_delegacion_count
+  media_activas_delegacion = opactivascount / objetivos_delegacion_count
+
+  objetivos_anho = env['objetivo_anuales'].search([('anho','=',record.anho)])
+  for ob in objetivos_anho:
+    oportunidad_hoy_global += ob.op_hoy_count
+    venta_global += ob.venta_total
+    oportunidad_activas_global += ob.op_activa_count
+
+  # Cálculo de media con global (aprovechamos datos generales del apartdo anterior (objetivos_delegacion_count y objetivos_central_count):
+  media_hoy_global = oportunidad_hoy_global / objetivos_central_count
+  media_venta_global = venta_global / objetivos_central_count
+  media_activas_global = oportunidad_activas_global / objetivos_central_count
+  op_hoy_vs_global = int(media_hoy_delegacion - media_hoy_global)
+  venta_vs_global =  media_venta_delegacion - media_venta_global
+  op_activas_vs_global = int(media_activas_delegacion - media_activas_global)
+  # raise Warning("En delegación: " + str(op_hoy_count) + " - Media delegación: " + str(media_hoy_delegacion) + " - Media global:" + str(media_hoy_global) + " - Diferencia:" + str(op_hoy_vs_global))
+  # raise Warning("En delegación: " + str(venta_total) + " - Media delegación: " + str(media_venta_delegacion) + " - Media global:" + str(media_venta_global) + " - Diferencia:" + str(venta_vs_global))
+  # raise Warning("En delegacion: " + str(opactivascount) + " - Media delegacion: " + str(media_activas_delegacion) + " - Media global: " + str(media_activas_global) + " - Diferencia: " + str(op_activas_vs_global))
+
+
+# = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+# Actualizo el registro de objetivo anual con las variables anteriores, para hacer una única escritura:
+# = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+record.write({'objetivo_total':objetivo_total, 'venta_total':venta_total, 'objetivo_pendiente':objetivo_pendiente, 'venta_percent':ventapercent,
+  'cumplido_total': cumplidocaanterior + cumplidocnanterior, 'cumplido_cn_anterior':cumplidocnanterior, 'cumplido_ca_anterior':cumplidocaanterior,
+  'objetivo_ca':objetivoca, 'objetivo_cn':objetivocn, 'venta_ca':ventaca, 'venta_cn':ventacn, 'venta_ca_percent':ventacapercent,
+  'venta_cn_percent':ventacnpercent, 'op_hoy_count':op_hoy_count, 'op_ganada_count':opganadacount, 'op_activa_count':opactivascount,
+  'op_vencida_count':opvencidas, 'op_perdida_count':opperdidas, 'op_prospeccion_count':opposterior,
+  'op_activa':opactivas, 'op_activa_ca':opactivasca, 'op_activa_cn':opactivascn, 'iniciativa_count':iniciativa_count,
+  'objetivo_count':objetivocount, 'op_ganada_count_percent':opganadacountpercent, 'op_activa_vs_hoy_percent':opactivavshoypercent,
+  'op_vencida_percent':opvencidaspercent, 'op_perdida_count_percent':opperdidaspercent, 'op_prospeccion_count_percent':opposteriorpercent,
+  'oportunidad_vs_objetivo_percent':cobertura, 'act_planificada_count':actplanificadas, 'op_sin_actividad_count':opsinactividad,
+  'act_vencida_count':actvencidas, 'act_finalizada_count':actfinalizadas, 'op_sin_actividad_percent':opsinactividadpercent,
+  'act_vencida_percent':actvencidaspercent, 'op_hoy_ca_count':op_hoy_ca_count, 'op_hoy_cn_count':op_hoy_cn_count,
+  'objetivo_ca_count':objetivocacount, 'objetivo_cn_count':objetivocncount, 'op_ganada_ca_count':ganadacacount,
+  'op_ganada_cn_count':ganadacncount, 'op_ganada_ca_count_percent':ganadacacountpercent, 'op_ganada_cn_count_percent':ganadacncountpercent,
+  'op_perdida_ca_count':opperdidasca, 'op_perdida_cn_count':opperdidascn, 'op_perdida_ca_count_percent':opperdidascapercent,
+  'op_perdida_cn_count_percent':opperdidascnpercent,
+  'kpi_captacion':captacion, 'kpi_fidelizacion':fidelizacion,
+  'op_activa_vs_media_global_percent':vs_global, 'op_hoy_vs_global':op_hoy_vs_global, 'venta_vs_global':venta_vs_global, 'op_activas_vs_global':op_activas_vs_global
+})
+
+            </field>
+    </record>
+
+
+
+
+
+
+
+
     <record id="actualizar_anual_test" model="ir.actions.server">
             <field name="name">=> Actualizar anual tests</field>
             <field name="model_id" ref="model_objetivo_anual"/>
