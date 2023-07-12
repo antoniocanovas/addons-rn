@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- ACCIÓN DE VENTANA PARA O2M OPORTUNIDADES (objetivo.anual.linea): -->
+    <record id="action_o2m_anual_to_anual_linea" model="ir.actions.act_window">
+        <field name="binding_model_id" eval="False"/>
+        <field name="binding_type">action</field>
+        <field name="context">{'search_default_objetivo_id': active_id,'default_objetivo_id': active_id}</field>
+        <field name="domain">[('objetivo_id,'=',active_id)]</field>
+        <field name="groups_id" eval="[(6, 0, [])]"/>
+        <field name="help"><![CDATA[<p> Líneas de objetivos por comercial </p>]]></field>
+        <field name="limit">80</field>
+        <field name="name">Reg. oportunidades</field>
+        <field name="res_model">objetivo.anual.linea</field>
+        <field name="target">current</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_id">False</>
+        <field name="view_mode">tree,form</field>
+    </record>
+
 
     <record id="annual_target_default_form_view" model="ir.ui.view">
         <field name="active" eval="True"/>
@@ -13,11 +30,13 @@
                     <button name="objetivo_anual_archivar" string="Archivar" type="object" class="oe_highlight oe_read_only" attrs="{'invisible':[('estado','!=','activo')]}" groups="sales_team.group_sale_manager"/>
                 </header>
                 <sheet string="Objetivos anuales">
-                    <!--
                     <div class="oe_button_box" name="button_box">
-                        <button class="oe_stat_button" icon="fa-recycle" type="action" name="236">
-                            <field name="x_x_objetivo_id__x_objetivo_anual_lineas_count" string="Reg. oportunidades" widget="statinfo"/>
+                        <button class="oe_stat_button" icon="fa-recycle" type="action" name="action_o2m_anual_to_anual_linea">
+                            <!--
+                            <field name="linea_count" string="Reg. oportunidades" widget="statinfo"/>
+                            -->
                         </button>
+                    <!--
                         <button class="oe_stat_button" icon="fa-calendar" type="action" name="237">
                             <field name="x_x_objetivo_anual_id__x_objetivo_mensuales_count" string="Meses" widget="statinfo"/>
                         </button>
