@@ -11,8 +11,8 @@ class ObjetivoEquipo(models.Model):
     _description = 'Objetivo Equipo Anual'
 
     # Estos campos van en el módulo de facturación desde ERP:
-    #    x_facturado  Incremento facturado
-    #    x_facturado_op_ganada   Fact.Op.Ganadas
+    #    facturado  Incremento facturado
+    #    facturado_op_ganada   Fact.Op.Ganadas
 
     name = fields.Char('Name', store=True, readonly=True)
     active = fields.Boolean('Activo', default=True)
@@ -146,7 +146,7 @@ class ObjetivoEquipo(models.Model):
     def get_equipo_incremento_objetivo_anual_percent(self):
         total = 0
         if self.cumplido_total > 0:
-            total = 100 * (self.objetivo_total / self.x_cumplido_total) - 100
+            total = 100 * (self.objetivo_total / self.cumplido_total) - 100
         self.incremento_objetivo_anual_percent = total
     incremento_objetivo_anual_percent = fields.Float('Variación obj.anual', store=True, readonly=True,
                                                      compute='get_equipo_incremento_objetivo_anual_percent',
