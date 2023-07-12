@@ -31,12 +31,10 @@
                 </header>
                 <sheet string="Objetivos anuales">
                     <div class="oe_button_box" name="button_box">
-                        <button class="oe_stat_button" icon="fa-recycle" type="action" name="action_o2m_anual_to_anual_linea">
                             <!--
+                        <button class="oe_stat_button" icon="fa-recycle" type="action" name="action_o2m_anual_to_anual_linea">
                             <field name="linea_count" string="Reg. oportunidades" widget="statinfo"/>
-                            -->
                         </button>
-                    <!--
                         <button class="oe_stat_button" icon="fa-calendar" type="action" name="237">
                             <field name="x_x_objetivo_anual_id__x_objetivo_mensuales_count" string="Meses" widget="statinfo"/>
                         </button>
