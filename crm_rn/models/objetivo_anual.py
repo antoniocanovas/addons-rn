@@ -155,10 +155,6 @@ class ObjetivoAnual(models.Model):
 
     linea_ids = fields.One2many('objetivo.anual.linea', 'objetivo_id', string='Líneas')
 
-    def _get_linea_count(self):
-        self.linea_count = len(self.linea_ids.ids)
-    linea_count = fields.Integer('Reg. oportunidades', store=False, compute='_get_linea_count')
-
     nota = fields.Text('Notas')
 
     objetivo_ca = fields.Monetary('Objetivo CA', store=True,
