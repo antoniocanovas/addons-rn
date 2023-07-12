@@ -322,7 +322,7 @@ class ObjetivoEquipo(models.Model):
 
     #### REVISAR ::: !!!
     def get_equipo_objetivo_anual_lineas_count(self):
-        lineas = self.env['objetivo.anual.linea'].search([('objetivo_equipo_id', '=', record.id)])
+        lineas = self.env['objetivo.anual.linea'].search([('objetivo_equipo_id', '=', self.id)])
         self.equipo_objetivo_anual_linea_count = len(lineas.ids)
     equipo_objetivo_anual_linea_count = fields.Integer('Obj. Equipo venta count', store=False, readonly=True,
                                                        compute='get_equipo_objetivo_anual_lineas_count')
