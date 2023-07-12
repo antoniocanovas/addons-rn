@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- ACCIÓN DE VENTANA PARA O2M OPORTUNIDADES (objetivo.anual.linea): -->
-    <record id="action_o2m_anual_to_anual_linea" model="ir.actions.act_window">
+    <record id="action_o2m_to_anual_linea" model="ir.actions.act_window">
         <field name="binding_model_id" eval="False"/>
         <field name="binding_type">action</field>
         <field name="context">{'search_default_objetivo_id': active_id,'default_objetivo_id': active_id}</field>
@@ -32,7 +32,7 @@
                 <sheet string="Objetivos anuales">
                     <div class="oe_button_box" name="button_box">
                             <!--
-                        <button class="oe_stat_button" icon="fa-recycle" type="action" name="action_o2m_anual_to_anual_linea">
+                        <button class="oe_stat_button" icon="fa-recycle" type="action" name="%(crm_rn.action_o2m_to_anual_linea)d">
                             <field name="linea_count" string="Reg. oportunidades" widget="statinfo"/>
                         </button>
                         <button class="oe_stat_button" icon="fa-calendar" type="action" name="237">
