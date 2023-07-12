@@ -1,30 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <!-- ACCIÓN DE VENTANA PARA COMERCIALES (objetivo.anual): -->
+    <record id="action_o2m_equipo_to_objetivo_anual" model="ir.actions.act_window">
+        <field name="binding_model_id" eval="False"/>
+        <field name="binding_type">action</field>
+        <field name="context">{'search_default_objetivo_equipo_id': active_id,'default_objetivo_equipo_id': active_id}</field>
+        <field name="domain">[('objetivo_equipo_id,'=',active_id)]</field>
+        <field name="groups_id" eval="[(6, 0, [])]"/>
+        <field name="help"><![CDATA[<p> Objetivos de comerciales </p>]]></field>
+        <field name="limit">80</field>
+        <field name="name">Comerciales</field>
+        <field name="res_model">objetivo.anual</field>
+        <field name="target">current</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_id" eval="False"/>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <!-- ACCIÓN DE VENTANA PARA O2M MESES (objetivo.anual.linea): -->
+    <record id="action_o2m_equipo_to_objetivo_mensual" model="ir.actions.act_window">
+        <field name="binding_model_id" eval="False"/>
+        <field name="binding_type">action</field>
+        <field name="context">{'search_default_objetivo_equipo_id': active_id,'default_objetivo_equipo_id': active_id}</field>
+        <field name="domain">[('objetivo_equipo_id,'=',active_id)]</field>
+        <field name="groups_id" eval="[(6, 0, [])]"/>
+        <field name="help"><![CDATA[<p> Registros mensuales automáticos del equipo </p>]]></field>
+        <field name="limit">80</field>
+        <field name="name">Reg mensuales</field>
+        <field name="res_model">objetivo.mensual</field>
+        <field name="target">current</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_id" eval="False"/>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <!-- ACCIÓN DE VENTANA PARA O2M OPORTUNIDADES (objetivo.anual.linea): -->
+    <record id="action_o2m_equipo_to_anual_linea" model="ir.actions.act_window">
+        <field name="binding_model_id" eval="False"/>
+        <field name="binding_type">action</field>
+        <field name="context">{'search_default_objetivo_equipo_id': active_id,'default_objetivo_equipo_id': active_id}</field>
+        <field name="domain">[('objetivo_equipo_id,'=',active_id)]</field>
+        <field name="groups_id" eval="[(6, 0, [])]"/>
+        <field name="help"><![CDATA[<p> Líneas de objetivos por equipo comercial </p>]]></field>
+        <field name="limit">80</field>
+        <field name="name">Reg. oportunidades</field>
+        <field name="res_model">objetivo.anual.linea</field>
+        <field name="target">current</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_id" eval="False"/>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+
+
+
+
     <record id="objetivo_equipo_default_form_view" model="ir.ui.view">
         <field name="active" eval="True"/>
         <field name="arch" type="xml">
             <form create="false" edit="true" delete="false">
                 <header>
                     <field name="active" options="{'clickable': '1'}" widget="statusbar"/>
-                    <!--
                     <button name="actualizar_objetivo_equipo" string="Actualizar" type="object" class="oe_highlight oe_read_only" attrs="{'invisible':[('active','=',False)]}"/>
-                    -->
                 </header>
                 <sheet string="Objetivos de equipos de venta">
-                    <!--
+
                     <div class="oe_button_box" name="button_box">
-                        <button class="oe_stat_button" icon="fa-shield" type="action" name="241">
-                            <field name="objetivo_equipo_id__objetivo_anuales_count" string="Comerciales" widget="statinfo"/>
+                        <button class="oe_stat_button" icon="fa-shield" type="action" name="%(crm_rn.action_o2m_equipo_to_objetivo_anual)d">
+                            <field name="equipo_objetivo_anual_count" string="Comerciales" widget="statinfo"/>
                         </button>
-                        <button class="oe_stat_button" icon="fa-calendar" type="action" name="242">
-                            <field name="objetivo_equipo_id__objetivo_mensuales_count" string="Reg. Mensuales" widget="statinfo"/>
+                        <button class="oe_stat_button" icon="fa-calendar" type="action" name="%(crm_rn.action_o2m_equipo_to_objetivo_mensual)d">
+                            <field name="equipo_objetivo_mensual_count" string="Reg. Mensuales" widget="statinfo"/>
                         </button>
-                        <button class="oe_stat_button" icon="fa-diamond" type="action" name="243">
-                            <field name="objetivo_equipo_id__objetivo_anual_lineas_count" string="Reg. Oportunidad" widget="statinfo"/>
+                        <button class="oe_stat_button" icon="fa-diamond" type="action" name="%(crm_rn.action_o2m_equipo_to_anual_linea)d">
+                            <field name="equipo_objetivo_anual_linea_count" string="Reg. Oportunidad" widget="statinfo"/>
                         </button>
                     </div>
-                    -->
+
                     <h2>
                         <field name="name" modifiers="{}" placeholder="Año, comercial ..."/>
                     </h2>

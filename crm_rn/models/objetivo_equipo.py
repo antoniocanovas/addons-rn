@@ -321,22 +321,23 @@ class ObjetivoEquipo(models.Model):
 
 
     #### REVISAR ::: !!!
-    def get_objetivo_equipo_id_objetivo_anual_lineas_count(self):
+    def get_equipo_objetivo_anual_lineas_count(self):
         for record in self:
             lineas = self.env['objetivo.anual.linea'].search([('objetivo_equipo_id', '=', record.id)])
-            record['objetivo_equipo_id_objetivo_anual_lineas_count'] = len(lineas.ids)
-    objetivo_equipo_id_objetivo_anual_lineas_count = fields.Integer('Obj. Equipo venta count', store=False, readonly=True,
-                                                                compute='get_objetivo_equipo_id_objetivo_anual_lineas_count')
-    def get_objetivo_equipo_id_objetivo_anuales_count(self):
+            record['equipo_objetivo_anual_linea_count'] = len(lineas.ids)
+    equipo_objetivo_anual_linea_count = fields.Integer('Obj. Equipo venta count', store=False, readonly=True,
+                                                                compute='get_equipo_objetivo_anual_lineas_count')
+    def get_equipo_objetivo_anuales_count(self):
         lineas = self.env['objetivo.anual'].search([('objetivo_equipo_id', '=', self.id)])
-        self.objetivo_id_objetivo_anual_lineas_count = len(lineas.ids)
-    objetivo_equipo_id_objetivo_anuales_count = fields.Integer('Objetivo equipo count', store=False, readonly=True,
-                                                                compute='get_objetivo_equipo_id_objetivo_anuales_count')
+        self.equipo_objetivo_anual_count = len(lineas.ids)
+    equipo_objetivo_anual_count = fields.Integer('Objetivo equipo count', store=False, readonly=True,
+                                                                compute='get_equipo_objetivo_anuales_count')
 
-    def objetivo_equipo_id_objetivo_mensuales_count(self):
+    def get_equipo_objetivo_mensuales_count(self):
         lineas = self.env['objetivo.mensual'].search([('objetivo_equipo_id', '=', self.id)])
-        record['objetivo_equipo_id_objetivo_mensuales_count'] = len(lineas.ids)
-    objetivo_equipo_id_objetivo_mensuales_count = fields.Integer('Obj. Equipo Ventas count', store=False, readonly=True,
-                                                                 compute='get_objetivo_equipo_id_objetivo_mensuales_count')
+        record['equipo_objetivo_mensual_count'] = len(lineas.ids)
+    equipo_objetivo_mensual_count = fields.Integer('Obj. Equipo Ventas count', store=False, readonly=True,
+                                                                 compute='get_equipo_objetivo_mensuales_count')
+
     def actualizar_objetivo_equipo(self):
         return True
