@@ -17,8 +17,8 @@ class ObjetivoEquipo(models.Model):
     name = fields.Char('Name', store=True, readonly=True)
     active = fields.Boolean('Activo', default=True)
     currency_id = fields.Many2one('res.currency', default=1)
-#    estado = fields.Selection([('activo','Activo'),('archivado','Archivado')],
-#                              string='Estado', store=True, readonly=True)
+    #    estado = fields.Selection([('activo','Activo'),('archivado','Archivado')],
+    #                              string='Estado', store=True, readonly=True)
 
     act_finalizada_count = fields.Integer('Activ.finalizadas', readonly=True, store=True,
                                           help='Nº de actividades marcadas como hechas')
@@ -179,7 +179,7 @@ class ObjetivoEquipo(models.Model):
     objetivo_cn_count = fields.Integer('Objetivo Ud.CN', store=True, readonly=True,
                                        help='Nº de oportunidades año actual que hay que hacer en Prospección buena, muy interesante, excelente y Cliente recuperar.')
     objetivo_count  = fields.Float('Objetivo Nº oportunidades', readonly=True, store=True,
-                                       help='Objetivo en número de oportunidades total año actual (nº oport en Venta cruzada más nº oport en Nuevo negocio).')
+                                   help='Objetivo en número de oportunidades total año actual (nº oport en Venta cruzada más nº oport en Nuevo negocio).')
     objetivo_pendiente = fields.Monetary('Objetivo pendiente', store=True, readonly=True)
 
     objetivo_total = fields.Monetary('Objetivo total', store=True, readonly=True)
@@ -189,17 +189,17 @@ class ObjetivoEquipo(models.Model):
                                      'Es posible que no coincida con la suma de cuenta nueva + base instalada si algún cliente no tiene esta clasificación asignada.')
 
     op_activa_ca  = fields.Monetary('Para negociar CA', store=True, readonly=True,
-                                help='Importe total de venta en oportunidades de Venta Cruzada que estamos trabajando '
-                                     '(no incluye las oportunidades que hay en las fases: Nuevo, Ganado y Perdido), en Cliente Actual y VIP.')
+                                    help='Importe total de venta en oportunidades de Venta Cruzada que estamos trabajando '
+                                         '(no incluye las oportunidades que hay en las fases: Nuevo, Ganado y Perdido), en Cliente Actual y VIP.')
 
     op_activa_cn = fields.Monetary('Para negociar CN', store=True, readonly=True,
-                                help='Importe total de ventas en Oportunidades en Nuevo negocio que estamos trabajando '
-                                     '(no incluye las oportundades en las fases: Nuevo, Ganado y Perdido) en Prospección buena, muy interesante, excelente y Cliente recuperar.')
+                                   help='Importe total de ventas en Oportunidades en Nuevo negocio que estamos trabajando '
+                                        '(no incluye las oportundades en las fases: Nuevo, Ganado y Perdido) en Prospección buena, muy interesante, excelente y Cliente recuperar.')
 
     op_activa_count = fields.Integer('Nº Op. activas', store=True, readonly=True,
                                      help='Total oportunidades que estamos trabajando (no incluye las que están en las fases: Nuevo, Ganado y Perdido, tampoco las iniciativas).' \
-                                            'Es posible que no coincida con el total de oportunidades activas del CRM, porque calcula la suma de cuenta nueva + base instalada.' \
-                                            'Si algún cliente no tiene esta clasificación no contará como ACTIVA.')
+                                          'Es posible que no coincida con el total de oportunidades activas del CRM, porque calcula la suma de cuenta nueva + base instalada.' \
+                                          'Si algún cliente no tiene esta clasificación no contará como ACTIVA.')
 
     op_activa_vs_hoy_percent = fields.Float('Op. activas (%)', store=True, readonly=True,
                                             help='Porcentaje entre oportunidades Activas y Actuales.')
@@ -250,7 +250,7 @@ class ObjetivoEquipo(models.Model):
                                      help='Nº total de oportunidades en Prospección buena, muy interesante, excelente y Cliente recuperar.')
 
     op_hoy_count = fields.Integer('Nº Op. actuales', store=True, readonly=True,
-                                     help='Oportunidades a fecha de la última actualización, incluyendo las nuevas, ganadas, perdidas y activas.')
+                                  help='Oportunidades a fecha de la última actualización, incluyendo las nuevas, ganadas, perdidas y activas.')
 
     op_hoy_vs_global = fields.Integer('VS Central', store=True, readonly=True,
                                       help='Comparación entre la media de oportunidades por cada comercial en esta delegación, con la media total de  los comerciales.')
@@ -293,7 +293,7 @@ class ObjetivoEquipo(models.Model):
 
     # En objetivo anual esta se llama op_vencida_count_percent:
     op_vencida_percent = fields.Float('Op. Vencidas (%)', store=True, readonly=True,
-                                            help='Porcentaje entre oportunidades Vencidas y Actuales.')
+                                      help='Porcentaje entre oportunidades Vencidas y Actuales.')
 
     oportunidad_vs_objetivo_percent = fields.Float('Cobertura', store=True, readonly=True, compute='get_oportunidad_vs_objetivo_percent',
                                                    help='Porcentaje de diferencia entre objetivo venta año y el importe en oportunidades activas.')
@@ -322,22 +322,21 @@ class ObjetivoEquipo(models.Model):
 
     #### REVISAR ::: !!!
     def get_equipo_objetivo_anual_lineas_count(self):
-        for record in self:
-            lineas = self.env['objetivo.anual.linea'].search([('objetivo_equipo_id', '=', record.id)])
-            record['equipo_objetivo_anual_linea_count'] = len(lineas.ids)
+        lineas = self.env['objetivo.anual.linea'].search([('objetivo_equipo_id', '=', record.id)])
+        self.equipo_objetivo_anual_linea_count = len(lineas.ids)
     equipo_objetivo_anual_linea_count = fields.Integer('Obj. Equipo venta count', store=False, readonly=True,
-                                                                compute='get_equipo_objetivo_anual_lineas_count')
+                                                       compute='get_equipo_objetivo_anual_lineas_count')
     def get_equipo_objetivo_anuales_count(self):
         lineas = self.env['objetivo.anual'].search([('objetivo_equipo_id', '=', self.id)])
         self.equipo_objetivo_anual_count = len(lineas.ids)
     equipo_objetivo_anual_count = fields.Integer('Objetivo equipo count', store=False, readonly=True,
-                                                                compute='get_equipo_objetivo_anuales_count')
+                                                 compute='get_equipo_objetivo_anuales_count')
 
     def get_equipo_objetivo_mensuales_count(self):
         lineas = self.env['objetivo.mensual'].search([('objetivo_equipo_id', '=', self.id)])
-        record['equipo_objetivo_mensual_count'] = len(lineas.ids)
+        self.equipo_objetivo_mensual_count = len(lineas.ids)
     equipo_objetivo_mensual_count = fields.Integer('Obj. Equipo Ventas count', store=False, readonly=True,
-                                                                 compute='get_equipo_objetivo_mensuales_count')
+                                                   compute='get_equipo_objetivo_mensuales_count')
 
     def actualizar_objetivo_equipo(self):
         return True
