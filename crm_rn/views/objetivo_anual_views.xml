@@ -13,7 +13,7 @@
         <field name="res_model">objetivo.anual.linea</field>
         <field name="target">current</field>
         <field name="type">ir.actions.act_window</field>
-        <field name="view_id">False</>
+        <field name="view_id" eval="False"/>
         <field name="view_mode">tree,form</field>
     </record>
 
