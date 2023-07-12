@@ -1,7 +1,5 @@
 <odoo>
 
-
-
     <record id="actualizar_equipo_test" model="ir.actions.server">
             <field name="name">=> Actualizar equipo tests</field>
             <field name="model_id" ref="model_objetivo_equipo"/>
@@ -324,8 +322,6 @@ if record.estado != 'archivado':
         'importe_inicial':opo.expected_revenue, 'name':nombre, 'es_objetivo':esobjetivo, 'cliente_id':opo.partner_id.id,
         'es_cuenta_nueva':opo.is_prospection, 'es_nueva':esnueva,
         'comercial_id':opo.user_id.id})
-
-# restauración de copia
 
 # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 # CALCULOS RELATIVOS A LA ACTIVIDAD COMERCIAL (tanto en borrador para diseño, como en objetivo ya confirmado):
