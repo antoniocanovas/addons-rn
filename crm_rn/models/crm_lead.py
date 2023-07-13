@@ -76,25 +76,7 @@ class CrmLead(models.Model):
             record['objetivo_anual_id'] = objetivo
     objetivo_anual_id = fields.Many2one('objetivo.anual', string='Obj. Anual', store=False, compute='_get_objetivo_anual')
 
-#    @api.constrains('vat')
-    def _check_valid_nif(self):
-        # Se divide por 23 y el dígito de control es el de la lista:
-        REGEXP = "[0-9]{8}[A-Z]"
-        DIGITO_CONTROL = "TRWAGMYFPDXBNJZSQVHLCKE"
-        INVALIDOS = {"00000000T", "00000001R", "99999999R"}
-        vat = self.vat
-
-        if self.vat in INVALIDOS:
-            raise ValidationError('NIF no válido 1')
-        if len(vat) != 9:
-            raise ValidationError('Son 9 dígitos')
-        if re.match(REGEXP, vat) is None:
-            raise ValidationError('NIF no válido 2')
-        if self.vat[8] != DIGITO_CONTROL[int(self.vat[:8]) % 23]:
-           raise ValidationError('NIF no válido3 ')
-        raise ValidationError('NIF: ' + self.vat + " Números: " + str(self.vat[8]) + str(int(self.vat[:8]) % 23))
-
-
+    # Validación del NIF por VIES, AUNQUE NO SE PONGA EL PAÍS DELANTE:
     @api.onchange('vat_sanitized')
     def _check_valid_nif(self):
         vat = self.vat_sanitized.upper()
