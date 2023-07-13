@@ -16,7 +16,19 @@ class CrmLead(models.Model):
     _inherit = 'crm.lead'
 
 
-    vat   = fields.Char('NIF', related='partner_id.vat', readonly=False)
+    vat   = fields.Char('Related NIF', related='partner_id.vat')
+
+    @api.onchange('vat_sanitized')
+    def _check_valid_nif(self):
+        vat = self.vat_sanitized
+        code = self.env.company_id.country_id.code
+        REGEXP = "[A-Z]{2}"
+        # Si no tiene letras al comenzar:
+        if re.match(REGEXP, vat) is None:
+            vat = code + self.vat_sanitized
+        self.vat = vat
+
+    vat_sanitized = fields.Char('NIF', store=True)
 
     empresa_id = fields.Many2one('res.company', store=True, related='user_id.empresa_id')
 

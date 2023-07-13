@@ -30,6 +30,7 @@
             <field name="phone" position="after">
                 <field name="partner_status_id"/>
                 <field name="vat"/>
+                <field name="vat_sanitized"/>
                 <field name="empresa_id" optional="show"/>
                 <field name="objetivo_anual_id" optional="show"/>
             </field>
