@@ -23,7 +23,6 @@ Objetivos y seguimiento mensual Roldán Netya
         'views/res_users_views.xml',
         'views/menu_views.xml',
         'data/server_action.xml',
-        'data/automated_action.xml',
     ],
     'installable': True,
 }
