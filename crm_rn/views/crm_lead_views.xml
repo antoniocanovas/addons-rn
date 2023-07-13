@@ -9,7 +9,7 @@
         <field name="priority">99</field>
         <field name="arch" type="xml">
             <field name="team_id" position="after">
-                <field name="vat"/>
+                <field name="vat" invisible="1"/>
                 <field name="vat_sanitized"/>
                 <field name="estado"/>
                 <field name="empresa_id"/>
