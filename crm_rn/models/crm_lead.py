@@ -104,7 +104,7 @@ class CrmLead(models.Model):
         if re.match(REGEXP, vat) is None:
             vat = code + self.vat_sanitized
         try:
-            self.write({'vat':vat})
+            self.partner_id.vat = vat
         except:
             raise ValidationError('NIF no válido')
         #raise ValidationError(vat + " " + self.env.user.company_id.country_id.code + " Código vat: " + str(self.vat[:2]) + " Chequeo: " + chequeo)
