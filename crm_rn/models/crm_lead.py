@@ -2,8 +2,8 @@
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
 
 from odoo import fields, models, api
-from odoo.exceptions import ValidationError
-from datetime import datetime, timedelta
+from odoo.exceptions import UserError, ValidationError
+from datetime import datetime
 
 
 import logging
@@ -85,4 +85,4 @@ class CrmLead(models.Model):
         if self.vat in INVALIDOS \
                 or re.match(REGEXP, self.vat) is None \
                 or self.vat[8] == DIGITO_CONTROL[int(self.vat[0:8]) % 23]:
-                    raise UserWarning('NIF no válido')
+                    raise ValidationError('NIF no válido')
