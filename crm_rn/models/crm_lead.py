@@ -103,4 +103,4 @@ class CrmLead(models.Model):
         # Si no tiene letras al comenzar:
         if re.match(REGEXP, vat) is None:
             vat = code + self.vat_sanitized
-        self.sudo().write({'vat':vat})
+        self.partner_id.write({'vat':vat})
