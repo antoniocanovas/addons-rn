@@ -83,6 +83,6 @@ class CrmLead(models.Model):
         INVALIDOS = {"00000000T", "00000001R", "99999999R"}
 
         if self.vat in INVALIDOS \
-                or re.match(REGEXP, self.vat) is None \
+                or re.match(REGEXP, self.vat) is not None \
                 or self.vat[8] == DIGITO_CONTROL[int(self.vat[0:8]) % 23]:
                     raise ValidationError('NIF no válido')
