@@ -17,17 +17,6 @@ class CrmLead(models.Model):
 
 
     vat   = fields.Char('Related NIF', related='partner_id.vat')
-
-    @api.constrains('vat_sanitized')
-    def _check_valid_nif(self):
-        vat = self.vat_sanitized
-        code = self.env.company_id.country_id.code
-        REGEXP = "[A-Z]{2}"
-        # Si no tiene letras al comenzar:
-        if re.match(REGEXP, vat) is None:
-            vat = code + self.vat_sanitized
-        self.vat = vat
-
     vat_sanitized = fields.Char('NIF', store=True)
 
     empresa_id = fields.Many2one('res.company', store=True, related='user_id.empresa_id')
@@ -104,3 +93,17 @@ class CrmLead(models.Model):
         if self.vat[8] != DIGITO_CONTROL[int(self.vat[:8]) % 23]:
            raise ValidationError('NIF no válido3 ')
         raise ValidationError('NIF: ' + self.vat + " Números: " + str(self.vat[8]) + str(int(self.vat[:8]) % 23))
+
+
+    @api.constrains('vat_sanitized')
+    def _check_valid_nif(self):
+        vat = self.vat_sanitized
+        chequeo = ""
+        code = self.env.company_id.country_id.code
+        REGEXP = "[A-Z]{2}"
+        # Si no tiene letras al comenzar:
+        if re.match(REGEXP, vat) is None:
+            vat = code + self.vat_sanitized
+            chequeo = 'paso'
+        self.vat = vat
+        raise ValidationError(vat + " " + self.env.company_id.code + " Código vat: " + str(self.vat[:2]) + " Chequeo: " + chequeo)
