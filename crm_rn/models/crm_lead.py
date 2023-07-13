@@ -81,12 +81,13 @@ class CrmLead(models.Model):
         REGEXP = "[0-9]{8}[A-Z]"
         DIGITO_CONTROL = "TRWAGMYFPDXBNJZSQVHLCKE"
         INVALIDOS = {"00000000T", "00000001R", "99999999R"}
+        vat = self.vat
 
         if self.vat in INVALIDOS:
             raise ValidationError('NIF no válido 1')
-        if len(self.vat) != 9:
+        if len(vat) != 9:
             raise ValidationError('Son 9 dígitos')
-        if re.match(REGEXP, self.vat) is False:
+        if re.match(REGEXP, vat) is False:
             raise ValidationError('NIF no válido 2')
-        if self.vat[8] == DIGITO_CONTROL[int(self.vat[0:8]) % 23]:
+        if self.vat[:8] == DIGITO_CONTROL[int(self.vat[:8]) % 23]:
            raise ValidationError('NIF no válido3 ')
