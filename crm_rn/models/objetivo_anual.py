@@ -474,9 +474,9 @@ class ObjetivoAnual(models.Model):
                 # Control 1:
                 # raise Warning('CA: ' + str(acum_opactivas_ca) + ' - CAnum: ' + str(opactivas_ca) + ' - CN: ' + str(acum_opactivas_cn) + ' - Total: ' + str(opactivas))
 
-                cantidad_oportunidades = len(env['objetivo.anual.linea'].search(
+                cantidad_oportunidades = len(self.env['objetivo.anual.linea'].search(
                     [('objetivo_id', '=', record.id), ('oportunidad_id.type', '=', 'opportunity')]).ids)
-                cantidad_inicial = len(env['objetivo.anual.linea'].search(
+                cantidad_inicial = len(self.env['objetivo.anual.linea'].search(
                     [('id', 'in', record.linea_ids.ids), ('es_objetivo', '=', True),
                      ('oportunidad_id.type', '=', 'opportunity')]).ids)
                 cantidad_objetivo = record.objetivo_ca_count + record.objetivo_cn_count
@@ -489,7 +489,7 @@ class ObjetivoAnual(models.Model):
                         actvencidas += 1
 
                     # Actividades planificadas:
-                act_activas = len(env['mail.activity'].search([('user_id', '=', record.comercial_id.id)]).ids)
+                act_activas = len(self.env['mail.activity'].search([('user_id', '=', record.comercial_id.id)]).ids)
                 # Actividades finalizadas, hay que buscar ESTE AÑO, en todas las que haya trabajado, sean suyas ahora o no:
                 finicio = str(record.anho) + '-01-01'
                 actividades_finalizadas = self.env['crm.activity.report'].search(
@@ -547,10 +547,10 @@ class ObjetivoAnual(models.Model):
                 #      oportunidad_hoy_ca +=1
                 #    elif  (li.es_cuenta_nueva == True) and (li.oportunidad_id.estado != 'lost'):
                 #      oportunidad_hoy_cn +=1
-                oportunidad_hoy_ca = len(env['objetivo.anual.linea'].search(
+                oportunidad_hoy_ca = len(self.env['objetivo.anual.linea'].search(
                     [('id', 'in', record.linea_ids.ids), ('es_cuenta_nueva', '=', False),
                      ('oportunidad_id.type', '=', 'opportunity')]))
-                oportunidad_hoy_cn = len(env['objetivo.anual.linea'].search(
+                oportunidad_hoy_cn = len(self.env['objetivo.anual.linea'].search(
                     [('id', 'in', record.linea_ids.ids), ('es_cuenta_nueva', '=', True),
                      ('oportunidad_id.type', '=', 'opportunity')]))
 
@@ -575,7 +575,7 @@ class ObjetivoAnual(models.Model):
 
                 # ACTUALIZAR LOS CAMPOS DE LA LÍNEA DE ESTE MES Y COMERCIAL:
 #                acc_mes = self.env['ir.actions.server'].browse(208)
-                ctx = dict(env.context or {})
+                ctx = dict(self.env.context or {})
                 ctx.update({'active_id': objetivomensual.id, 'active_model': 'objetivo.mensual'})
                 resp_mes = actualizar_objetivo_mensual().with_context(ctx).run()
 
@@ -660,10 +660,10 @@ class ObjetivoAnual(models.Model):
                 # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
                 # 1. Capacidad de generar nuevas oportunidades por comparativas con global (en unidades):
                 # Para número de oportunidades de hoy del comercial utilizamos la variable 'cantidad_oportunidades'
-                cantidad_oportunidades_delegacion = len(env['objetivo.anual.linea'].search(
+                cantidad_oportunidades_delegacion = len(self.env['objetivo.anual.linea'].search(
                     [('equipo_id', '=', record.equipo_id.id), ('anho', '=', record.anho),
                      ('oportunidad_id.type', '=', 'opportunity')]).ids)
-                cantidad_oportunidades_global = len(env['objetivo.anual.linea'].search(
+                cantidad_oportunidades_global = len(self.env['objetivo.anual.linea'].search(
                     [('anho', '=', record.anho), ('oportunidad_id.type', '=', 'opportunity')]).ids)
                 # Cálculo de medias por equipo y central (aprovechamos datos generales del apartdo anterior (objetivos_delegacion_count y objetivos_central_count):
                 media_hoy_delegacion = int(cantidad_oportunidades_delegacion / objetivos_delegacion_count)
@@ -692,10 +692,10 @@ class ObjetivoAnual(models.Model):
 
                 # 3. Esfuerzo requerido, lo mismo del punto 1, pero sólo con las oportunidades 'activas':
                 # Para número de oportunidades de hoy del comercial utilizamos la variable 'opactivas'
-                cantidad_oportunidades_activas_delegacion = len(env['objetivo.anual.linea'].search(
+                cantidad_oportunidades_activas_delegacion = len(self.env['objetivo.anual.linea'].search(
                     [('equipo_id', '=', record.equipo_id.id), ('anho', '=', record.anho),
                      ('oportunidad_id.type', '=', 'opportunity'), ('oportunidad_id.stage_id.en_curso', '=', True)]).ids)
-                cantidad_oportunidades_activas_global = len(env['objetivo.anual.linea'].search(
+                cantidad_oportunidades_activas_global = len(self.env['objetivo.anual.linea'].search(
                     [('anho', '=', record.anho), ('oportunidad_id.type', '=', 'opportunity'),
                      ('oportunidad_id.stage_id.en_curso', '=', True)]).ids)
                 # Cálculo de medias por equipo y central (aprovechamos datos generales del apartdo anterior (objetivos_delegacion_count y objetivos_central_count):
