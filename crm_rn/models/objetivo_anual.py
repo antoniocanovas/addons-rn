@@ -575,9 +575,9 @@ class ObjetivoAnual(models.Model):
 
                 # ACTUALIZAR LOS CAMPOS DE LA LÍNEA DE ESTE MES Y COMERCIAL:
 #                acc_mes = self.env['ir.actions.server'].browse(208)
-                ctx = dict(self.env.context or {})
-                ctx.update({'active_id': objetivomensual.id, 'active_model': 'objetivo.mensual'})
-                resp_mes = actualizar_objetivo_mensual().with_context(ctx).run()
+#                ctx = dict(self.env.context or {})
+#                ctx.update({'active_id': objetivomensual.id, 'active_model': 'objetivo.mensual'})
+#                resp_mes = actualizar_objetivo_mensual().with_context(ctx).run()
 
                 # VAMOS CON KPI:
                 # Eficiencia y Perdidas (ganadas o perdidas/ objetivo ud op anual)
