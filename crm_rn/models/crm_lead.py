@@ -84,7 +84,7 @@ class CrmLead(models.Model):
 
         if self.vat in INVALIDOS:
             raise ValidationError('NIF no válido 1')
-        if len(self.vat != 9):
+        if len(self.vat) != 9:
             raise ValidationError('Son 9 dígitos')
         if re.match(REGEXP, self.vat) is False:
             raise ValidationError('NIF no válido 2')
