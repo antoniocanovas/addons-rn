@@ -97,7 +97,7 @@ class CrmLead(models.Model):
 
     @api.constrains('vat_sanitized')
     def _check_valid_nif(self):
-        vat = self.vat_sanitized
+        vat = self.vat_sanitized.upper()
         chequeo = ""
         code = self.env.user.company_id.country_id.code
         REGEXP = "[A-Z]{2}"
