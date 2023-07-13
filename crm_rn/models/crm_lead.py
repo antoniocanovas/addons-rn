@@ -17,12 +17,12 @@ class CrmLead(models.Model):
     vat   = fields.Char('NIF', related='partner_id.vat', readonly=False)
     empresa_id = fields.Many2one('res.company', store=True, related='user_id.empresa_id')
 
-    @api.depends('stage_id')
+    @api.depends('stage_id','probability')
     def _get_crm_estado(self):
         for record in self:
-            if (record.probability == 0) and (record.estado != 'lost') and (record.type == 'opportunity'):
+            if (record.probability == 0) and (record.type == 'opportunity'):
                 estado = 'lost'
-            elif (record.probability == 100) and (record.estado != 'won') and (record.type == 'opportunity'):
+            elif (record.probability == 100) and (record.type == 'opportunity'):
                 estado = 'won'
             elif (record.probability > 0) and (record.probability < 100) and (record.type == 'opportunity'):
                 estado = 'pending'
