@@ -28,7 +28,7 @@ class CrmLead(models.Model):
                 estado = 'pending'
             self.estado = estado
     estado = fields.Selection([('pending','En curso'),('won','Ganado'),('lost','Perdido')],
-                              string='Estado', store=True, readonly=True, compute='_get_crm_estado')
+                              string='Estado', store=True, readonly=True, default='pending', compute='_get_crm_estado')
 
     @api.depends('active')
     def _get_lead_es_perdida(self):
