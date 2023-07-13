@@ -78,7 +78,7 @@ class CrmLead(models.Model):
     @api.constrains('vat')
     def _check_valid_nif(self):
         # Se divide por 23 y el dígito de control es el de la lista:
-        REGEXP = "[0-9]{8}[A-Z]"
+        REGEXP = "[0-9]{8}[A-Z]{1}"
         DIGITO_CONTROL = "TRWAGMYFPDXBNJZSQVHLCKE"
         INVALIDOS = {"00000000T", "00000001R", "99999999R"}
         vat = self.vat
