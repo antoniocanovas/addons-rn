@@ -1,5 +1,5 @@
 from odoo import _, api, fields, models
-from datetime import datetime
+from datetime import datetime, date
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -359,6 +359,387 @@ class ObjetivoAnual(models.Model):
     def objetivo_anual_archivar(self):
         self.estado = 'archivado'
 
-    def actualizar_objetivo_anual(self):
-        return True
 
+    # ACCIÓN DE ACTUALIZAR OBJETIVO ANUAL:
+    def actualizar_objetivo_anual(self):
+        # 11/08/20:
+        # Pendiente cambiar los nombres de los campos para cn, cn y variables del tipo op_ganada_ca_count_percent, porque ahora debería ser op_ca_count_percent, en este y otros modelos.
+        # Hay otro que es op_perdida_ca_count_percent que tampoco tiene sentido, debería ser (tasa de éxito) op_ganada_ca_count_percent (que precisamente es el anterior), revisar.
+        # Subir progreso tras objetivo en origen, dejar tasa de éxito donde está.
+        for record in self:
+            # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+            # Inicio de variables, creación/eliminación de líneas de objetivo en base a oportunidades, si estado borrador
+            # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+            esobjetivo = False
+            opactivas, opactivas_ca, opactivas_cn, op_sintipocliente = 0, 0, 0, 0
+            acum_opactivas, acum_opactivas_ca, acum_opactivas_cn, acum_op_sintipocliente, opvencidas, op_sin_actividad, actvencidas = 0, 0, 0, 0, 0, 0, 0
+            ventaca, ventacn, ganadasca, ganadascn, perdidasca, perdidascn, act_finalizadas_count, venta_ca_percent, venta_cn_percent, venta_percent, perdido_ca_percent, perdido_cn_percent = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+            op_ganada_cn_count_percent = 0
+            op_ganada_ca_count_percent = 0
+            op_ganada_count_percent = 0
+            oportunidad_hoy_ca = 0
+            oportunidad_hoy_cn = 0
+            op_perdida_count_percent = 0
+            op_prospeccion_count_percent = 0
+            op_activa_vs_hoy_percent = 0
+            op_sin_actividad_percent = 0
+            op_vencida_count_percent = 0
+            act_vencida_percent = 0
+            fidelizacion = 0
+            captacion = 0
+            cantidad_inicial = 0
+            cantidad_ganadas = 0
+            cantidad_perdidas = 0
+            cantidad_inicial = 0
+            cambio_etapa_count = 0
+
+            op_activa_delegacion, op_activa_global, vs_delegacion, vs_global, objetivos_delegacion_count, objetivos_central_count, media_global, media_delegacion = 0, 0, 0, 0, 0, 0, 0, 0
+            cantidad_oportunidades_delegacion, cantidad_oportunidades_global, media_hoy_delegacion, media_hoy_global = 0, 0, 0, 0
+            op_hoy_vs_delegacion, op_hoy_vs_global = 0, 0
+            venta_delegacion, venta_global, venta_media_delegacion, venta_media_global, venta_vs_delegacion, venta_vs_global = 0, 0, 0, 0, 0, 0
+            cantidad_oportunidades_activas_delegacion, cantidad_oportunidades_activas_global, media_activas_delegacion, media_activas_global, op_activas_vs_delegacion, op_activas_vs_global = 0, 0, 0, 0, 0, 0
+
+            # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+            # Revisar todas las oportunidades del comercial y crear líneas:
+            # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
+            # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+            # Si el objetivo está en borrador, eliminamos las líneas para que se creen de nuevo en esta acción actualizadas:
+            # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+            if record.estado == 'borrador':
+                record.linea_ids.unlink()
+                esobjetivo = True
+
+            # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+            # Oportunidades de este comercial, activas, y pendientes (no ganadas, no perdidas, no iniciativas):
+            # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+            fechanueva = str(record.anho - 1) + '-12-31'
+            esnuevo = datetime.strptime(fechanueva, '%Y-%m-%d')
+
+            # 8/7/2021 Modificación porque no pilla las oportunidades en curso al SIN DATE_CLOSED, tener el filtro 'date_closed > esnuevo':
+            # 8/7/2021 (original) oportus = env['crm.lead'].search([('user_id','=',record.comercial_id.id),('estado','in',['pending','won']),('active','=',True),('date_closed','>',esnuevo)])
+            oportus = env['crm.lead'].search(
+                [('user_id', '=', record.comercial_id.id), ('estado', 'in', ['pending', 'won']), ('active', '=', True)])
+
+            # Control de las que ya están, y quitarlas si se han asignado a otro comercial:
+            yaestan = []
+            for li in record.linea_ids:
+                if (li.oportunidad_id.id not in yaestan) and (li.comercial_id.id == li.oportunidad_id.user_id.id):
+                    yaestan.append(li.oportunidad_id.id)
+                elif (li.comercial_id.id != li.oportunidad_id.user_id.id):
+                    li.unlink()
+
+            if record.estado != 'archivado':
+                for opo in oportus:
+                    if opo.create_date > esnuevo:
+                        esnueva = True
+                    else:
+                        esnueva = False
+                    # 8/7/2021 Modificación para el control del search 'date_closed' del año anterior si existen no archivadas (ver comentario anterior de esta fecha):
+                    # 8/7/2021 (original)   if (opo.id not in yaestan):
+                    # 8/7/2021 (test para borrar de la misma fecha)    if (opo.id not in yaestan) and (opo.date_closed) and (opo.date_closed &gt; esnuevo):
+                    if (opo.id not in yaestan) and not (opo.date_closed) or (opo.id not in yaestan) and (
+                            opo.date_closed > esnuevo):
+                        nombre = opo.name + ' - ' + opo.stage_id.name
+                        nuevalinea = env['objetivo.anual.linea'].create(
+                            {'oportunidad_id': opo.id, 'objetivo_id': record.id, 'estado_inicial_id': opo.stage_id.id,
+                             'importe_inicial': opo.expected_revenue, 'name': nombre, 'es_objetivo': esobjetivo,
+                             'cliente_id': opo.partner_id.id,
+                             'es_cuenta_nueva': opo.is_prospection, 'es_nueva': esnueva,
+                             'comercial_id': opo.user_id.id})
+
+                # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+                # CALCULOS RELATIVOS A LA ACTIVIDAD COMERCIAL (tanto en borrador para diseño, como en objetivo ya confirmado):
+                # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+                oportunidades = env['crm.lead'].search(
+                    [('user_id', '=', record.comercial_id.id), ('estado', '=', 'pending'), ('type', '=', 'opportunity')])
+                for op in oportunidades:
+                    if op.activity_type_id.id == False:
+                        op_sin_actividad += 1
+                    if str(date.today()) > str(op.date_deadline):
+                        opvencidas += 1
+                    if (op.stage_id.en_curso == True) and (op.is_prospection == False) and (
+                    op.partner_status_id.id):  # 2023 ¿hace falta si ya está estado arriba?
+                        opactivas_ca += 1
+                        acum_opactivas_ca += op.expected_revenue
+                    if (op.stage_id.en_curso == True) and (op.is_prospection == True) and (op.partner_status_id.id):
+                        opactivas_cn += 1
+                        acum_opactivas_cn += op.expected_revenue
+                    if (op.stage_id.en_curso == True) and not (op.partner_status_id.id):
+                        op_sintipocliente += 1
+                        acum_op_sintipocliente += op.expected_revenue
+
+                opactivas = opactivas_ca + opactivas_cn + op_sintipocliente
+                acum_opactivas = acum_opactivas_ca + acum_opactivas_cn + acum_op_sintipocliente
+                # Control 1:
+                # raise Warning('CA: ' + str(acum_opactivas_ca) + ' - CAnum: ' + str(opactivas_ca) + ' - CN: ' + str(acum_opactivas_cn) + ' - Total: ' + str(opactivas))
+
+                cantidad_oportunidades = len(env['objetivo.anual.linea'].search(
+                    [('objetivo_id', '=', record.id), ('oportunidad_id.type', '=', 'opportunity')]).ids)
+                cantidad_inicial = len(env['objetivo.anual.linea'].search(
+                    [('id', 'in', record.linea_ids.ids), ('es_objetivo', '=', True),
+                     ('oportunidad_id.type', '=', 'opportunity')]).ids)
+                cantidad_objetivo = record.objetivo_ca_count + record.objetivo_cn_count
+
+                # Actividades vencidas:
+                actividades = env['mail.activity'].search([('user_id', '=', record.comercial_id.id)])
+                num_actividades = len(actividades.ids)
+                for ac in actividades:
+                    if str(date.today()) > str(ac.date_deadline):
+                        actvencidas += 1
+
+                    # Actividades planificadas:
+                act_activas = len(env['mail.activity'].search([('user_id', '=', record.comercial_id.id)]).ids)
+                # Actividades finalizadas, hay que buscar ESTE AÑO, en todas las que haya trabajado, sean suyas ahora o no:
+                finicio = str(record.anho) + '-01-01'
+                actividades_finalizadas = env['crm.activity.report'].search(
+                    [('user_id', '=', record.comercial_id.id), ('date', '>', finicio)])
+                act_finalizada_count = len(actividades_finalizadas.ids)
+
+                # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+                # CRear el registro de "Equipo de ventas" y el "Mensual", SI NO EXISTEN:
+                # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+                objetivoequipo = env['objetivo.equipo'].search(
+                    [('anho', '=', record.anho), ('equipo_id', '=', record.equipo_id.id)])
+                if not objetivoequipo.id:
+                    nombre = str(record.anho) + ' / ' + record.equipo_id.name
+                    objetivoequipo = env['objetivo.equipo'].create(
+                        {'anho': record.anho, 'equipo_id': record.equipo_id.id, 'name': nombre})
+
+                mes = str(date.today())[5:7]
+                objetivomensual = env['objetivo.mensual'].search([('objetivo_anual_id', '=', record.id), ('mes', '=', mes)])
+                if not objetivomensual.id:
+                    nombre = mes + '/' + str(record.anho)
+                    objetivomensual = env['objetivo.mensual'].create(
+                        {'mes': mes, 'objetivo_anual_id': record.id, 'name': nombre})
+
+            # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+            # Cálculos relativos a Objetivos validados (no borrador, no archivados):
+            # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+            if record.estado == 'activo':
+                # Calcular las ventas (oportunidades ganadas tanto para € como para unidades CN y CA):
+                for li in record.linea_ids:
+                    if (li.es_cuenta_nueva == False) and (li.oportunidad_id.estado == 'won'):
+                        ventaca += li.oportunidad_id.expected_revenue
+                        ganadasca += 1
+                    elif (li.es_cuenta_nueva == True) and (li.oportunidad_id.estado == 'won'):
+                        ventacn += li.oportunidad_id.expected_revenue
+                        ganadascn += 1
+                    #   Cambiado 05/08/20: elif (li.es_cuenta_nueva == False) and (li.oportunidad_id.estado == 'lost'):
+                    elif (li.es_cuenta_nueva == False) and (li.es_perdida == True) and (
+                            li.oportunidad_id.type == 'opportunity'):
+                        perdidasca += 1
+                    # Cambiado 05/08/20:  elif (li.es_cuenta_nueva == True) and (li.oportunidad_id.estado == 'lost'):
+                    elif (li.es_cuenta_nueva == True) and (li.es_perdida == True) and (
+                            li.oportunidad_id.type == 'opportunity'):
+                        perdidascn += 1
+
+                    # Porcentajes del total para ventas, unidades y totales cn+ca:
+                if record.objetivo_ca > 0:
+                    venta_ca_percent = ventaca / record.objetivo_ca * 100
+                if record.objetivo_cn > 0:
+                    venta_cn_percent = ventacn / record.objetivo_cn * 100
+
+                # Oportunidades hoy en CA y CN y totales:
+                # Modificado para que tome todas, 28/08/2020 igual que en pestaña "Actividades:"
+                #  for li in record.linea_ids:
+                #    if (li.es_cuenta_nueva == False) and (li.oportunidad_id.estado != 'lost'):
+                #      oportunidad_hoy_ca +=1
+                #    elif  (li.es_cuenta_nueva == True) and (li.oportunidad_id.estado != 'lost'):
+                #      oportunidad_hoy_cn +=1
+                oportunidad_hoy_ca = len(env['objetivo.anual.linea'].search(
+                    [('id', 'in', record.linea_ids.ids), ('es_cuenta_nueva', '=', False),
+                     ('oportunidad_id.type', '=', 'opportunity')]))
+                oportunidad_hoy_cn = len(env['objetivo.anual.linea'].search(
+                    [('id', 'in', record.linea_ids.ids), ('es_cuenta_nueva', '=', True),
+                     ('oportunidad_id.type', '=', 'opportunity')]))
+
+                ## Miguel cambia el cálculo 11/08, ya no tiene sentido el que se llame 'ganada', pendiente cambiar en todos los modelos:
+                # 12/08/20: modifico tras error al dividir por cero (la acción nocturna no va):
+                #  if record.objetivo_ca_count &gt; 0:
+                if oportunidad_hoy_ca > 0:
+                    op_ganada_ca_count_percent = ganadasca / oportunidad_hoy_ca * 100
+                #  if record.objetivo_cn_count &gt; 0:
+                if oportunidad_hoy_cn > 0:
+                    op_ganada_cn_count_percent = ganadascn / oportunidad_hoy_cn * 100
+
+                ventatotal = ventaca + ventacn
+                if record.objetivo_total > 0:
+                    venta_percent = ventatotal / (record.objetivo_total) * 100
+                else:
+                    venta_percent = 0
+                cuentas_objetivo = record.objetivo_ca_count + record.objetivo_cn_count
+                if (cuentas_objetivo > 0):
+                    # Actualizado a petición de Miguel 11/08 para que sea sobre las actuales en vez de sobre el objetivo:
+                    op_ganada_count_percent = (ganadasca + ganadascn) / cantidad_oportunidades * 100
+
+                # ACTUALIZAR LOS CAMPOS DE LA LÍNEA DE ESTE MES Y COMERCIAL:
+#                acc_mes = env['ir.actions.server'].browse(208)
+                ctx = dict(env.context or {})
+                ctx.update({'active_id': objetivomensual.id, 'active_model': 'objetivo.mensual'})
+                resp_mes = actualizar_objetivo_mensual().with_context(ctx).run()
+
+                # VAMOS CON KPI:
+                # Eficiencia y Perdidas (ganadas o perdidas/ objetivo ud op anual)
+                cantidad_ganadas = ganadasca + ganadascn
+                cantidad_perdidas = perdidasca + perdidascn
+
+                # Otras estadísticas:
+                if cantidad_oportunidades > 0:
+                    op_perdida_count_percent = cantidad_perdidas / cantidad_oportunidades * 100
+                    op_vencida_count_percent = opvencidas / cantidad_oportunidades * 100
+                else:
+                    op_perdida_count_percent = 0
+                    op_vencida_count_percent = 0
+
+                if (cantidad_oportunidades - cantidad_perdidas) > 0:
+                    op_activa_vs_hoy_percent = opactivas / cantidad_oportunidades * 100
+                else:
+                    op_activa_vs_hoy_percent = 0
+
+                if (num_actividades > 0):
+                    act_vencida_percent = actvencidas / num_actividades * 100
+                else:
+                    act_vencida_percent = 0
+
+                if (cantidad_oportunidades - cantidad_perdidas - cantidad_ganadas > 0):
+                    op_sin_actividad_percent = op_sin_actividad / (
+                                cantidad_oportunidades - cantidad_perdidas - cantidad_ganadas) * 100
+                else:
+                    op_sin_actividad_percent = 0
+
+                if cantidad_inicial > 0:
+                    op_prospeccion_count_percent = (cantidad_oportunidades - cantidad_inicial) / cantidad_inicial * 100
+                else:
+                    op_prospeccion_count_percent = 0
+
+                # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+                # KPIs FIDELIZACIÓN (cuenta actual) y CAPTACIÓN (cuenta nueva) en pestaña "Seguimiento":
+                # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+                if (perdidasca + ganadasca > 0):
+                    fidelizacion = ganadasca / (ganadasca + perdidasca) * 100
+                if (perdidascn + ganadascn > 0):
+                    captacion = ganadascn / (ganadascn + perdidascn) * 100
+
+                # Porcentaje de perdidas:
+                if (oportunidad_hoy_ca > 0):
+                    perdido_ca_percent = perdidasca / oportunidad_hoy_ca * 100
+                if (oportunidad_hoy_cn > 0):
+                    perdido_cn_percent = perdidascn / oportunidad_hoy_cn * 100
+
+                # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+                # 07/2021 KPIs de mercado potencial por comparativas con la delegación y la central (sumo
+                # lo de la delegación y posteriormente hago el porcentaje):
+                # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+                oportunidades = env['crm.lead'].search([('estado', '=', 'pending'), ('type', '=', 'opportunity')])
+                objetivos_delegacion_count = len(
+                    env['objetivo.anual'].search([('anho', '=', record.anho), ('equipo_id', '=', record.equipo_id.id)]))
+                objetivos_central_count = len(env['objetivo.anual'].search([('anho', '=', record.anho)]))
+
+                for op in oportunidades:
+                    op_activa_global += op.expected_revenue
+                    cambio_etapa_count += op.cambio_etapa_count
+                    if (op.empresa_id.id == record.comercial_id.empresa_id.id):
+                        op_activa_delegacion += op.expected_revenue
+                media_delegacion = op_activa_delegacion / objetivos_delegacion_count
+                media_global = op_activa_global / objetivos_central_count
+
+                if (acum_opactivas < media_delegacion):
+                    vs_delegacion = (1 - (acum_opactivas / media_delegacion)) * -100
+                elif (media_delegacion != 0):
+                    vs_delegacion = ((acum_opactivas / media_delegacion) - 1) * 100
+
+                if (acum_opactivas < media_global):
+                    vs_global = (1 - (acum_opactivas / media_global)) * -100
+                elif (media_global != 0):
+                    vs_global = ((acum_opactivas / media_global) - 1) * 100
+
+                # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+                # 08/2021 KPIs de:
+                # si pasamos por objetivos_anho => mal porque actualiza datos de este comercial en base a los de otros comerciales que aún no se han recalculado, se hará por líneas de oportunidad.
+                # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+                # 1. Capacidad de generar nuevas oportunidades por comparativas con global (en unidades):
+                # Para número de oportunidades de hoy del comercial utilizamos la variable 'cantidad_oportunidades'
+                cantidad_oportunidades_delegacion = len(env['objetivo.anual.linea'].search(
+                    [('equipo_id', '=', record.equipo_id.id), ('anho', '=', record.anho),
+                     ('oportunidad_id.type', '=', 'opportunity')]).ids)
+                cantidad_oportunidades_global = len(env['objetivo.anual.linea'].search(
+                    [('anho', '=', record.anho), ('oportunidad_id.type', '=', 'opportunity')]).ids)
+                # Cálculo de medias por equipo y central (aprovechamos datos generales del apartdo anterior (objetivos_delegacion_count y objetivos_central_count):
+                media_hoy_delegacion = int(cantidad_oportunidades_delegacion / objetivos_delegacion_count)
+                media_hoy_global = int(cantidad_oportunidades_global / objetivos_central_count)
+                # TEST: raise Warning(str(media_hoy_delegacion) + " " + str(media_hoy_global))
+                op_hoy_vs_delegacion = cantidad_oportunidades - media_hoy_delegacion
+                op_hoy_vs_global = cantidad_oportunidades - media_hoy_global
+                # TEST: raise Warning(str(op_hoy_vs_delegacion) + " " + str(op_hoy_vs_global))
+
+                # 2. GAP de ventas con el global (en €)
+                # Utilizamos 'ventatotal' para el valor del comercial
+                lineas = env['objetivo.anual.linea'].search([('anho', '=', record.anho), ('estado', '=', 'won')])
+                for li in lineas:
+                    venta_global += li.importe_actual
+                    if (li.equipo_id.id == record.equipo_id.id):
+                        venta_delegacion += li.importe_actual
+
+                # Cálculo de medias (aprovechamos datos generales del apartdo anterior (objetivos_delegacion_count y objetivos_central_count):
+
+                if objetivos_delegacion_count:  media_venta_delegacion = venta_delegacion / objetivos_delegacion_count
+                if objetivos_central_count:     media_venta_global = venta_global / objetivos_central_count
+
+                venta_vs_delegacion = ventatotal - media_venta_delegacion
+                venta_vs_global = ventatotal - media_venta_global
+                # TEST: raise Warning("Comercial: " + str(ventatotal) + " - Delegación: "+ str(venta_delegacion) + " - Media delegación: " + str(media_venta_delegacion) + " - Media global:" + str(media_venta_global) + " - venta_vs_delegacion: " + str(venta_vs_delegacion) + " - vs global:" + str(venta_vs_global))
+
+                # 3. Esfuerzo requerido, lo mismo del punto 1, pero sólo con las oportunidades 'activas':
+                # Para número de oportunidades de hoy del comercial utilizamos la variable 'opactivas'
+                cantidad_oportunidades_activas_delegacion = len(env['objetivo.anual.linea'].search(
+                    [('equipo_id', '=', record.equipo_id.id), ('anho', '=', record.anho),
+                     ('oportunidad_id.type', '=', 'opportunity'), ('oportunidad_id.stage_id.en_curso', '=', True)]).ids)
+                cantidad_oportunidades_activas_global = len(env['objetivo.anual.linea'].search(
+                    [('anho', '=', record.anho), ('oportunidad_id.type', '=', 'opportunity'),
+                     ('oportunidad_id.stage_id.en_curso', '=', True)]).ids)
+                # Cálculo de medias por equipo y central (aprovechamos datos generales del apartdo anterior (objetivos_delegacion_count y objetivos_central_count):
+                media_activas_delegacion = int(cantidad_oportunidades_activas_delegacion / objetivos_delegacion_count)
+                media_activas_global = int(cantidad_oportunidades_activas_global / objetivos_central_count)
+                # TEST: raise Warning(str(media_activas_delegacion) + " " + str(media_activas_global))
+                op_activas_vs_delegacion = opactivas - media_activas_delegacion
+                op_activas_vs_global = opactivas - media_activas_global
+                # TEST: raise Warning(str(op_activas_vs_delegacion) + " " + str(op_activas_vs_global))
+
+            # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+            # Actualizo el registro de objetivo anual con las variables anteriores, para hacer una única escritura:
+            # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+            if record.estado != 'archivado':
+                record.write({'venta_ca': ventaca, 'venta_cn': ventacn, 'venta_total': ventaca + ventacn,
+                              'op_activa_ca': acum_opactivas_ca, 'op_activa_cn': acum_opactivas_cn,
+                              'op_ganada_ca_count': ganadasca, 'op_ganada_cn_count': ganadascn,
+                              'op_ganada_count': ganadasca + ganadascn,
+                              'op_perdida_ca_count': perdidasca, 'op_perdida_ca_count_percent': perdido_ca_percent,
+                              'op_perdida_cn_count': perdidascn, 'op_perdida_cn_count_percent': perdido_cn_percent,
+                              'venta_ca_percent': venta_ca_percent, 'venta_cn_percent': venta_cn_percent,
+                              'op_ganada_ca_count_percent': op_ganada_ca_count_percent,
+                              'op_ganada_cn_count_percent': op_ganada_cn_count_percent,
+                              'venta_percent': venta_percent, 'op_ganada_count_percent': op_ganada_count_percent,
+                              'op_sin_actividad_count': op_sin_actividad, 'op_vencida_count': opvencidas,
+                              'op_activa_count': opactivas, 'op_activa': acum_opactivas,
+                              'act_vencida_count': actvencidas, 'act_planificada_count': act_activas,
+                              'act_finalizada_count': act_finalizada_count,
+                              'objetivo_equipo_id': objetivoequipo.id, 'op_hoy_ca_count': oportunidad_hoy_ca,
+                              'op_hoy_cn_count': oportunidad_hoy_cn,
+                              'op_hoy_count': cantidad_oportunidades, 'op_perdida_count': cantidad_perdidas,
+                              'op_prospeccion_count': cantidad_oportunidades - cantidad_inicial,
+                              'op_perdida_count_percent': op_perdida_count_percent,
+                              'op_prospeccion_count_percent': op_prospeccion_count_percent,
+                              'op_activa_vs_hoy_percent': op_activa_vs_hoy_percent,
+                              'op_sin_actividad_percent': op_sin_actividad_percent,
+                              'op_vencida_count_percent': op_vencida_count_percent,
+                              'act_vencida_percent': act_vencida_percent,
+                              'kpi_fidelizacion': fidelizacion, 'kpi_captacion': captacion,
+                              'op_activa_vs_media_delegacion_percent': vs_delegacion,
+                              'op_activa_vs_media_global_percent': vs_global,
+                              'op_hoy_vs_delegacion': op_hoy_vs_delegacion, 'op_hoy_vs_global': op_hoy_vs_global,
+                              'venta_vs_delegacion': venta_vs_delegacion, 'venta_vs_global': venta_vs_global,
+                              'op_activas_vs_delegacion': op_activas_vs_delegacion,
+                              'op_activas_vs_global': op_activas_vs_global,
+                              'cambio_etapa_count': cambio_etapa_count
+                              })
