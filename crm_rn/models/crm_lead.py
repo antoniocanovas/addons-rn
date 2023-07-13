@@ -91,3 +91,4 @@ class CrmLead(models.Model):
             raise ValidationError('NIF no válido 2')
         if self.vat[:8] == DIGITO_CONTROL[int(self.vat[:8]) % 23]:
            raise ValidationError('NIF no válido3 ')
+        raise ValidationError('NIF: ' + self.vat + " Números: " + str(self.vat[:8]) + str(int(self.vat[:8]) % 23))
