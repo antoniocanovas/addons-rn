@@ -18,7 +18,7 @@ class CrmLead(models.Model):
 
     vat   = fields.Char('Related NIF', related='partner_id.vat')
 
-    @api.depends('vat_sanitized')
+    @api.constrains('vat_sanitized')
     def _check_valid_nif(self):
         vat = self.vat_sanitized
         code = self.env.company_id.country_id.code
