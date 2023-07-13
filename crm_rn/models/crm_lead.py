@@ -78,7 +78,7 @@ class CrmLead(models.Model):
     @api.constrains('vat')
     def _check_valid_nif(self):
         # Se divide por 23 y el dígito de control es el de la lista:
-        REGEXP = "[0-9]{8}[A-Z]{1}"
+        REGEXP = "[0-9]{8}[A-Z]"
         DIGITO_CONTROL = "TRWAGMYFPDXBNJZSQVHLCKE"
         INVALIDOS = {"00000000T", "00000001R", "99999999R"}
         vat = self.vat
@@ -87,7 +87,7 @@ class CrmLead(models.Model):
             raise ValidationError('NIF no válido 1')
         if len(vat) != 9:
             raise ValidationError('Son 9 dígitos')
-        if re.match(REGEXP, vat) is not None:
+        if re.match(REGEXP, vat) == False:
             raise ValidationError('NIF no válido 2')
         if self.vat[8] != DIGITO_CONTROL[int(self.vat[:8]) % 23]:
            raise ValidationError('NIF no válido3 ')
