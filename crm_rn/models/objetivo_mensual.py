@@ -263,17 +263,17 @@ class ObjetivoMensual(models.Model):
                 # ARRAY DE OPORTUNIDADES:
                 este_mes = str(record.objetivo_anual_id.anho) + '-' + record.mes + '-01'
                 # activas (todas, no se requiere la variable 'este_mes'):
-                oportunidades = env['crm.lead'].search(
+                oportunidades = self.env['crm.lead'].search(
                     [('user_id', '=', record.objetivo_anual_id.comercial_id.id), ('estado', '=', 'pending')]).ids
                 # más las ganadas (de este mes):
-                opganadasmes = env['crm.lead'].search(
+                opganadasmes = self.env['crm.lead'].search(
                     [('user_id', '=', record.objetivo_anual_id.comercial_id.id), ('date_closed', '>', este_mes)]).ids
                 for opg in opganadasmes:
                     ganadas_este_mes += 1
                     if opg not in oportunidades:
                         oportunidades.append(opg)
                 #  y perdidas (de este mes):
-                opperdidasmes = env['crm.lead'].search(
+                opperdidasmes = self.env['crm.lead'].search(
                     [('user_id', '=', record.comercial_id.id), ('active', '=', False), ('probability', '=', 0),
                      ('date_closed', '>', este_mes)]).ids
                 for opp in opperdidasmes:
@@ -283,7 +283,7 @@ class ObjetivoMensual(models.Model):
 
                 # BUCLE PARA TODAS LAS OPORTUNIDADES, si existe línea se actualiza, si no se crea; las que sobran se eliminan:
                 for opo in oportunidades:
-                    op = env['crm.lead'].browse(opo)
+                    op = self.env['crm.lead'].browse(opo)
                     creada = op.create_date.date()
                     if str(creada.month) == mes:
                         esnueva = True
@@ -296,8 +296,8 @@ class ObjetivoMensual(models.Model):
                     else:
                         esobjetivo = False
 
-                    # corregido 31/05, peta:    yaexiste = env['objetivo_mensual_lineas'].search([('id','in',record.linea_ids.ids),('oportunidad_id','=',op.id)])
-                    yaexiste = env['objetivo.mensual.linea'].search(
+                    # corregido 31/05, peta:    yaexiste = self.env['objetivo_mensual_lineas'].search([('id','in',record.linea_ids.ids),('oportunidad_id','=',op.id)])
+                    yaexiste = self.env['objetivo.mensual.linea'].search(
                         [('id', 'in', lineasahora), ('oportunidad_id', '=', op.id)])
                     if (yaexiste.id) and (op.active == True) and (op.probability > 0):
                         yaexiste.write(
@@ -315,13 +315,13 @@ class ObjetivoMensual(models.Model):
                              'es_nueva': esnueva, 'name': op.name, 'es_objetivo': esobjetivo, 'es_perdida': True})
                         lineasahora.remove(yaexiste.id)
                     elif (yaexiste.id == False) and (op.active == True) and (op.probability > 0):
-                        nueva = env['objetivo.mensual.linea'].create(
+                        nueva = self.env['objetivo.mensual.linea'].create(
                             {'oportunidad_id': op.id, 'comercial_id': op.user_id.id, 'objetivo_mensual_id': record.id,
                              'etapa_id': op.stage_id.id, 'es_cuenta_nueva': op.is_prospection,
                              'importe': op.expected_revenue,
                              'es_nueva': esnueva, 'name': op.name, 'es_objetivo': esobjetivo, 'es_perdida': False})
                     elif (yaexiste.id == False) and (op.active == False) and (op.probability == 0):
-                        nueva = env['objetivo.mensual.linea'].create(
+                        nueva = self.env['objetivo.mensual.linea'].create(
                             {'oportunidad_id': op.id, 'comercial_id': op.user_id.id, 'objetivo_mensual_id': record.id,
                              'etapa_id': op.stage_id.id, 'es_cuenta_nueva': op.is_prospection,
                              'importe': op.expected_revenue,
@@ -329,12 +329,12 @@ class ObjetivoMensual(models.Model):
 
                     # Borrar las líneas que ya no son de este mes y este comercial (corregido el 13/07/20, estaba un tabulador más adelante):
                 for li in lineasahora:
-                    env['objetivo.mensual.linea'].browse(li).unlink()
+                    self.env['objetivo.mensual.linea'].browse(li).unlink()
 
                 # FOTO DEL MES:
                 # Calculamos en las oportunidades anteriores y cumplimentamos variables:
                 for opo in oportunidades:
-                    op = env['crm.lead'].browse(opo)
+                    op = self.env['crm.lead'].browse(opo)
                     if (op.estado == 'pending') and (op.stage_id.en_curso == False):
                         nuevas += 1
                         acum_nuevas += op.expected_revenue

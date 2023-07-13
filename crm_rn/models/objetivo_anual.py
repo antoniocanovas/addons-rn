@@ -417,8 +417,8 @@ class ObjetivoAnual(models.Model):
             esnuevo = datetime.strptime(fechanueva, '%Y-%m-%d')
 
             # 8/7/2021 Modificación porque no pilla las oportunidades en curso al SIN DATE_CLOSED, tener el filtro 'date_closed > esnuevo':
-            # 8/7/2021 (original) oportus = env['crm.lead'].search([('user_id','=',record.comercial_id.id),('estado','in',['pending','won']),('active','=',True),('date_closed','>',esnuevo)])
-            oportus = env['crm.lead'].search(
+            # 8/7/2021 (original) oportus = self.env['crm.lead'].search([('user_id','=',record.comercial_id.id),('estado','in',['pending','won']),('active','=',True),('date_closed','>',esnuevo)])
+            oportus = self.env['crm.lead'].search(
                 [('user_id', '=', record.comercial_id.id), ('estado', 'in', ['pending', 'won']), ('active', '=', True)])
 
             # Control de las que ya están, y quitarlas si se han asignado a otro comercial:
@@ -441,7 +441,7 @@ class ObjetivoAnual(models.Model):
                     if (opo.id not in yaestan) and not (opo.date_closed) or (opo.id not in yaestan) and (
                             opo.date_closed > esnuevo):
                         nombre = opo.name + ' - ' + opo.stage_id.name
-                        nuevalinea = env['objetivo.anual.linea'].create(
+                        nuevalinea = self.env['objetivo.anual.linea'].create(
                             {'oportunidad_id': opo.id, 'objetivo_id': record.id, 'estado_inicial_id': opo.stage_id.id,
                              'importe_inicial': opo.expected_revenue, 'name': nombre, 'es_objetivo': esobjetivo,
                              'cliente_id': opo.partner_id.id,
@@ -451,7 +451,7 @@ class ObjetivoAnual(models.Model):
                 # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
                 # CALCULOS RELATIVOS A LA ACTIVIDAD COMERCIAL (tanto en borrador para diseño, como en objetivo ya confirmado):
                 # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-                oportunidades = env['crm.lead'].search(
+                oportunidades = self.env['crm.lead'].search(
                     [('user_id', '=', record.comercial_id.id), ('estado', '=', 'pending'), ('type', '=', 'opportunity')])
                 for op in oportunidades:
                     if op.activity_type_id.id == False:
@@ -482,7 +482,7 @@ class ObjetivoAnual(models.Model):
                 cantidad_objetivo = record.objetivo_ca_count + record.objetivo_cn_count
 
                 # Actividades vencidas:
-                actividades = env['mail.activity'].search([('user_id', '=', record.comercial_id.id)])
+                actividades = self.env['mail.activity'].search([('user_id', '=', record.comercial_id.id)])
                 num_actividades = len(actividades.ids)
                 for ac in actividades:
                     if str(date.today()) > str(ac.date_deadline):
@@ -492,25 +492,25 @@ class ObjetivoAnual(models.Model):
                 act_activas = len(env['mail.activity'].search([('user_id', '=', record.comercial_id.id)]).ids)
                 # Actividades finalizadas, hay que buscar ESTE AÑO, en todas las que haya trabajado, sean suyas ahora o no:
                 finicio = str(record.anho) + '-01-01'
-                actividades_finalizadas = env['crm.activity.report'].search(
+                actividades_finalizadas = self.env['crm.activity.report'].search(
                     [('user_id', '=', record.comercial_id.id), ('date', '>', finicio)])
                 act_finalizada_count = len(actividades_finalizadas.ids)
 
                 # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
                 # CRear el registro de "Equipo de ventas" y el "Mensual", SI NO EXISTEN:
                 # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-                objetivoequipo = env['objetivo.equipo'].search(
+                objetivoequipo = self.env['objetivo.equipo'].search(
                     [('anho', '=', record.anho), ('equipo_id', '=', record.equipo_id.id)])
                 if not objetivoequipo.id:
                     nombre = str(record.anho) + ' / ' + record.equipo_id.name
-                    objetivoequipo = env['objetivo.equipo'].create(
+                    objetivoequipo = self.env['objetivo.equipo'].create(
                         {'anho': record.anho, 'equipo_id': record.equipo_id.id, 'name': nombre})
 
                 mes = str(date.today())[5:7]
-                objetivomensual = env['objetivo.mensual'].search([('objetivo_anual_id', '=', record.id), ('mes', '=', mes)])
+                objetivomensual = self.env['objetivo.mensual'].search([('objetivo_anual_id', '=', record.id), ('mes', '=', mes)])
                 if not objetivomensual.id:
                     nombre = mes + '/' + str(record.anho)
-                    objetivomensual = env['objetivo.mensual'].create(
+                    objetivomensual = self.env['objetivo.mensual'].create(
                         {'mes': mes, 'objetivo_anual_id': record.id, 'name': nombre})
 
             # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -574,7 +574,7 @@ class ObjetivoAnual(models.Model):
                     op_ganada_count_percent = (ganadasca + ganadascn) / cantidad_oportunidades * 100
 
                 # ACTUALIZAR LOS CAMPOS DE LA LÍNEA DE ESTE MES Y COMERCIAL:
-#                acc_mes = env['ir.actions.server'].browse(208)
+#                acc_mes = self.env['ir.actions.server'].browse(208)
                 ctx = dict(env.context or {})
                 ctx.update({'active_id': objetivomensual.id, 'active_model': 'objetivo.mensual'})
                 resp_mes = actualizar_objetivo_mensual().with_context(ctx).run()
@@ -631,10 +631,10 @@ class ObjetivoAnual(models.Model):
                 # 07/2021 KPIs de mercado potencial por comparativas con la delegación y la central (sumo
                 # lo de la delegación y posteriormente hago el porcentaje):
                 # = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-                oportunidades = env['crm.lead'].search([('estado', '=', 'pending'), ('type', '=', 'opportunity')])
+                oportunidades = self.env['crm.lead'].search([('estado', '=', 'pending'), ('type', '=', 'opportunity')])
                 objetivos_delegacion_count = len(
-                    env['objetivo.anual'].search([('anho', '=', record.anho), ('equipo_id', '=', record.equipo_id.id)]))
-                objetivos_central_count = len(env['objetivo.anual'].search([('anho', '=', record.anho)]))
+                    self.env['objetivo.anual'].search([('anho', '=', record.anho), ('equipo_id', '=', record.equipo_id.id)]))
+                objetivos_central_count = len(self.env['objetivo.anual'].search([('anho', '=', record.anho)]))
 
                 for op in oportunidades:
                     op_activa_global += op.expected_revenue
@@ -675,7 +675,7 @@ class ObjetivoAnual(models.Model):
 
                 # 2. GAP de ventas con el global (en €)
                 # Utilizamos 'ventatotal' para el valor del comercial
-                lineas = env['objetivo.anual.linea'].search([('anho', '=', record.anho), ('estado', '=', 'won')])
+                lineas = self.env['objetivo.anual.linea'].search([('anho', '=', record.anho), ('estado', '=', 'won')])
                 for li in lineas:
                     venta_global += li.importe_actual
                     if (li.equipo_id.id == record.equipo_id.id):
