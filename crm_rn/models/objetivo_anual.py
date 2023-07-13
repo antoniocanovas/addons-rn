@@ -578,7 +578,7 @@ class ObjetivoAnual(models.Model):
                 ctx = dict(self.env.context or {})
                 ctx.update({'active_id': objetivomensual.id, 'active_model': 'objetivo.mensual'})
 #                resp_mes = actualizar_objetivo_mensual().with_context(ctx).run()
-                self.env['objetivo.mensual'].actualizar_objetivo_mensual().with_context(ctx)
+                self.env['objetivo.mensual'].actualizar_objetivo_mensual()
 
                 # VAMOS CON KPI:
                 # Eficiencia y Perdidas (ganadas o perdidas/ objetivo ud op anual)
