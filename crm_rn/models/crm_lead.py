@@ -75,7 +75,7 @@ class CrmLead(models.Model):
             record['objetivo_anual_id'] = objetivo
     objetivo_anual_id = fields.Many2one('objetivo.anual', string='Obj. Anual', store=False, compute='_get_objetivo_anual')
 
-    @api.constraint('vat')
+    @api.constrains('vat')
     def _check_valid_nif(self):
         # Se divide por 23 y el dígito de control es el de la lista:
         REGEXP = "[0-9]{8}[A-Z]"
