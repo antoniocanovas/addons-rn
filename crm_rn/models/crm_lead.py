@@ -106,4 +106,4 @@ class CrmLead(models.Model):
             vat = code + self.vat_sanitized
             chequeo = 'paso'
         self.vat = vat
-        raise ValidationError(vat + " " + self.env.user.company_id.code + " Código vat: " + str(self.vat[:2]) + " Chequeo: " + chequeo)
+        raise ValidationError(vat + " " + self.env.user.company_id.country_id.code + " Código vat: " + str(self.vat[:2]) + " Chequeo: " + chequeo)
