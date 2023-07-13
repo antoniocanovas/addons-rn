@@ -99,11 +99,11 @@ class CrmLead(models.Model):
     def _check_valid_nif(self):
         vat = self.vat_sanitized
         chequeo = ""
-        code = self.env.company_id.country_id.code
+        code = self.env.user.company_id.country_id.code
         REGEXP = "[A-Z]{2}"
         # Si no tiene letras al comenzar:
         if re.match(REGEXP, vat) is None:
             vat = code + self.vat_sanitized
             chequeo = 'paso'
         self.vat = vat
-        raise ValidationError(vat + " " + self.env.company_id.code + " Código vat: " + str(self.vat[:2]) + " Chequeo: " + chequeo)
+        raise ValidationError(vat + " " + self.env.user.company_id.code + " Código vat: " + str(self.vat[:2]) + " Chequeo: " + chequeo)
