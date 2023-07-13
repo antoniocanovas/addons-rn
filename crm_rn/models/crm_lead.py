@@ -82,7 +82,7 @@ class CrmLead(models.Model):
         DIGITO_CONTROL = "TRWAGMYFPDXBNJZSQVHLCKE"
         INVALIDOS = {"00000000T", "00000001R", "99999999R"}
 
-        if self.vat not in self.INVALIDOS
-            and re.match(self.REGEXP, self.vat) is not None
-            and dni[8] == self.DIGITO_CONTROL[int(self.vat[0:8]) % 23]:
-                raise UserWarning('NIF no válido')
+        if self.vat not in INVALIDOS \
+                and re.match(REGEXP, self.vat) is not None \
+                and dni[8] == DIGITO_CONTROL[int(self.vat[0:8]) % 23]:
+                    raise UserWarning('NIF no válido')
