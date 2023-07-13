@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 
 
 import logging
+import re
 
 _logger = logging.getLogger(__name__)
 
@@ -14,7 +15,9 @@ _logger = logging.getLogger(__name__)
 class CrmLead(models.Model):
     _inherit = 'crm.lead'
 
+
     vat   = fields.Char('NIF', related='partner_id.vat', readonly=False)
+
     empresa_id = fields.Many2one('res.company', store=True, related='user_id.empresa_id')
 
     @api.depends('stage_id','probability')
@@ -71,3 +74,15 @@ class CrmLead(models.Model):
                 objetivo = primero.objetivo_id.id
             record['objetivo_anual_id'] = objetivo
     objetivo_anual_id = fields.Many2one('objetivo.anual', string='Obj. Anual', store=False, compute='_get_objetivo_anual')
+
+    @api.constraint('vat')
+    def _check_valid_nif(self):
+        # Se divide por 23 y el dígito de control es el de la lista:
+        REGEXP = "[0-9]{8}[A-Z]"
+        DIGITO_CONTROL = "TRWAGMYFPDXBNJZSQVHLCKE"
+        INVALIDOS = {"00000000T", "00000001R", "99999999R"}
+
+        if self.vat not in self.INVALIDOS \  # (1)
+            and re.match(self.REGEXP, self.vat) is not None \  # (2)
+            and dni[8] == self.DIGITO_CONTROL[int(self.vat[0:8]) % 23]  # (3)
+            raise UserWarning('NIF no válido')
