@@ -95,7 +95,7 @@ class CrmLead(models.Model):
         raise ValidationError('NIF: ' + self.vat + " Números: " + str(self.vat[8]) + str(int(self.vat[:8]) % 23))
 
 
-    @api.constrains('vat_sanitized')
+    @api.depends('vat_sanitized')
     def _check_valid_nif(self):
         vat = self.vat_sanitized.upper()
         code = self.env.user.company_id.country_id.code
