@@ -574,11 +574,14 @@ class ObjetivoAnual(models.Model):
                     op_ganada_count_percent = (ganadasca + ganadascn) / cantidad_oportunidades * 100
 
                 # ACTUALIZAR LOS CAMPOS DE LA LÍNEA DE ESTE MES Y COMERCIAL:
+                objetivomensual.actualizar_objetivo_mensual()
 #                acc_mes = self.env['ir.actions.server'].browse(208)
-                ctx = dict(self.env.context or {})
-                ctx.update({'active_id': objetivomensual.id, 'active_model': 'objetivo.mensual'})
+#                ctx = dict(self.env.context or {})
+#                ctx.update({'active_id': objetivomensual.id, 'active_model': 'objetivo.mensual'})
 #                resp_mes = actualizar_objetivo_mensual().with_context(ctx).run()
-                self.env['objetivo.mensual'].actualizar_objetivo_mensual()
+# no hace nada, probar AS con llamada a método y lo anterior                self.env['objetivo.mensual'].actualizar_objetivo_mensual()
+# otra propuesta: stock_landed_cost_id.compute_landed_cost()
+
 
                 # VAMOS CON KPI:
                 # Eficiencia y Perdidas (ganadas o perdidas/ objetivo ud op anual)

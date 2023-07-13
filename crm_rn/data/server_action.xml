@@ -1,5 +1,36 @@
 <odoo>
 
+    <record id="actualizar_objetivo_anual" model="ir.actions.server">
+            <field name="name">=> Actualizar objetivo anual</field>
+            <field name="model_id" ref="model_objetivo_anual"/>
+            <field name="state">code</field>
+            <field name="code">
+model.actualizar_objetivo_anual()
+            </field>
+    </record>
+
+    <record id="actualizar_objetivo_equipo" model="ir.actions.server">
+            <field name="name">=> Actualizar objetivo equipo</field>
+            <field name="model_id" ref="model_objetivo_anual"/>
+            <field name="state">code</field>
+            <field name="code">
+model.actualizar_objetivo_equipo()
+            </field>
+    </record>
+    <record id="actualizar_objetivo_mensual" model="ir.actions.server">
+            <field name="name">=> Actualizar objetivo mensual</field>
+            <field name="model_id" ref="model_objetivo_anual"/>
+            <field name="state">code</field>
+            <field name="code">
+model.actualizar_objetivo_mensuall()
+            </field>
+    </record>
+
+
+
+    ###############################
+    # LAS DE DESARROLLO Y PRUEBAS:
+    ###############################
     <record id="actualizar_anual_test" model="ir.actions.server">
             <field name="name">=> Actualizar anual tests</field>
             <field name="model_id" ref="model_objetivo_anual"/>
@@ -578,13 +609,6 @@ if str(hoy.month) == mes:
 
             </field>
     </record>
-
-
-
-
-
-    # HECHOS Y PROBADOS (quitado el binding a la acción contextual):
-
 
 
     # ACTUALIZAR OBJETIVOS DEL EQUIPO DE VENTA:
