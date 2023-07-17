@@ -44,7 +44,7 @@
     <record id="objetivo_anual_linea_default_tree_view" model="ir.ui.view">
         <field name="active" eval="True"/>
         <field name="arch" type="xml">
-            <tree string="Objetivo anual Líneas" decoration-danger="es_objetivo == True">
+            <tree string="Objetivo anual Líneas" decoration-danger="es_objetivo == True" create="false" delete="true">
                 <field name="es_objetivo" invisible="1"/>
                 <field name="es_nueva"/>
                 <field name="es_cuenta_nueva"/>
