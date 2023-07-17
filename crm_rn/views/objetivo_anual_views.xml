@@ -4,8 +4,8 @@
     <record id="action_o2m_to_anual_linea" model="ir.actions.act_window">
         <field name="binding_model_id" eval="False"/>
         <field name="binding_type">action</field>
-        <field name="context">{'search_default_objetivo_id': active_id,'default_objetivo_id': active_id}</field>
-        <field name="domain">[('objetivo_id,'=',active_id)]</field>
+        <field name="context">{'search_default_objetivo_id':active_id,'default_objetivo_id':active_id}</field>
+        <field name="domain">[('objetivo_id','=',active_id)]</field>
         <field name="groups_id" eval="[(6, 0, [])]"/>
         <field name="help"><![CDATA[<p> Líneas de objetivos por comercial </p>]]></field>
         <field name="limit">80</field>
@@ -16,12 +16,12 @@
         <field name="view_id" eval="False"/>
         <field name="view_mode">tree,form</field>
     </record>
-    <!-- ACCIÓN DE VENTANA PARA O2M MESES (objetivo.anual.linea): -->
+    <!-- ACCIÓN DE VENTANA PARA O2M MESES (objetivo.mensual): -->
     <record id="action_o2m_to_objetivo_mensual" model="ir.actions.act_window">
         <field name="binding_model_id" eval="False"/>
         <field name="binding_type">action</field>
-        <field name="context">{'search_default_objetivo_anual_id': active_id,'default_objetivo_anual_id': active_id}</field>
-        <field name="domain">[('objetivo_anual_id,'=',active_id)]</field>
+        <field name="context">{'search_default_objetivo_anual_id':active_id,'default_objetivo_anual_id':active_id}</field>
+        <field name="domain">[('objetivo_anual_id','=',active_id)]</field>
         <field name="groups_id" eval="[(6, 0, [])]"/>
         <field name="help"><![CDATA[<p> Registros mensuales automáticos </p>]]></field>
         <field name="limit">80</field>
