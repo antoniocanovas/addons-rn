@@ -61,7 +61,7 @@ class ObjetivoEquipo(models.Model):
         if objetivo > 0:
             resultado = self.venta_ca / objetivo * 100
         self.grupo_ca_hoy_percent = resultado
-    grupo_ca_hoy_percent = fields.Float('grupo_ca_hoy_percent', store=False, reaonly=True, compute='get_grupo_ca_hoy_percent')
+    grupo_ca_hoy_percent = fields.Float('grupo_ca_hoy_percent', store=False, readonly=True, compute='get_grupo_ca_hoy_percent')
 
     def get_grupo_ca_objetivo_percent(self):
         resultado, objetivo, objetivo_equipo = 0, 0, 0
@@ -72,7 +72,7 @@ class ObjetivoEquipo(models.Model):
         if objetivo > 0:
             resultado = self.objetivo_ca / objetivo * 100
         self.grupo_ca_objetivo_percent = resultado
-    grupo_ca_objetivo_percent = fields.Float('grupo_ca_objetivo_percent', store=False, reaonly=True, compute='get_grupo_ca_objetivo_percent')
+    grupo_ca_objetivo_percent = fields.Float('grupo_ca_objetivo_percent', store=False, readonly=True, compute='get_grupo_ca_objetivo_percent')
 
     def get_grupo_ca_op_hoy_percent(self):
         resultado, objetivo, objetivo_equipo = 0, 0, 0
@@ -83,7 +83,7 @@ class ObjetivoEquipo(models.Model):
         if objetivo > 0:
             resultado = self.op_hoy_ca_count / objetivo * 100
         self.grupo_ca_op_hoy_percent = resultado
-    grupo_ca_op_hoy_percent = fields.Float('grupo_ca_op_hoy_percent', store=False, reaonly=True, compute='get_grupo_ca_op_hoy_percent')
+    grupo_ca_op_hoy_percent = fields.Float('grupo_ca_op_hoy_percent', store=False, readonly=True, compute='get_grupo_ca_op_hoy_percent')
 
     def get_grupo_ca_op_objetivo_percent(self):
         resultado, objetivo, objetivo_equipo = 0, 0, 0
@@ -94,7 +94,7 @@ class ObjetivoEquipo(models.Model):
         if objetivo > 0:
             resultado = self.objetivo_ca_count / objetivo * 100
         self.grupo_ca_op_objetivo_percent = resultado
-    grupo_ca_op_objetivo_percent = fields.Float('grupo_ca_op_objetivo_percent', store=False, reaonly=True, compute='get_grupo_ca_op_objetivo_percent')
+    grupo_ca_op_objetivo_percent = fields.Float('grupo_ca_op_objetivo_percent', store=False, readonly=True, compute='get_grupo_ca_op_objetivo_percent')
 
     # Ahora con CN:
     def get_grupo_cn_hoy_percent(self):
@@ -106,7 +106,7 @@ class ObjetivoEquipo(models.Model):
         if objetivo > 0:
             resultado = self.venta_ca / objetivo * 100
         self.grupo_cn_hoy_percent = resultado
-    grupo_cn_hoy_percent = fields.Float('grupo_ca_hoy_percent', store=False, reaonly=True, compute='get_grupo_cn_hoy_percent')
+    grupo_cn_hoy_percent = fields.Float('grupo_ca_hoy_percent', store=False, readonly=True, compute='get_grupo_cn_hoy_percent')
 
     def get_grupo_cn_objetivo_percent(self):
         resultado, objetivo, objetivo_equipo = 0, 0, 0
@@ -117,7 +117,7 @@ class ObjetivoEquipo(models.Model):
         if objetivo > 0:
             resultado = self.objetivo_cn / objetivo * 100
         self.grupo_cn_objetivo_percent = resultado
-    grupo_cn_objetivo_percent = fields.Float('grupo_cn_objetivo_percent', store=False, reaonly=True, compute='get_grupo_cn_objetivo_percent')
+    grupo_cn_objetivo_percent = fields.Float('grupo_cn_objetivo_percent', store=False, readonly=True, compute='get_grupo_cn_objetivo_percent')
 
     def get_grupo_cn_op_hoy_percent(self):
         resultado, objetivo, objetivo_equipo = 0, 0, 0
@@ -128,7 +128,7 @@ class ObjetivoEquipo(models.Model):
         if objetivo > 0:
             resultado = self.op_hoy_cn_count / objetivo * 100
         self.grupo_cn_op_hoy_percent = resultado
-    grupo_cn_op_hoy_percent = fields.Float('grupo_cn_op_hoy_percent', store=False, reaonly=True, compute='get_grupo_cn_op_hoy_percent')
+    grupo_cn_op_hoy_percent = fields.Float('grupo_cn_op_hoy_percent', store=False, readonly=True, compute='get_grupo_cn_op_hoy_percent')
 
     def get_grupo_cn_op_objetivo_percent(self):
         resultado, objetivo, objetivo_equipo = 0, 0, 0
@@ -139,7 +139,7 @@ class ObjetivoEquipo(models.Model):
         if objetivo > 0:
             resultado = self.objetivo_cn_count / objetivo * 100
         self.grupo_cn_op_objetivo_percent = resultado
-    grupo_cn_op_objetivo_percent = fields.Float('grupo_cn_op_objetivo_percent', store=False, reaonly=True, compute='get_grupo_cn_op_objetivo_percent')
+    grupo_cn_op_objetivo_percent = fields.Float('grupo_cn_op_objetivo_percent', store=False, readonly=True, compute='get_grupo_cn_op_objetivo_percent')
 
 
     @api.depends('objetivo_total','cumplido_total')
