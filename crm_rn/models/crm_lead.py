@@ -79,10 +79,11 @@ class CrmLead(models.Model):
     # Validación del NIF por VIES, AUNQUE NO SE PONGA EL PAÍS DELANTE:
     @api.onchange('vat_sanitized')
     def _check_valid_nif(self):
-        vat = self.vat_sanitized.upper()
-        code = self.env.user.company_id.country_id.code
-        REGEXP = "[A-Z]{2}"
-        # Si no tiene letras al comenzar:
-        if re.match(REGEXP, vat) is None:
-            vat = code + self.vat_sanitized.upper()
-        self.partner_id.write({'vat':vat})
+        if vat:
+            vat = self.vat_sanitized.upper()
+            code = self.env.user.company_id.country_id.code
+            REGEXP = "[A-Z]{2}"
+            # Si no tiene letras al comenzar:
+            if re.match(REGEXP, vat) is None:
+                vat = code + self.vat_sanitized.upper()
+            self.partner_id.write({'vat':vat})
